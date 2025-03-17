@@ -10,11 +10,17 @@ import TechStackMarquee from "@/components/ui/marquee/tech-stack";
 import VelocityScroll from "@/components/typography/scroll-based-velocity";
 import getDictionary from "./dictionaries";
 
-export async function generateMetadata({
-  params: { lang },
-}: {
-  params: { lang: string };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ lang: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    lang
+  } = params;
+
   const t = await getDictionary(lang);
   return {
     title: t.page.title,
@@ -22,11 +28,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { lang },
-}: {
-  params: { lang: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ lang: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    lang
+  } = params;
+
   const t = await getDictionary(lang);
   return (
     <div className="bg-black">

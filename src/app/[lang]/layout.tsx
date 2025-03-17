@@ -13,6 +13,7 @@ const instrumentSans = Instrument_Sans({
 export const metadata: Metadata = {
   title: "Portfolio | Achmad Daniel",
   description: "",
+  icons: { icon: "/en/favicon.ico" },
 };
 
 interface LangParams {
@@ -23,13 +24,16 @@ export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "id" }];
 }
 
-export default function RootLayout({
-  children,
-  params,
-}: Readonly<{
-  children: React.ReactNode;
-  params: LangParams;
-}>) {
+export default async function RootLayout(
+  props: Readonly<{
+    children: React.ReactNode;
+    params: LangParams;
+  }>
+) {
+  const params = await props.params;
+
+  const { children } = props;
+
   return (
     <html
       lang={params.lang}
