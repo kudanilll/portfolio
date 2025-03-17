@@ -6,7 +6,11 @@ import AboutView from "@/components/views/about";
 import ServicesView from "@/components/views/services";
 import ContactView from "@/components/views/contact";
 
-type Props = { id: "home" | "projects" | "about" | "services" | "contact" };
+type Props = {
+  id: "home" | "projects" | "about" | "services" | "contact";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  lang: any;
+};
 
 const Views = {
   home: HomeView,
@@ -21,7 +25,7 @@ export default function Section(props: Props) {
   return (
     <section className="flex min-h-screen min-w-full">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <View />
+        <View lang={props.lang} />
       </div>
     </section>
   );

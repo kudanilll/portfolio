@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Sans } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
 
 // Font
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -15,14 +15,24 @@ export const metadata: Metadata = {
   description: "",
 };
 
+interface LangParams {
+  lang: "en" | "id";
+}
+
+export async function generateStaticParams() {
+  return [{ lang: "en" }, { lang: "id" }];
+}
+
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: LangParams;
 }>) {
   return (
     <html
-      lang="en"
+      lang={params.lang}
       className="scroll-smooth no-scrollbar"
       style={{ scrollBehavior: "smooth" }}
     >

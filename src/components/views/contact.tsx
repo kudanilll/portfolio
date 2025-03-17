@@ -42,7 +42,7 @@ function ContactButton() {
   );
 }
 
-export default function ContactView() {
+export default function ContactView({ lang }: { lang: any }) {
   return (
     <section id="contact">
       <div className="min-h-screen flex flex-col items-center justify-center">
@@ -51,7 +51,7 @@ export default function ContactView() {
           text="Contact Me"
         />
         <GradualSpacing
-          className="text-4xl font-bold -tracking-widest text-neutral-600 md:text-7xl md:leading-[5rem]"
+          className="text-4xl font-bold -tracking-widest text-neutral-500 md:text-7xl md:leading-[5rem]"
           text="Let's Work Together"
         />
         <ContactButton />

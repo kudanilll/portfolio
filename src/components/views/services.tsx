@@ -47,7 +47,7 @@ const services = [
   },
 ];
 
-export default function ServicesView() {
+export default function ServicesView({ lang }: { lang: any }) {
   return (
     <section id="services">
       <div className="min-h-screen flex flex-row items-center justify-center">

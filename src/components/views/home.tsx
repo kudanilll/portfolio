@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { motion } from "framer-motion";
@@ -22,7 +23,7 @@ function Title() {
   );
 }
 
-function Description() {
+function Description({ lang }: { lang: any }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
@@ -35,14 +36,15 @@ function Description() {
       viewport={{ once: false, amount: 0.3 }}
     >
       <p className="md:text-xl font-inter-tight text-neutral-400 text-center mt-6 md:mt-10">
-        I am always excited to create innovative solutions and engaging user
-        experiences.
+        {/* I am always excited to create innovative solutions and engaging user
+        experiences. */}
+        {lang.home_section.desc}
       </p>
     </motion.div>
   );
 }
 
-function LetsTalkButton() {
+function LetsTalkButton({ lang }: { lang: any }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0 }}
@@ -63,13 +65,13 @@ function LetsTalkButton() {
           <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
             <div className="flex flex-row items-center">
               <span className="block leading-[20px] text-center transform origin-right group-hover:rotate-[15deg]">
-                Download CV
+                {lang.home_section.button_text}
               </span>
               <Download className="ml-3 text-white" size={22} />
             </div>
             <div className="flex flex-row items-center">
               <span className="block text-center transform origin-left translate-y-0 group-hover:rotate-0">
-                Download CV
+                {lang.home_section.button_text}
               </span>
               <Download className="ml-3 text-white" size={22} />
             </div>
@@ -80,11 +82,11 @@ function LetsTalkButton() {
   );
 }
 
-function LeftBottomComponent() {
+function LeftBottomComponent({ lang }: { lang: any }) {
   return (
     <motion.div>
       <h1 className="absolute md:block hidden bottom-6 left-0 text-neutral-400 md:text-lg font-semibold font-inter-tight uppercase">
-        <span>Based in bekasi</span>
+        <span>{lang.home_section.location}</span>
         <span className="text-neutral-600">, Indonesia</span>
       </h1>
     </motion.div>
@@ -102,7 +104,7 @@ function RightBottomComponent() {
   );
 }
 
-export default function HomeView() {
+export default function HomeView({ lang }: { lang: any }) {
   return (
     <section
       id="home"
@@ -111,13 +113,13 @@ export default function HomeView() {
       {/* Main Content */}
       <div className="flex flex-col items-center justify-center">
         <Title />
-        <Description />
-        <LetsTalkButton />
+        <Description lang={lang} />
+        <LetsTalkButton lang={lang} />
       </div>
 
       {/* Bottom */}
       <div>
-        <LeftBottomComponent />
+        <LeftBottomComponent lang={lang} />
         <RightBottomComponent />
       </div>
     </section>
