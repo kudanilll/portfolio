@@ -60,8 +60,24 @@ export default function TechStackMarquee() {
           className="px-6"
           loading="lazy"
         />
+        <Image
+          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/androidstudio/androidstudio-original.svg"
+          alt="Next.js"
+          width="220"
+          height="220"
+          className="px-6"
+          loading="lazy"
+        />
       </Marquee>
       <Marquee className="overflow-hidden mt-8" direction="right">
+        <Image
+          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/xcode/xcode-original.svg"
+          alt="React"
+          width="220"
+          height="220"
+          className="px-6"
+          loading="lazy"
+        />
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg"
           alt="Next.js"

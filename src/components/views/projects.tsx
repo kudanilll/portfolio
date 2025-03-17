@@ -19,7 +19,7 @@ const projects = [
       "https://aceternity.com/images/products/thumbnails/new/cursor.png",
   },
   {
-    title: "FJKT48",
+    title: "FJKT48 - JKT48 Fans Website",
     link: "#",
     thumbnail:
       "https://aceternity.com/images/products/thumbnails/new/rogue.png",
@@ -79,7 +79,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
           </motion.div>
         </div>
       </div>
-      <BentoGrid className="mx-8">
+      <BentoGrid className="mx-auto">
         {projects.map((project, i) => (
           <BentoGridItem
             key={i}
