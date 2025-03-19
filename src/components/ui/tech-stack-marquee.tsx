@@ -9,7 +9,7 @@ export default function TechStackMarquee() {
     <div className="flex flex-col items-center justify-center">
       <GradualSpacing
         className="text-center text-4xl font-bold -tracking-widest text-neutral-200 md:text-7xl md:leading-[5rem] mt-20"
-        text="Tech Stack"
+        text="Tech Stack & Tools"
       />
       <Marquee className="overflow-hidden mt-12">
         <Image
@@ -62,7 +62,15 @@ export default function TechStackMarquee() {
         />
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/androidstudio/androidstudio-original.svg"
-          alt="Next.js"
+          alt="Android Studio"
+          width="220"
+          height="220"
+          className="px-6"
+          loading="lazy"
+        />
+        <Image
+          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg"
+          alt="VS Code"
           width="220"
           height="220"
           className="px-6"
@@ -72,7 +80,7 @@ export default function TechStackMarquee() {
       <Marquee className="overflow-hidden mt-8" direction="right">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/xcode/xcode-original.svg"
-          alt="React"
+          alt="Xcode"
           width="220"
           height="220"
           className="px-6"
@@ -120,7 +128,15 @@ export default function TechStackMarquee() {
         />
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg"
-          alt="C++"
+          alt="Python"
+          width="220"
+          height="220"
+          className="px-6"
+          loading="lazy"
+        />
+        <Image
+          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ubuntu/ubuntu-original.svg"
+          alt="Ubuntu"
           width="220"
           height="220"
           className="px-6"

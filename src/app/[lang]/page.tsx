@@ -6,20 +6,16 @@ import Section from "@/components/partials/section";
 import Footer from "@/components/partials/footer";
 import AuroraBackground from "@/components/ui/aurora-background";
 import CursorPointer from "@/components/ui/cursor-pointer";
-import TechStackMarquee from "@/components/ui/marquee/tech-stack";
+import TechStackMarquee from "@/components/ui/tech-stack-marquee";
 import VelocityScroll from "@/components/typography/scroll-based-velocity";
 import getDictionary from "./dictionaries";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ lang: string }>;
-  }
-) {
+export async function generateMetadata(props: {
+  params: Promise<{ lang: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    lang
-  } = params;
+  const { lang } = params;
 
   const t = await getDictionary(lang);
   return {
@@ -28,16 +24,12 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page(
-  props: {
-    params: Promise<{ lang: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ lang: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    lang
-  } = params;
+  const { lang } = params;
 
   const t = await getDictionary(lang);
   return (
