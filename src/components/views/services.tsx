@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import GradualSpacing from "@/components/typography/gradual-spacing";
 import StickyScroll from "@/components/ui/sticky-scroll-reveal";
 import Image from "next/image";
