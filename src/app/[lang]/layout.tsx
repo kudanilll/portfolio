@@ -24,19 +24,18 @@ export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "id" }];
 }
 
-export default async function RootLayout(
-  props: Readonly<{
-    children: React.ReactNode;
-    params: LangParams;
-  }>
-) {
-  const params = await props.params;
-
-  const { children } = props;
+export default async function RootLayout({
+  children,
+  params,
+}: Readonly<{
+  children: React.ReactNode;
+  params: Promise<LangParams>;
+}>) {
+  const { lang } = await params;
 
   return (
     <html
-      lang={params.lang}
+      lang={lang}
       className="scroll-smooth no-scrollbar"
       style={{ scrollBehavior: "smooth" }}
     >
