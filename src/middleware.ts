@@ -19,6 +19,13 @@ function getLocale(request: NextRequest): string {
 }
 
 export function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname === "/favicon.ico") return NextResponse.next();
+  if (request.nextUrl.pathname === "/sitemap.xml") return NextResponse.next();
+  if (request.nextUrl.pathname === "/robots.txt") return NextResponse.next();
+
+  if (request.nextUrl.pathname.startsWith("/assets"))
+    return NextResponse.next();
+
   if (request.nextUrl.pathname.startsWith("/_next")) return NextResponse.next();
 
   const { pathname } = request.nextUrl;

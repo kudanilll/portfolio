@@ -12,7 +12,7 @@ const services = [
       "Work together in real time with your team, clients, and stakeholders. Collaborate on documents, share ideas, and make decisions quickly. With our platform, you can streamline your workflow and increase productivity.",
     content: (
       <Image
-        src="/en/assets/illustration/mobile.jpg"
+        src="/assets/illustration/mobile.jpg"
         alt="Mobile Service Illustration"
         width={600}
         height={600}
@@ -26,7 +26,7 @@ const services = [
       "Experience real-time updates and never stress about version control again. Our platform ensures that you're always working on the most recent version of your project, eliminating the need for constant manual updates. Stay in the loop, keep your team aligned, and maintain the flow of your work without any interruptions.",
     content: (
       <Image
-        src="/en/assets/illustration/web.jpg"
+        src="/assets/illustration/web.jpg"
         alt="Web Service Illustration"
         width={600}
         height={600}
@@ -40,7 +40,7 @@ const services = [
       "Experience real-time updates and never stress about version control again. Our platform ensures that you're always working on the most recent version of your project, eliminating the need for constant manual updates. Stay in the loop, keep your team aligned, and maintain the flow of your work without any interruptions.",
     content: (
       <Image
-        src="/en/assets/illustration/iot.jpg"
+        src="/assets/illustration/iot.jpg"
         alt="IoT Service Illustration"
         width={600}
         height={600}
