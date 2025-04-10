@@ -111,7 +111,7 @@ export default async function RootLayout({
   return (
     <html
       lang={lang}
-      className="scroll-smooth no-scrollbar"
+      className="scroll-smooth no-scrollbar bg-black text-white"
       style={{ scrollBehavior: "smooth" }}
     >
       <body
