@@ -16,8 +16,8 @@ export default function NavigationBar() {
   }, []);
 
   return (
-    <nav className="fixed top-0 -left-6 -right-6 md:left-0 md:right-0 z-10 flex items-center justify-between flex-wrap px-10 py-6 transition-all duration-300 ease-in-out bg-transparent">
-      <div className="flex items-center flex-no-shrink">
+    <nav className="fixed top-0 z-10 flex flex-row justify-between w-full items-center px-10 md:px-56 py-6 transition-all duration-300 ease-in-out bg-transparent">
+      <div className="flex items-center">
         <span
           className={`font-semibold text-2xl tracking-tight ${
             isScrolled ? "text-neutral-400" : "text-neutral-200"
@@ -26,7 +26,7 @@ export default function NavigationBar() {
           Web Portfolio.
         </span>
       </div>
-      <div className="flex items-center justify-center text-center flex-no-shrink">
+      <div className="flex items-center justify-center text-center">
         <Link
           href="/en"
           className="font-regular text-xl tracking-tight text-neutral-200"
