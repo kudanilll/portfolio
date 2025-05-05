@@ -3,6 +3,7 @@
 
 "use client";
 
+import Container from "@/components/partials/container";
 import GradualSpacing from "@/components/typography/gradual-spacing";
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
@@ -48,17 +49,19 @@ function ContactButton() {
 export default function ContactView({ lang }: { lang: any }) {
   return (
     <section id="contact">
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <GradualSpacing
-          className="text-4xl font-bold -tracking-widest text-neutral-200 md:text-7xl md:leading-[5rem]"
-          text="Contact Me"
-        />
-        <GradualSpacing
-          className="text-4xl font-bold -tracking-widest text-neutral-500 md:text-7xl md:leading-[5rem]"
-          text="Let's Work Together"
-        />
-        <ContactButton />
-      </div>
+      <Container>
+        <div className="min-h-screen flex flex-col items-center justify-center">
+          <GradualSpacing
+            className="text-4xl font-bold -tracking-widest text-neutral-200 md:text-7xl md:leading-[5rem]"
+            text="Contact Me"
+          />
+          <GradualSpacing
+            className="text-4xl font-bold -tracking-widest text-neutral-500 md:text-7xl md:leading-[5rem]"
+            text="Let's Work Together"
+          />
+          <ContactButton />
+        </div>
+      </Container>
     </section>
   );
 }

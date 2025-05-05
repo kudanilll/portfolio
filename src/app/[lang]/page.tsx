@@ -4,8 +4,8 @@
 import NavigationBar from "@/components/partials/navbar";
 import Section from "@/components/partials/section";
 import Footer from "@/components/partials/footer";
-import AuroraBackground from "@/components/ui/aurora-background";
 import CursorPointer from "@/components/ui/cursor-pointer";
+import Particles from "@/components/ui/particles";
 import TechStackMarquee from "@/components/ui/tech-stack-marquee";
 import VelocityScroll from "@/components/typography/scroll-based-velocity";
 import getDictionary from "./dictionaries";
@@ -33,9 +33,9 @@ export default async function Page(props: {
 
   const t = await getDictionary(lang);
   return (
-    <div className="bg-black">
+    <div>
       <NavigationBar />
-      <AuroraBackground />
+      <Particles />
       <Section id="home" lang={t}></Section>
       <Section id="about" lang={t}></Section>
       <VelocityScroll

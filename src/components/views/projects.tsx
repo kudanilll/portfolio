@@ -56,8 +56,8 @@ const projects = [
 export default function ProjectsView({ lang }: { lang: any }) {
   return (
     <section id="projects" className="relative h-full w-full">
-      <div className="max-w-7xl relative mx-auto pt-40 pb-10 w-screen md:w-full left-0 top-0">
-        <div className="md:pl-8">
+      <div className="relative mx-auto pt-40 pb-10 w-screen md:w-full left-0 top-0">
+        <div className="">
           <GradualSpacing
             className="text-4xl md:text-7xl font-bold -tracking-widest text-white md:leading-[4rem]"
             text={"My Awesome\nProjects"}
@@ -74,7 +74,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: false, amount: 0.3 }}
           >
-            <p className="max-w-2xl text-base md:text-lg mt-6 text-neutral-400 font-instrument-sans">
+            <p className="text-base md:text-lg mt-6 text-neutral-400 font-instrument-sans">
               I build beautiful projects with the latest technologies and
               frameworks. I am a passionate developer and designer that loves to
               build amazing projects.

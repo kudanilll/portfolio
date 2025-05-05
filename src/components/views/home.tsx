@@ -57,7 +57,7 @@ function LetsTalkButton({ lang }: { lang: any }) {
       viewport={{ once: false, amount: 0.3 }}
     >
       <a
-        href="https://drive.usercontent.google.com/u/0/uc?id=1RvDMkBMcXlsDzbHIW3UzjZKM9tzpQ5lo&export=download"
+        href={process.env.NEXT_PUBLIC_CV_EN}
         className="font-inter-tight w-48 h-12 rounded-full bg-transparent border border-neutral-400 text-white text-lg mt-6 group flex items-center justify-center gap-3 relative overflow-hidden"
       >
         {/* Text */}

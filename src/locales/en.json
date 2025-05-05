@@ -9,6 +9,8 @@
     "location": "Based in bekasi"
   },
   "about_section": {
-    "title": "About Me"
+    "title": "About Me",
+    "paragraph_1": "Allow me to introduce myself, I'm Achmad Daniel Syahputra, a developer who was born and nurtured in Bekasi. Since 2019, I've immersed myself in the world of coding, with a primary focus on web and mobile application development. My interest also extends significantly to the potential of the Internet of Things, and I'm always enthusiastic about creating innovative digital solutions that connect various facets of our lives.",
+    "paragraph_2": "For me, development isn't just about writing code, but also about bringing ideas to life in a functional and beneficial way. I am a continuous learner who never stops seeking new challenges and views every opportunity as a space to enhance my skills."
   }
 }

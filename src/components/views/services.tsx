@@ -53,12 +53,12 @@ const services = [
 export default function ServicesView({ lang }: { lang: any }) {
   return (
     <section id="services">
-      <div className="min-h-screen flex flex-row items-center justify-center">
+      <div className="min-h-screen w-full flex flex-row gap-x-8 items-center justify-between">
         <GradualSpacing
           className="text-4xl font-bold -tracking-widest text-white md:text-7xl md:leading-[4rem]"
           text={"What can I do\nfor you?"}
         />
-        <div className="pl-10">
+        <div className="">
           <StickyScroll content={services} />
         </div>
       </div>

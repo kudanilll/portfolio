@@ -1,5 +1,6 @@
 "use client";
 
+import Container from "@/components/partials/container";
 import HomeView from "@/components/views/home";
 import ProjectsView from "@/components/views/projects";
 import AboutView from "@/components/views/about";
@@ -24,9 +25,9 @@ export default function Section(props: Props) {
   const View = Views[props.id];
   return (
     <section className="flex min-h-screen min-w-full">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <Container>
         <View lang={props.lang} />
-      </div>
+      </Container>
     </section>
   );
 }
