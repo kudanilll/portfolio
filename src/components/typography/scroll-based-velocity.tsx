@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import {
   motion,
   useAnimationFrame,
@@ -12,107 +12,131 @@ import {
 } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-type VelocityScrollProps = {
+// Type definitions
+interface VelocityScrollProps {
   text: string;
-  default_velocity?: number;
+  defaultVelocity?: number;
   className?: string;
-};
+}
 
-type ParallaxProps = {
+interface ParallaxTextProps {
   children: string;
   baseVelocity: number;
   className?: string;
-};
-
-function wrap(min: number, max: number, v: number) {
-  const rangeSize = max - min;
-  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
 }
 
-export default function VelocityScroll({
-  text,
-  default_velocity = 5,
+// Helper untuk wrap nilai dalam rentang tertentu
+const wrap = (min: number, max: number, v: number): number => {
+  const rangeSize = max - min;
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
+};
+
+// Component ParallaxText yang direfactor
+const ParallaxText = ({
+  children,
+  baseVelocity = 100,
   className,
-}: VelocityScrollProps) {
-  function ParallaxText({
-    children,
-    baseVelocity = 100,
-    className,
-  }: ParallaxProps) {
-    const baseX = useMotionValue(0);
-    const { scrollY } = useScroll();
-    const scrollVelocity = useVelocity(scrollY);
-    const smoothVelocity = useSpring(scrollVelocity, {
-      damping: 50,
-      stiffness: 400,
-    });
+}: ParallaxTextProps): JSX.Element => {
+  const baseX = useMotionValue(0);
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 50,
+    stiffness: 400,
+  });
 
-    const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
-      clamp: false,
-    });
+  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
+    clamp: false,
+  });
 
-    const [repetitions, setRepetitions] = useState(1);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const textRef = useRef<HTMLSpanElement>(null);
+  const [repetitions, setRepetitions] = useState<number>(1);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
 
-    useEffect(() => {
-      const calculateRepetitions = () => {
-        if (containerRef.current && textRef.current) {
-          const containerWidth = containerRef.current.offsetWidth;
-          const textWidth = textRef.current.offsetWidth;
-          const newRepetitions = Math.ceil(containerWidth / textWidth) + 2;
-          setRepetitions(newRepetitions);
-        }
-      };
-
-      calculateRepetitions();
-
-      window.addEventListener("resize", calculateRepetitions);
-      return () => window.removeEventListener("resize", calculateRepetitions);
-    }, [children]);
-
-    const x = useTransform(baseX, (v) => `${wrap(-100 / repetitions, 0, v)}%`);
-
-    const directionFactor = useRef<number>(1);
-    useAnimationFrame((t, delta) => {
-      let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
-
-      if (velocityFactor.get() < 0) {
-        directionFactor.current = -1;
-      } else if (velocityFactor.get() > 0) {
-        directionFactor.current = 1;
+  // Effect untuk menghitung jumlah pengulangan teks yang dibutuhkan
+  useEffect(() => {
+    const calculateRepetitions = (): void => {
+      if (containerRef.current && textRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const textWidth = textRef.current.offsetWidth;
+        const newRepetitions = Math.ceil(containerWidth / textWidth) + 1;
+        setRepetitions(Math.max(2, newRepetitions)); // Minimal 2 pengulangan
       }
+    };
 
-      moveBy += directionFactor.current * moveBy * velocityFactor.get();
+    calculateRepetitions();
 
-      baseX.set(baseX.get() + moveBy);
-    });
+    // Gunakan ResizeObserver daripada event listener untuk performa lebih baik
+    const resizeObserver = new ResizeObserver(calculateRepetitions);
+    if (containerRef.current) resizeObserver.observe(containerRef.current);
 
-    return (
-      <div
-        className="w-full overflow-hidden whitespace-nowrap"
-        ref={containerRef}
-      >
-        <motion.div
-          className={cn("inline-block skew-x-[-50deg]", className)}
-          style={{ x }}
-        >
-          {Array.from({ length: repetitions }).map((_, i) => (
-            <span key={i} ref={i === 0 ? textRef : null}>
-              {children}{" "}
-            </span>
-          ))}
-        </motion.div>
-      </div>
-    );
-  }
+    return () => resizeObserver.disconnect();
+  }, [children]);
+
+  // Transform nilai baseX untuk animasi
+  const x = useTransform(baseX, (v) => `${wrap(-100 / repetitions, 0, v)}%`);
+
+  // Ref untuk arah gerakan
+  const directionFactor = useRef<number>(1);
+
+  // Animation frame untuk menggerakkan teks
+  useAnimationFrame((_, delta) => {
+    // Hitung delta movement
+    let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
+
+    // Perbarui arah berdasarkan velocity scroll
+    const currentVelocity = velocityFactor.get();
+    if (currentVelocity < 0) {
+      directionFactor.current = -1;
+    } else if (currentVelocity > 0) {
+      directionFactor.current = 1;
+    }
+
+    // Tambahkan velocity scroll ke gerakan dasar
+    moveBy += directionFactor.current * moveBy * Math.abs(currentVelocity);
+
+    // Perbarui posisi
+    baseX.set(baseX.get() + moveBy);
+  });
+
+  // Buat array repetisi dengan useMemo untuk menghindari render ulang yang tidak perlu
+  const repetitionArray = useMemo(
+    () =>
+      Array.from({ length: repetitions }).map((_, i) => (
+        <span key={i} ref={i === 0 ? textRef : null}>
+          {children}{" "}
+        </span>
+      )),
+    [repetitions, children]
+  );
 
   return (
-    <section className="relative w-full font-inter-tight text-neutral-400">
-      <ParallaxText baseVelocity={default_velocity} className={className}>
+    <div
+      className="w-full overflow-hidden whitespace-nowrap"
+      ref={containerRef}
+    >
+      <motion.div
+        className={cn("inline-block skew-x-[-50deg]", className)}
+        style={{ x }}
+      >
+        {repetitionArray}
+      </motion.div>
+    </div>
+  );
+};
+
+// Component utama VelocityScroll
+export default function VelocityScroll({
+  text,
+  defaultVelocity = 5,
+  className,
+}: VelocityScrollProps): JSX.Element {
+  return (
+    <section className="relative w-full font-inter-tight text-white/80 bg-gradient-to-r from-blue-600 to-blue-800 py-4">
+      <ParallaxText baseVelocity={defaultVelocity} className={className}>
         {text}
       </ParallaxText>
-      <ParallaxText baseVelocity={-default_velocity} className={className}>
+      <ParallaxText baseVelocity={-defaultVelocity} className={className}>
         {text}
       </ParallaxText>
     </section>

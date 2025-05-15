@@ -12,5 +12,17 @@
     "title": "Tentang Saya",
     "paragraph_1": "Perkenalkan, saya Achmad Daniel Syahputra, seorang pengembang yang tumbuh dan berkembang di Bekasi. Sejak tahun 2019, saya telah menyelami dunia pengkodean, dengan fokus pada pengembangan web dan aplikasi seluler. Ketertarikan saya juga sangat besar pada potensi Internet of Things, dan saya selalu bersemangat untuk menciptakan solusi digital inovatif yang menghubungkan berbagai aspek kehidupan kita.",
     "paragraph_2": "Bagi saya, pengembangan bukan hanya tentang menulis kode, tetapi juga tentang mewujudkan ide-ide menjadi kenyataan yang fungsional dan bermanfaat. Saya adalah seorang pembelajar yang tak pernah berhenti mencari tantangan baru dan melihat setiap kesempatan sebagai ruang untuk meningkatkan kemampuan diri."
+  },
+  "project_section": {
+    "title": "Kumpulan Projek Saya",
+    "desc": "Saya membuat projek menarik dengan teknologi terbaru. Saya adalah developer yang senang untuk membuat projek-projek menarik."
+  },
+  "service_section": {
+    "title": "Apa yang bisa saya lakukan\nuntuk Anda?"
+  },
+  "contact_section": {
+    "title_1": "Hubungi Saya",
+    "title_2": "Mari kita bekerja sama",
+    "button": "Kontak"
   }
 }

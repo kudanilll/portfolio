@@ -78,15 +78,24 @@ export default function TechStackMarquee() {
   function renderImages(items: { src: string; alt: string }[]) {
     const duplicatedItems = [...items, ...items];
     return duplicatedItems.map((item, index) => (
-      <Image
-        key={`${item.alt}-${index}`}
-        src={item.src}
-        alt={item.alt}
-        width="220"
-        height="220"
-        className="px-6"
-        loading="lazy"
-      />
+      <div key={`${item.alt}-${index}`}>
+        <Image
+          src={item.src}
+          alt={item.alt}
+          width="220"
+          height="220"
+          className="px-6 hidden md:block"
+          loading="lazy"
+        />
+        <Image
+          src={item.src}
+          alt={item.alt}
+          width="124"
+          height="124"
+          className="px-2 md:hidden"
+          loading="lazy"
+        />
+      </div>
     ));
   }
 

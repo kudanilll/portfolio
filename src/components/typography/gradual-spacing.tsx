@@ -1,4 +1,5 @@
 "use client";
+
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -8,6 +9,7 @@ type GradualSpacingProps = {
   delayMultiple?: number;
   framerProps?: Variants;
   className?: string;
+  align?: "left" | "center" | "right";
 };
 
 export default function GradualSpacing({
@@ -15,19 +17,39 @@ export default function GradualSpacing({
   duration = 0.5,
   delayMultiple = 0.04,
   className,
+  align = "left", // Default to left alignment
 }: GradualSpacingProps) {
-  // Split text dengan mempertahankan newline
+  // Split text while preserving newlines
   const textParts = text.split(/(\n)/);
 
+  // Alignment classes mapping
+  const alignmentClasses = {
+    left: "items-start",
+    center: "items-center",
+    right: "items-end",
+  };
+
   return (
-    <div className="flex flex-col space-y-1 font-inter-tight font-semibold uppercase">
+    <div
+      className={cn(
+        "flex flex-col space-y-1 font-inter-tight font-semibold uppercase",
+        alignmentClasses[align]
+      )}
+    >
       <AnimatePresence>
         {textParts.map((part, index) => {
-          // Jika bagian adalah newline, lewati rendering
+          // Skip rendering if part is a newline
           if (part === "\n") return null;
 
           return (
-            <div key={index} className="flex space-x-1">
+            <div
+              key={index}
+              className={cn(
+                "flex space-x-1",
+                align === "center" && "justify-center",
+                align === "right" && "justify-end"
+              )}
+            >
               {part.split("").map((char, charIndex) => (
                 <motion.h1
                   key={`${index}-${charIndex}`}

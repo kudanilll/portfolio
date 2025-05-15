@@ -55,12 +55,12 @@ const projects = [
 
 export default function ProjectsView({ lang }: { lang: any }) {
   return (
-    <section id="projects" className="relative h-full w-full">
-      <div className="relative mx-auto pt-40 pb-10 w-screen md:w-full left-0 top-0">
+    <section id="projects" className="relative h-full w-full px-4 md:px-0">
+      <div className="relative mx-auto pt-24 md:pt-40 pb-8 md:pb-10 w-full left-0 top-0">
         <div className="">
           <GradualSpacing
             className="text-4xl md:text-7xl font-bold -tracking-widest text-white md:leading-[4rem]"
-            text={"My Awesome\nProjects"}
+            text={lang.project_section.title}
           />
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -75,14 +75,12 @@ export default function ProjectsView({ lang }: { lang: any }) {
             viewport={{ once: false, amount: 0.3 }}
           >
             <p className="text-base md:text-lg mt-6 text-neutral-400 font-instrument-sans">
-              I build beautiful projects with the latest technologies and
-              frameworks. I am a passionate developer and designer that loves to
-              build amazing projects.
+              {lang.project_section.desc}
             </p>
           </motion.div>
         </div>
       </div>
-      <BentoGrid className="mx-auto">
+      <BentoGrid className="mx-auto pb-12 md:pb-0">
         {projects.map((project, i) => (
           <BentoGridItem
             key={i}

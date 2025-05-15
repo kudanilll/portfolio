@@ -40,8 +40,8 @@ export default async function Page(props: {
       <Section id="about" lang={t}></Section>
       <VelocityScroll
         text="Web Developer • Mobile Developer • IoT Enthusiast • "
-        default_velocity={5}
-        className="text-center text-4xl font-semibold tracking-[-0.02em] drop-shadow-sm text-neutral-400 md:text-7xl md:leading-[5rem]"
+        defaultVelocity={5}
+        className="text-center text-4xl font-semibold tracking-[-0.02em] drop-shadow-sm md:text-7xl md:leading-[5rem]"
       />
       <Section id="projects" lang={t}></Section>
       <Section id="services" lang={t}></Section>

@@ -3,12 +3,11 @@
 
 "use client";
 
-import Container from "@/components/partials/container";
 import GradualSpacing from "@/components/typography/gradual-spacing";
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 
-function ContactButton() {
+function ContactButton({ text }: { text: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0 }}
@@ -29,13 +28,13 @@ function ContactButton() {
           <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
             <div className="flex flex-row items-center">
               <span className="block leading-[20px] text-center transform origin-right group-hover:rotate-[15deg]">
-                Contact
+                {text}
               </span>
               <Mail className="ml-3 text-neutral-200" size={20} />
             </div>
             <div className="flex flex-row items-center">
               <span className="block text-center transform origin-left translate-y-0 group-hover:rotate-0">
-                Contact
+                {text}
               </span>
               <Mail className="ml-3 text-neutral-200" size={20} />
             </div>
@@ -48,20 +47,21 @@ function ContactButton() {
 
 export default function ContactView({ lang }: { lang: any }) {
   return (
-    <section id="contact">
-      <Container>
-        <div className="min-h-screen flex flex-col items-center justify-center">
-          <GradualSpacing
-            className="text-4xl font-bold -tracking-widest text-neutral-200 md:text-7xl md:leading-[5rem]"
-            text="Contact Me"
-          />
-          <GradualSpacing
-            className="text-4xl font-bold -tracking-widest text-neutral-500 md:text-7xl md:leading-[5rem]"
-            text="Let's Work Together"
-          />
-          <ContactButton />
-        </div>
-      </Container>
+    <section
+      id="contact"
+      className="h-screen mx-auto flex flex-col items-center justify-center relative"
+    >
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <GradualSpacing
+          className="text-3xl font-bold -tracking-widest text-neutral-200 md:text-7xl md:leading-[5rem]"
+          text={lang.contact_section.title_1}
+        />
+        <GradualSpacing
+          className="text-3xl font-bold -tracking-widest text-neutral-500 md:text-7xl md:leading-[5rem]"
+          text={lang.contact_section.title_2}
+        />
+        <ContactButton text={lang.contact_section.button} />
+      </div>
     </section>
   );
 }
