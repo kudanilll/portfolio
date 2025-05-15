@@ -27,7 +27,7 @@ export const metadata: Metadata = {
         height: 600,
       },
       {
-        url: "https://www.kudaniel.my.id/assets/images/og-alt.png",
+        url: "https://www.kudaniel.my.id/assets/images/og.png",
         alt: "Portfolio | Achmad Daniel",
         width: 1800,
         height: 1600,
