@@ -6,6 +6,7 @@
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { motion } from "framer-motion";
 import GradualSpacing from "@/components/typography/gradual-spacing";
+import { ResponsiveComponents } from "@/lib/responsive";
 // import Image from "next/image";
 
 const projects = [
@@ -55,12 +56,28 @@ const projects = [
 
 export default function ProjectsView({ lang }: { lang: any }) {
   return (
-    <section id="projects" className="relative h-full w-full px-4 md:px-0">
+    <section id="projects" className="relative h-full w-full">
       <div className="relative mx-auto pt-24 md:pt-40 pb-8 md:pb-10 w-full left-0 top-0">
-        <div className="">
-          <GradualSpacing
-            className="text-4xl md:text-7xl font-bold -tracking-widest text-white md:leading-[4rem]"
-            text={lang.project_section.title}
+        <>
+          <ResponsiveComponents
+            desktopComponents={
+              <GradualSpacing
+                className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-200 md:leading-[4rem]"
+                text={lang.project_section.title}
+              />
+            }
+            mobileComponents={
+              <>
+                <GradualSpacing
+                  className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-200 md:leading-[4rem]"
+                  text="MY AWESOME"
+                />
+                <GradualSpacing
+                  className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-500 md:leading-[4rem]"
+                  text="PROJECTS"
+                />
+              </>
+            }
           />
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -78,7 +95,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
               {lang.project_section.desc}
             </p>
           </motion.div>
-        </div>
+        </>
       </div>
       <BentoGrid className="mx-auto pb-12 md:pb-0">
         {projects.map((project, i) => (

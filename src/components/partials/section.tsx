@@ -24,7 +24,7 @@ const Views = {
 export default function Section(props: Props) {
   const View = Views[props.id];
   return (
-    <section className="flex min-h-screen min-w-full">
+    <section className="flex min-h-screen">
       <Container>
         <View lang={props.lang} />
       </Container>

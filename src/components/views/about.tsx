@@ -40,7 +40,7 @@ export default function AboutView({ lang }: { lang: any }) {
       ref={sectionRef}
       className="min-h-screen w-full relative py-24 md:py-24"
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="container mx-auto">
         {/* Desktop layout with flex-row */}
         <div className="hidden md:flex flex-row items-center justify-between gap-8 lg:gap-16">
           {/* Left content column */}

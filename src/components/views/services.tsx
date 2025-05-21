@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import GradualSpacing from "@/components/typography/gradual-spacing";
+import { ResponsiveComponents } from "@/lib/responsive";
 
 export default function ServicesView({ lang }: { lang: any }) {
   const services = [
@@ -23,12 +24,32 @@ export default function ServicesView({ lang }: { lang: any }) {
 
   return (
     <section id="services" className="py-12 md:py-64">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <div className="flex flex-col items-center justify-center mb-12 md:mb-16">
-          <GradualSpacing
+          {/* <GradualSpacing
             className="text-center text-4xl font-bold -tracking-widest text-neutral-200 md:text-7xl md:leading-[4rem]"
             align="center"
             text={lang.service_section.title}
+          /> */}
+          <ResponsiveComponents
+            desktopComponents={
+              <GradualSpacing
+                className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-200 md:leading-[4rem]"
+                text={lang.service_section.title}
+              />
+            }
+            mobileComponents={
+              <>
+                <GradualSpacing
+                  className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-200 md:leading-[4rem]"
+                  text="WHAT CAN I DO"
+                />
+                <GradualSpacing
+                  className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-500 md:leading-[4rem]"
+                  text="FOR YOU?"
+                />
+              </>
+            }
           />
         </div>
 

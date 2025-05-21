@@ -34,8 +34,8 @@ function BackToTopButton() {
 
 export default function Footer() {
   return (
-    <footer className="z-10 bg-transparent pb-2 md:pb-4">
-      <Container className="flex items-center justify-between flex-wrap">
+    <footer className="z-10 bg-transparent pb-4">
+      <Container className="flex items-center justify-center md:justify-between flex-wrap">
         <div className="flex items-center flex-no-shrink">
           <span className="font-regular font-instrument-sans text-neutral-200 text-md md:text-lg tracking-tight uppercase">
             &copy; {new Date().getFullYear()} Achmad Daniel

@@ -85,7 +85,7 @@ function LetsTalkButton({ lang }: { lang: any }) {
 function LeftBottomComponent({ lang }: { lang: any }) {
   return (
     <motion.div>
-      <h1 className="absolute bottom-6 left-0 text-neutral-400 md:text-lg font-semibold font-inter-tight uppercase">
+      <h1 className="hidden md:block absolute bottom-6 left-0 text-neutral-400 md:text-lg font-semibold font-inter-tight uppercase">
         <span>{lang.home_section.location}</span>
         <span className="text-neutral-600">, Indonesia</span>
       </h1>

@@ -2,10 +2,15 @@
 
 import { useState, useEffect } from "react";
 
-export function useResponsiveString(
-  desktopString: string,
-  mobileString: string
-) {
+interface ResponsiveComponentsProps {
+  desktopComponents: React.ReactNode;
+  mobileComponents: React.ReactNode;
+}
+
+export function ResponsiveComponents({
+  desktopComponents,
+  mobileComponents,
+}: ResponsiveComponentsProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -18,5 +23,5 @@ export function useResponsiveString(
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  return isMobile ? mobileString : desktopString;
+  return isMobile ? mobileComponents : desktopComponents;
 }
