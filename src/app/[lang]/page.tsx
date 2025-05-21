@@ -48,9 +48,7 @@ export default async function Page(props: {
       <TechStackMarquee />
       <Section id="contact" lang={t}></Section>
       <Footer />
-      <div className="hidden md:block">
-        <CursorPointer color="#ffffffaa" />
-      </div>
+      <CursorPointer color="#ffffffaa" />
     </div>
   );
 }

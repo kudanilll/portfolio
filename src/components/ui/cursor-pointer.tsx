@@ -14,6 +14,11 @@ const CursorPointer: FC<CursorPointerProps> = ({ color = "#323232a6" }) => {
     let width = window.innerWidth;
     let height = window.innerHeight;
 
+    // Cek apakah ukuran layar lebih besar dari 768px (misalnya desktop)
+    if (width <= 768) {
+      return; // Tidak render jika pada perangkat mobile
+    }
+
     const cursor = { x: width / 2, y: height / 2 };
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
