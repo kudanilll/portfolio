@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Container from "@/components/partials/container";
 
 export default function NavigationBar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,35 +16,43 @@ export default function NavigationBar() {
   }, []);
 
   return (
-    <nav className="fixed top-0 z-50 w-screen transition-all duration-300 ease-in-out bg-transparent">
-      <Container className="h-16 flex items-center justify-between">
-        <div className="flex items-center">
-          <span
-            className={`font-semibold text-2xl tracking-tight ${
-              isScrolled ? "text-neutral-400" : "text-neutral-200"
-            } transition-colors duration-300`}
-          >
-            Web Portfolio.
-          </span>
-        </div>
-        <div className="flex items-center justify-center text-center">
+    <nav className="w-full px-4 md:px-8 absolute top-0 md:top-4 z-50 transition-all duration-300 ease-in-out bg-transparent">
+      <div className="w-full h-16 flex items-center justify-end">
+        <div className="flex items-center justify-center text-center gap-3">
           <Link
             href="/en"
-            className="font-regular text-xl tracking-tight text-neutral-200"
+            className="cursor-pointer w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
           >
-            EN
+            {/* Text */}
+            <div className="relative items-center h-6 overflow-hidden uppercase">
+              <div className="transition-transform duration-500 ease-out group-hover:-translate-y-7">
+                <div className="flex flex-row items-center -translate-y-0.5">
+                  EN
+                </div>
+                <div className="flex flex-row items-center -translate-y-0.5">
+                  EN
+                </div>
+              </div>
+            </div>
           </Link>
-          <span className="mx-2 font-regular text-lg tracking-tight text-neutral-200">
-            |
-          </span>
           <Link
             href="/id"
-            className="font-regular text-xl tracking-tight text-neutral-200"
+            className="cursor-pointer w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
           >
-            ID
+            {/* Text */}
+            <div className="relative items-center h-6 overflow-hidden uppercase">
+              <div className="transition-transform duration-500 ease-out group-hover:-translate-y-7">
+                <div className="flex flex-row items-center -translate-y-0.5">
+                  ID
+                </div>
+                <div className="flex flex-row items-center -translate-y-0.5">
+                  ID
+                </div>
+              </div>
+            </div>
           </Link>
         </div>
-      </Container>
+      </div>
     </nav>
   );
 }

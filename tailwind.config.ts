@@ -32,10 +32,6 @@ export default {
         },
       },
     },
-    fontFamily: {
-      "inter-tight": ["Inter Tight", "sans-serif"],
-      "instrument-sans": ["Instrument Sans", "sans-serif"],
-    },
   },
   plugins: [],
 } satisfies Config;

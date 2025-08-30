@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import Container from "@/components/partials/container";
 
 function BackToTopButton() {
   return (
@@ -9,10 +8,10 @@ function BackToTopButton() {
       onClick={() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }}
-      className="font-inter-tight w-40 h-10 rounded-full bg-transparent border border-neutral-400 text-white text-base group flex items-center justify-center gap-3 relative overflow-hidden"
+      className="w-44 h-12 bg-transparent border border-neutral-400 text-white text-base group flex items-center justify-center gap-2 relative overflow-hidden"
     >
       {/* Text */}
-      <div className="relative items-center h-5 overflow-hidden">
+      <div className="relative items-center h-5 overflow-hidden uppercase">
         <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
           <span className="block leading-[22px] text-center transform origin-right group-hover:rotate-[15deg]">
             Back to Top
@@ -34,17 +33,17 @@ function BackToTopButton() {
 
 export default function Footer() {
   return (
-    <footer className="z-10 bg-transparent pb-4">
-      <Container className="flex items-center justify-center md:justify-between flex-wrap">
+    <footer className="z-10 bg-transparent pb-4 px-4 md:px-8 w-screen">
+      <div className="flex items-center justify-center md:justify-between">
         <div className="flex items-center flex-no-shrink">
-          <span className="font-regular font-instrument-sans text-neutral-200 text-md md:text-lg tracking-tight uppercase">
+          <span className="font-regular text-neutral-200 text-md md:text-lg tracking-tight uppercase">
             &copy; {new Date().getFullYear()} Achmad Daniel
           </span>
         </div>
         <div className="hidden md:flex items-center flex-no-shrink">
           <BackToTopButton />
         </div>
-      </Container>
+      </div>
     </footer>
   );
 }

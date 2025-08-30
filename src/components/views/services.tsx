@@ -1,72 +1,86 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import GradualSpacing from "@/components/typography/gradual-spacing";
+"use client";
+
 import { ResponsiveComponents } from "@/lib/responsive";
+import { useState } from "react";
+import Image from "next/image";
 
 export default function ServicesView({ lang }: { lang: any }) {
+  const [currentService, setCurrentService] = useState<number>(0);
+
   const services = [
     {
       title: "Mobile Development",
+      image: "/assets/images/og.png",
+
       description:
-        "Work together in real time with your team, clients, and stakeholders. Collaborate on documents, share ideas, and make decisions quickly. With our platform, you can streamline your workflow and increase productivity.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
     {
       title: "Web Development",
+      image: "/assets/images/og.png",
       description:
-        "Experience real-time updates and never stress about version control again. Our platform ensures that you're always working on the most recent version of your project, eliminating the need for constant manual updates. Stay in the loop, keep your team aligned, and maintain the flow of your work without any interruptions.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
     {
       title: "Internet of Things",
+      image: "/assets/images/og.png",
       description:
-        "Experience real-time updates and never stress about version control again. Our platform ensures that you're always working on the most recent version of your project, eliminating the need for constant manual updates. Stay in the loop, keep your team aligned, and maintain the flow of your work without any interruptions.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
   ];
 
   return (
-    <section id="services" className="py-12 md:py-64">
-      <div className="container mx-auto">
-        <div className="flex flex-col items-center justify-center mb-12 md:mb-16">
-          {/* <GradualSpacing
-            className="text-center text-4xl font-bold -tracking-widest text-neutral-200 md:text-7xl md:leading-[4rem]"
-            align="center"
-            text={lang.service_section.title}
-          /> */}
-          <ResponsiveComponents
-            desktopComponents={
-              <GradualSpacing
-                className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-200 md:leading-[4rem]"
-                text={lang.service_section.title}
-              />
-            }
-            mobileComponents={
-              <>
-                <GradualSpacing
-                  className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-200 md:leading-[4rem]"
-                  text="WHAT CAN I DO"
-                />
-                <GradualSpacing
-                  className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-500 md:leading-[4rem]"
-                  text="FOR YOU?"
-                />
-              </>
-            }
-          />
-        </div>
+    <section
+      id="services"
+      className="flex flex-col items-center justify-center mt-36 mb-12"
+    >
+      <div className="hidden md:block w-screen">
+        <ResponsiveComponents
+          desktopComponents={
+            <h1 className="mb-12 px-4 md:px-8 text-5xl text-white tracking-tighter uppercase">
+              {lang.service_section.title}
+            </h1>
+          }
+          mobileComponents={<></>}
+        />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="group rounded-xl border border-neutral-700 bg-neutral-800/20 p-6 transition-all hover:bg-neutral-800/50 backdrop-blur"
-            >
-              <h3 className="mb-4 text-xl font-semibold text-neutral-200 md:text-2xl">
-                {service.title}
-              </h3>
-              <p className="text-neutral-400 transition-all group-hover:text-neutral-300">
-                {service.description}
-              </p>
-            </div>
-          ))}
+        <div className="min-h-screen relative bg-neutral-950">
+          {/* List Services */}
+          <div className="absolute top-8 right-8">
+            {services.map((service, index) => (
+              <div key={index} className="pb-1">
+                <h1
+                  onClick={() => setCurrentService(index)}
+                  className={`${
+                    currentService === index
+                      ? "text-lime-400"
+                      : "text-white/30 hover:text-white/70 transition-all duration-300"
+                  } text-end md:text-6xl font-semibold tracking-tighter cursor-pointer`}
+                >
+                  {service.title} {currentService === index ? "•" : ""}
+                </h1>
+              </div>
+            ))}
+          </div>
+
+          {/* Image */}
+          <div className="absolute top-8 left-8">
+            <Image
+              src={services[currentService].image}
+              alt={services[currentService].title}
+              width={600}
+              height={600}
+            />
+          </div>
+
+          {/* Description */}
+          <div className="absolute bottom-36 left-8 right-8">
+            <h1 className="text-white text-start md:text-4xl max-w-4xl tracking-tighter">
+              {services[currentService].description}
+            </h1>
+          </div>
         </div>
       </div>
     </section>

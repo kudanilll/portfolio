@@ -132,7 +132,7 @@ export default function VelocityScroll({
   className,
 }: VelocityScrollProps): JSX.Element {
   return (
-    <section className="relative w-full font-inter-tight text-white/80 bg-gradient-to-r from-blue-600 to-blue-800 py-4">
+    <section className="relative w-full text-black bg-gradient-to-r from-white to-[#F0F0F0] py-4">
       <ParallaxText baseVelocity={defaultVelocity} className={className}>
         {text}
       </ParallaxText>

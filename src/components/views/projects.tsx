@@ -1,112 +1,177 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 "use client";
 
-import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
-import { motion } from "framer-motion";
-import GradualSpacing from "@/components/typography/gradual-spacing";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { bebasNeue } from "@/common/font";
 import { ResponsiveComponents } from "@/lib/responsive";
-// import Image from "next/image";
+import Image from "next/image";
 
+// Daftarkan plugin GSAP
+gsap.registerPlugin(ScrollTrigger, SplitText);
+
+// Data proyek Anda
 const projects = [
   {
-    title: "KuPass - Password Manager",
+    title: ["Mono", "No. 1"],
+    description:
+      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/moonbeam.png",
+    thumbnail: "/assets/images/og.png",
+    bgColor: "bg-trasnparent",
+    scrollLineColor: "bg-trasnparent",
   },
   {
-    title: "Kunime - Watch Anime For Free",
+    title: ["Look", "No. 2"],
+    description:
+      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/cursor.png",
+    thumbnail: "/assets/images/og.png",
+    bgColor: "bg-trasnparent",
+    scrollLineColor: "bg-trasnparent",
   },
   {
-    title: "FJKT48 - JKT48 Fans Website",
+    title: ["Zombie", "No. 3"],
+    description:
+      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/rogue.png",
+    thumbnail: "/assets/images/og.png",
+    bgColor: "bg-trasnparent",
+    scrollLineColor: "bg-trasnparent",
   },
   {
-    title: "Avatar Anime Maker",
+    title: ["Jimi", "No. 4"],
+    description:
+      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/editorially.png",
-  },
-  {
-    title: "LinkHub Profile - Linktree Clone",
-    link: "#",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/editrix.png",
-  },
-  {
-    title: "Wallfaper - Search Wallpapers Online",
-    link: "#",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/pixelperfect.png",
-  },
-  {
-    title: "IR Remote Arduino - Control Your Lamp",
-    link: "#",
-    thumbnail:
-      "https://aceternity.com/images/products/thumbnails/new/algochurn.png",
+    thumbnail: "/assets/images/og.png",
+    bgColor: "bg-trasnparent",
+    scrollLineColor: "bg-trasnparent",
   },
 ];
 
 export default function ProjectsView({ lang }: { lang: any }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray<HTMLElement>(".project-slide").forEach((slide) => {
+        // Animasi teks saat masuk
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: slide,
+            start: "top 70%", // Animasi dimulai saat 70% bagian atas slide terlihat
+          },
+        });
+
+        new SplitText(slide.querySelectorAll(".col__content-title"), {
+          type: "lines",
+          linesClass: "line",
+        });
+
+        tl.from(slide.querySelectorAll(".line"), {
+          y: 200,
+          duration: 1.5,
+          ease: "power4",
+          stagger: 0.1,
+        })
+          .from(
+            slide.querySelectorAll(".col__content-txt"),
+            { x: 100, opacity: 0, duration: 1.5, ease: "power4" },
+            "-=1.2"
+          )
+          .from(
+            slide.querySelectorAll(".slide-link"),
+            { x: -100, opacity: 0, duration: 1.5, ease: "power4" },
+            "<"
+          );
+
+        const imageWrapper =
+          slide.querySelector<HTMLElement>(".col__image-wrap");
+        gsap.fromTo(
+          imageWrapper,
+          { y: "-20vh" }, // Mulai dari atas
+          {
+            y: "20vh", // Bergerak ke bawah saat scroll
+            scrollTrigger: {
+              trigger: slide,
+              scrub: true, // Efek mengikuti scroll
+              start: "top bottom",
+              end: "bottom top",
+            },
+            ease: "none",
+          }
+        );
+      });
+    }, containerRef);
+
+    return () => ctx.revert(); // Cleanup otomatis
+  }, []);
+
   return (
-    <section id="projects" className="relative h-full w-full">
-      <div className="relative mx-auto pt-24 md:pt-40 pb-8 md:pb-10 w-full left-0 top-0">
-        <>
-          <ResponsiveComponents
-            desktopComponents={
-              <GradualSpacing
-                className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-200 md:leading-[4rem]"
-                text={lang.project_section.title}
-              />
-            }
-            mobileComponents={
-              <>
-                <GradualSpacing
-                  className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-200 md:leading-[4rem]"
-                  text="MY AWESOME"
-                />
-                <GradualSpacing
-                  className="text-4xl md:text-7xl font-bold -tracking-widest text-neutral-500 md:leading-[4rem]"
-                  text="PROJECTS"
-                />
-              </>
-            }
-          />
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate="visible"
-            exit="hidden"
-            transition={{
-              type: "spring",
-              stiffness: 100,
-              duration: 0.5,
-            }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            <p className="text-base md:text-lg mt-6 text-neutral-400 font-instrument-sans">
-              {lang.project_section.desc}
-            </p>
-          </motion.div>
-        </>
+    <div ref={containerRef} className="w-full">
+      <div className="h-[8dvh]"></div>
+      <div className="relative">
+        <ResponsiveComponents
+          desktopComponents={
+            <h1 className="py-12 px-4 md:px-8 text-5xl text-white tracking-tighter uppercase">
+              {lang.project_section.title}
+            </h1>
+          }
+          mobileComponents={<></>}
+        />
+
+        <div className="h-16 w-16 bg-lime-400 absolute right-8 top-8"></div>
+        <div className="h-14 w-14 border border-lime-400 absolute right-16 top-16"></div>
       </div>
-      <BentoGrid className="mx-auto pb-12 md:pb-0">
-        {projects.map((project, i) => (
-          <BentoGridItem
-            key={i}
-            title={project.title}
-            // description={project.description}
-            className={i === 3 || i === 6 ? "md:col-span-2" : ""}
-          />
-        ))}
-      </BentoGrid>
-    </section>
+      {projects.map((project, i) => (
+        <section
+          key={i}
+          className="project-slide flex-col md:flex-row flex items-stretch h-screen overflow-hidden border-t last:border-b border-neutral-600"
+        >
+          <div className="col relative w-full md:flex-1 h-screen z-[1]">
+            <div
+              className={`col__content flex flex-col justify-end h-full overflow-hidden p-[6vw_6vw_10vw] w-full md:w-auto ${project.bgColor} bg-opacity-90 md:bg-opacity-100`}
+            >
+              <h3 className="col__content-title text-[18vw] md:text-[8vw] tracking-tight leading-none mb-[6vw] md:mb-[2vw] text-custom-dark">
+                {project.title.map((line, lineIdx) => (
+                  <span
+                    key={lineIdx}
+                    className={`block overflow-hidden ${
+                      lineIdx % 2 !== 0 ? "md:-mt-[1vw]" : ""
+                    }`}
+                  >
+                    {line}
+                  </span>
+                ))}
+              </h3>
+              <div className="col__content-wrap flex flex-col md:flex-row justify-end items-start md:items-center">
+                <a
+                  href={project.link}
+                  className="slide-link group relative order-2 md:order-1 self-end md:self-auto flex justify-end w-[75px] h-[53px]"
+                >
+                  <div className="slide-link__circ w-[53px] h-[53px] rounded-full border border-custom-dark"></div>
+                  <div className="slide-link__line absolute top-[25px] left-0 w-16 h-0.5 bg-custom-dark transition-all duration-700 ease-in-out group-hover:scale-x-50 group-hover:translate-x-5 transform-origin-right"></div>
+                </a>
+                <p className="col__content-txt order-1 md:order-2 text-custom-dark max-w-[50vw] md:max-w-[22vw] mb-10 md:mb-0 ml-0 md:ml-8">
+                  {project.description}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="col absolute md:relative top-0 left-0 w-full md:flex-1 h-screen overflow-hidden z-0">
+            <div className="col__image-wrap relative w-full h-[140vh] -top-[20vh]">
+              <Image
+                src={project.thumbnail}
+                alt={project.title.join(" ")}
+                fill
+                className="object-cover w-full h-full"
+              />
+            </div>
+          </div>
+        </section>
+      ))}
+    </div>
   );
 }
