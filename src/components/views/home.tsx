@@ -25,7 +25,9 @@ function Title({ lang }: { lang: any }) {
 function Description({ lang, className }: { lang: any; className?: string }) {
   return (
     <div className={className}>
-      <p className="md:text-xl text-neutral-400">{lang.home_section.desc}</p>
+      <p className="md:text-xl text-neutral-400 uppercase">
+        {lang.home_section.desc}
+      </p>
     </div>
   );
 }
@@ -121,15 +123,6 @@ function RightBottomComponent() {
             </div>
           </div>
         </Link>
-        {/* <div className="active:scale-75 font-regular text-xl tracking-tight text-neutral-200 p-4 border border-neutral-200 hover:bg-neutral-200/10 hover:scale-110 hover:shadow-lg transition-all duration-500 ease-in-out cursor-pointer transform hover:-translate-y-1">
-          <Instagram />
-        </div>
-        <div className="active:scale-75 font-regular text-xl tracking-tight text-neutral-200 p-4 border border-neutral-200 hover:bg-neutral-200/10 hover:scale-110 hover:shadow-lg transition-all duration-500 ease-in-out cursor-pointer transform hover:-translate-y-1">
-          <Github />
-        </div>
-        <div className="active:scale-75 font-regular text-xl tracking-tight text-neutral-200 p-4 border border-neutral-200 hover:bg-neutral-200/10 hover:scale-110 hover:shadow-lg transition-all duration-500 ease-in-out cursor-pointer transform hover:-translate-y-1">
-          <Twitter />
-        </div> */}
       </div>
     </div>
   );
@@ -144,7 +137,7 @@ export default function HomeView({ lang }: { lang: any }) {
       {/* Main Content */}
       <div className="mt-0 md:mt-28 w-screen px-4 md:px-8 flex flex-row items-start justify-between">
         <Title lang={lang} />
-        <Description lang={lang} className="w-full md:w-1/4 text-end" />
+        <Description lang={lang} className="w-full md:w-1/3 text-end" />
       </div>
 
       {/* Bottom */}
