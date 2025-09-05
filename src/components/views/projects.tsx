@@ -105,6 +105,14 @@ export default function ProjectsView({ lang }: { lang: any }) {
           }
         );
       });
+
+      gsap.to(".flower-rotate", {
+        rotation: 360,
+        duration: 12,
+        ease: "linear",
+        repeat: -1, // infinite
+        transformOrigin: "50% 50%",
+      });
     }, containerRef);
 
     return () => ctx.revert(); // Cleanup otomatis

@@ -6,7 +6,7 @@ const Flower = () => {
       viewBox="0 0 200 200"
       color="#a3e635"
       fill="currentColor"
-      className="w-24 h-24"
+      className="w-24 h-24 flower-rotate"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g>
@@ -15,21 +15,6 @@ const Flower = () => {
           fill="currentColor"
         />
       </g>
-      <defs>
-        <linearGradient
-          id="paint0_linear_104_44"
-          x1="100"
-          y1="0"
-          x2="100"
-          y2="200"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop /> <stop offset="1" />
-        </linearGradient>
-        <clipPath id="clip0_104_44">
-          <rect width="200" height="200" fill="currentColor" />
-        </clipPath>
-      </defs>{" "}
     </svg>
   );
 };
