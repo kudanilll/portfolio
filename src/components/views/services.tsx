@@ -5,6 +5,7 @@
 import { ResponsiveComponents } from "@/lib/responsive";
 import { useState } from "react";
 import Image from "next/image";
+import Abstract from "@/components/svg/abstract";
 
 export default function ServicesView({ lang }: { lang: any }) {
   const [currentService, setCurrentService] = useState<number>(0);
@@ -57,9 +58,9 @@ export default function ServicesView({ lang }: { lang: any }) {
                     currentService === index
                       ? "text-lime-400"
                       : "text-white/30 hover:text-white/70 transition-all duration-300"
-                  } text-end md:text-6xl font-semibold tracking-tighter cursor-pointer`}
+                  } text-end md:text-6xl font-semibold tracking-tighter cursor-pointer flex items-center justify-end gap-4`}
                 >
-                  {service.title} {currentService === index ? "•" : ""}
+                  {service.title} {currentService === index ? <Abstract /> : ""}
                 </h1>
               </div>
             ))}

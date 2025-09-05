@@ -2,6 +2,7 @@
 
 import { bebasNeue } from "@/common/font";
 import { TextReveal } from "@/components/ui/text-reveal";
+import Dot from "@/components/svg/dot";
 import Image from "next/image";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,6 +24,10 @@ export default function AboutView({ lang }: { lang: any }) {
         height={450}
         className="absolute top-3/4 md:left-24 -translate-y-1/2 grayscale"
       />
+
+      <div className="absolute bottom-0 md:right-32 w-[200px] h-[200px]">
+        <Dot />
+      </div>
 
       <div className="w-full flex justify-between">
         <div className="w-2/5 h-full"></div>

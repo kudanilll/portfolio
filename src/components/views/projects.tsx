@@ -7,6 +7,7 @@ import { SplitText } from "gsap/SplitText";
 import { bebasNeue } from "@/common/font";
 import { ResponsiveComponents } from "@/lib/responsive";
 import Image from "next/image";
+import Flower from "@/components/svg/flower";
 
 // Daftarkan plugin GSAP
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -14,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 // Data proyek Anda
 const projects = [
   {
-    title: ["Mono", "No. 1"],
+    title: ["Kupass", "No. 1"],
     description:
       "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
@@ -23,7 +24,7 @@ const projects = [
     scrollLineColor: "bg-trasnparent",
   },
   {
-    title: ["Look", "No. 2"],
+    title: ["Nielcode", "No. 2"],
     description:
       "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
@@ -32,7 +33,7 @@ const projects = [
     scrollLineColor: "bg-trasnparent",
   },
   {
-    title: ["Zombie", "No. 3"],
+    title: ["Kunime", "No. 3"],
     description:
       "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
@@ -41,7 +42,7 @@ const projects = [
     scrollLineColor: "bg-trasnparent",
   },
   {
-    title: ["Jimi", "No. 4"],
+    title: ["FJKT48", "No. 4"],
     description:
       "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
@@ -112,18 +113,22 @@ export default function ProjectsView({ lang }: { lang: any }) {
   return (
     <div ref={containerRef} className="w-full">
       <div className="h-[8dvh]"></div>
-      <div className="relative">
+      <div className="relative md:mx-16">
         <ResponsiveComponents
           desktopComponents={
-            <h1 className="py-12 px-4 md:px-8 text-5xl text-white tracking-tighter uppercase">
+            <h1 className="py-12 px-4 md:px-6 text-5xl text-white tracking-tighter uppercase">
               {lang.project_section.title}
             </h1>
           }
           mobileComponents={<></>}
         />
 
-        <div className="h-16 w-16 bg-lime-400 absolute right-8 top-8"></div>
-        <div className="h-14 w-14 border border-lime-400 absolute right-16 top-16"></div>
+        <div className="absolute right-8 top-6">
+          <Flower />
+        </div>
+
+        {/* <div className="h-16 w-16 bg-lime-400 absolute right-8 top-8"></div>
+        <div className="h-14 w-14 border border-lime-400 absolute right-16 top-16"></div> */}
       </div>
       {projects.map((project, i) => (
         <section
@@ -154,7 +159,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
                   <div className="slide-link__circ w-[53px] h-[53px] rounded-full border border-custom-dark"></div>
                   <div className="slide-link__line absolute top-[25px] left-0 w-16 h-0.5 bg-custom-dark transition-all duration-700 ease-in-out group-hover:scale-x-50 group-hover:translate-x-5 transform-origin-right"></div>
                 </a>
-                <p className="col__content-txt order-1 md:order-2 text-custom-dark max-w-[50vw] md:max-w-[22vw] mb-10 md:mb-0 ml-0 md:ml-8">
+                <p className="md:text-xl col__content-txt order-1 md:order-2 text-custom-dark max-w-[50vw] md:max-w-[22vw] mb-10 md:mb-0 ml-0 md:ml-8">
                   {project.description}
                 </p>
               </div>
