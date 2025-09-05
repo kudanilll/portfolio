@@ -4,7 +4,6 @@
 "use client";
 
 import { bebasNeue } from "@/common/font";
-// import GradualSpacing from "@/components/typography/gradual-spacing";
 import { Mail } from "lucide-react";
 
 function ContactButton({ text }: { text: string }) {
@@ -21,13 +20,13 @@ function ContactButton({ text }: { text: string }) {
               <span className="block leading-[20px] text-center transform origin-right group-hover:rotate-[15deg]">
                 {text}
               </span>
-              <Mail className="ml-3 text-neutral-200" size={20} />
+              <Mail className="ml-3 text-white" size={22} />
             </div>
             <div className="flex flex-row items-center">
               <span className="block text-center transform origin-left translate-y-0 group-hover:rotate-0">
                 {text}
               </span>
-              <Mail className="ml-3 text-neutral-200" size={20} />
+              <Mail className="ml-3 text-white" size={22} />
             </div>
           </div>
         </div>
@@ -53,15 +52,6 @@ export default function ContactView({ lang }: { lang: any }) {
         >
           {lang.contact_section.title_2}
         </h2>
-
-        {/* <GradualSpacing
-          className="text-3xl font-bold -tracking-widest text-neutral-200 md:text-7xl md:leading-[5rem]"
-          text={lang.contact_section.title_1}
-        />
-        <GradualSpacing
-          className="text-3xl font-bold -tracking-widest text-neutral-500 md:text-7xl md:leading-[5rem]"
-          text={lang.contact_section.title_2}
-        /> */}
         <ContactButton text={lang.contact_section.button} />
       </div>
     </section>

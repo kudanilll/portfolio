@@ -38,7 +38,7 @@ function LetsTalkButton({ lang }: { lang: any }) {
         className="tracking-normal text-base w-48 h-12 bg-transparent border border-neutral-400 text-white mt-6 group flex items-center justify-center gap-3 relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
       >
         {/* Text */}
-        <div className="relative items-center h-5 overflow-hidden">
+        <div className="relative items-center h-5 overflow-hidden uppercase">
           <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
             <div className="flex flex-row items-center">
               <span className="block leading-[20px] text-center transform origin-right group-hover:rotate-[15deg]">

@@ -36,9 +36,21 @@ export default function Footer() {
     <footer className="z-10 bg-transparent pb-4 px-4 md:px-8 w-screen">
       <div className="flex items-center justify-center md:justify-between">
         <div className="flex items-center flex-no-shrink">
-          <span className="font-regular text-neutral-200 text-md md:text-lg tracking-tight uppercase">
+          <div className="group">
+            <div className="relative items-center h-5 overflow-hidden uppercase">
+              <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
+                <span className="block leading-[22px] text-center transform origin-right group-hover:rotate-[15deg]">
+                  &copy; {new Date().getFullYear()} Achmad Daniel
+                </span>
+                <span className="block text-center transform origin-left translate-y-0 group-hover:rotate-0">
+                  &copy; {new Date().getFullYear()} Achmad Daniel
+                </span>
+              </div>
+            </div>
+          </div>
+          {/* <span className="font-regular text-neutral-200 text-md md:text-lg tracking-tight uppercase">
             &copy; {new Date().getFullYear()} Achmad Daniel
-          </span>
+          </span> */}
         </div>
         <div className="hidden md:flex items-center flex-no-shrink">
           <BackToTopButton />
