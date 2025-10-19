@@ -18,7 +18,10 @@
     "desc": "I build beautiful projects with the latest technologies and frameworks. I am a passionate developer and designer that loves to build amazing projects."
   },
   "service_section": {
-    "title": "— What can I do for you?"
+    "title": "— Solutions I build for your business",
+    "mobile": "Production-ready Android/iOS apps that feel fast and polished. I handle flows, development, testing, and store release—plus analytics & crash reporting—so you can focus on growth.",
+    "web": "High-converting, high-performance websites & web apps: clean architecture, responsive UI, SEO, API/CMS integrations, and security best practices. From landing pages to dashboards, built to scale.",
+    "iot": "End-to-end IoT solutions: sensors to cloud, real-time data, automation, and monitoring dashboards. Outcome: leaner operations and data-driven decisions."
   },
   "contact_section": {
     "title_1": "Contact Me",

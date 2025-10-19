@@ -17,7 +17,10 @@
     "desc": "Saya membuat projek menarik dengan teknologi terbaru. Saya adalah developer yang senang untuk membuat projek-projek menarik."
   },
   "service_section": {
-    "title": "— Apa yang bisa saya lakukan untuk Anda?"
+    "title": "— Solusi yang saya bangun untuk bisnis Anda",
+    "mobile": "Aplikasi Android/iOS yang cepat, halus, dan siap produksi. Saya tangani alur, pengembangan, testing hingga rilis—plus analitik & crash reporting—agar Anda fokus ke pertumbuhan.",
+    "web": "Website & web app yang konversi dan kencang: arsitektur rapi, UI responsif, SEO, integrasi API/CMS, dan best practice keamanan. Dari landing page hingga dashboard, siap scale.",
+    "iot": "Solusi IoT end-to-end: dari sensor ke cloud, data real-time, automasi, hingga dashboard pemantauan. Hasilnya: operasi lebih efisien dan keputusan berbasis data."
   },
   "contact_section": {
     "title_1": "Hubungi Saya",
