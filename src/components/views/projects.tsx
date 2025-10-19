@@ -15,7 +15,8 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 // Data proyek Anda
 const projects = [
   {
-    title: ["Kupass", "No. 1"],
+    id: 1,
+    title: "Kupass",
     description:
       "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
@@ -24,7 +25,8 @@ const projects = [
     scrollLineColor: "bg-trasnparent",
   },
   {
-    title: ["Nielcode", "No. 2"],
+    id: 2,
+    title: "Nielcode",
     description:
       "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
@@ -33,7 +35,8 @@ const projects = [
     scrollLineColor: "bg-trasnparent",
   },
   {
-    title: ["Kunime", "No. 3"],
+    id: 3,
+    title: "Kunime",
     description:
       "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
@@ -42,7 +45,8 @@ const projects = [
     scrollLineColor: "bg-trasnparent",
   },
   {
-    title: ["FJKT48", "No. 4"],
+    id: 4,
+    title: "FJKT48",
     description:
       "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
     link: "#",
@@ -147,25 +151,19 @@ export default function ProjectsView({ lang }: { lang: any }) {
             <div
               className={`col__content flex flex-col justify-end h-full overflow-hidden p-[6vw_6vw_10vw] w-full md:w-auto ${project.bgColor} bg-opacity-90 md:bg-opacity-100`}
             >
-              <h3 className="col__content-title text-[18vw] md:text-[8vw] tracking-tight leading-none mb-[6vw] md:mb-[2vw] text-custom-dark">
-                {project.title.map((line, lineIdx) => (
-                  <span
-                    key={lineIdx}
-                    className={`block overflow-hidden ${
-                      lineIdx % 2 !== 0 ? "md:-mt-[1vw]" : ""
-                    }`}
-                  >
-                    {line}
-                  </span>
-                ))}
+              <h3 className="col__content-title tracking-tight leading-none mb-[6vw] md:mb-[2vw] text-custom-dark">
+                <span className="block overflow-hidden md:text-[2vw] opacity-50 md:ml-2">{`No. ${project.id}`}</span>
+                <span className="block overflow-hidden text-[18vw] md:text-[8vw]">
+                  {project.title}
+                </span>
               </h3>
               <div className="col__content-wrap flex flex-col md:flex-row justify-end items-start md:items-center">
                 <a
                   href={project.link}
                   className="slide-link group relative order-2 md:order-1 self-end md:self-auto flex justify-end w-[75px] h-[53px]"
                 >
-                  <div className="slide-link__circ w-[53px] h-[53px] rounded-full border border-custom-dark"></div>
-                  <div className="slide-link__line absolute top-[25px] left-0 w-16 h-0.5 bg-custom-dark transition-all duration-700 ease-in-out group-hover:scale-x-50 group-hover:translate-x-5 transform-origin-right"></div>
+                  {/* <div className="slide-link__circ w-[53px] h-[53px] rounded-full border border-custom-dark"></div>
+                  <div className="slide-link__line absolute top-[25px] left-0 w-16 h-0.5 bg-custom-dark transition-all duration-700 ease-in-out group-hover:scale-x-50 group-hover:translate-x-5 transform-origin-right"></div> */}
                 </a>
                 <p className="md:text-xl col__content-txt order-1 md:order-2 text-custom-dark max-w-[50vw] md:max-w-[22vw] mb-10 md:mb-0 ml-0 md:ml-8">
                   {project.description}
@@ -177,7 +175,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
             <div className="col__image-wrap relative w-full h-[140vh] -top-[20vh]">
               <Image
                 src={project.thumbnail}
-                alt={project.title.join(" ")}
+                alt={project.title}
                 fill
                 className="object-cover w-full h-full"
               />
