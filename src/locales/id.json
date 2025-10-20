@@ -14,7 +14,11 @@
   },
   "project_section": {
     "title": "— Kumpulan Projek Saya",
-    "desc": "Saya membuat projek menarik dengan teknologi terbaru. Saya adalah developer yang senang untuk membuat projek-projek menarik."
+    "desc": "Saya membuat projek menarik dengan teknologi terbaru. Saya adalah developer yang senang untuk membuat projek-projek menarik.",
+    "project_1": "Nielcode adalah platform untuk menyewa jasa pembuatan website dan aplikasi.",
+    "project_2": "Kunime adalah aplikasi streaming anime gratis untuk penonton Indonesia, lengkap dengan subtitle Bahasa Indonesia dan antarmuka yang ringan.",
+    "project_3": "Kupass adalah aplikasi manajer kata sandi open-source untuk Android, dirancang dengan fokus pada keamanan dan kemudahan pakai.",
+    "project_4": "Favget adalah layanan backend berperforma tinggi untuk mengambil dan menyajikan favicon dari berbagai domain dengan caching global/CDN."
   },
   "service_section": {
     "title": "— Solusi yang saya bangun untuk bisnis Anda",

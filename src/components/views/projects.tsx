@@ -4,69 +4,62 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { bebasNeue } from "@/common/font";
 import { ResponsiveComponents } from "@/lib/responsive";
-import Image from "next/image";
 import Flower from "@/components/svg/flower";
+import Image from "next/image";
+import Link from "next/link";
 
-// Daftarkan plugin GSAP
 gsap.registerPlugin(ScrollTrigger, SplitText);
-
-// Data proyek Anda
-const projects = [
-  {
-    id: 1,
-    title: "Kupass",
-    description:
-      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
-    link: "#",
-    thumbnail: "/assets/images/og.png",
-    bgColor: "bg-trasnparent",
-    scrollLineColor: "bg-trasnparent",
-  },
-  {
-    id: 2,
-    title: "Nielcode",
-    description:
-      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
-    link: "#",
-    thumbnail: "/assets/images/og.png",
-    bgColor: "bg-trasnparent",
-    scrollLineColor: "bg-trasnparent",
-  },
-  {
-    id: 3,
-    title: "Kunime",
-    description:
-      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
-    link: "#",
-    thumbnail: "/assets/images/og.png",
-    bgColor: "bg-trasnparent",
-    scrollLineColor: "bg-trasnparent",
-  },
-  {
-    id: 4,
-    title: "FJKT48",
-    description:
-      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada magna mollis euismod.",
-    link: "#",
-    thumbnail: "/assets/images/og.png",
-    bgColor: "bg-trasnparent",
-    scrollLineColor: "bg-trasnparent",
-  },
-];
 
 export default function ProjectsView({ lang }: { lang: any }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const projects = [
+    {
+      id: 1,
+      title: "Nielcode",
+      description: lang.project_section.project_1,
+      link: "https://www.nielcode.my.id",
+      thumbnail: "/assets/images/nielcode.webp",
+      bgColor: "bg-trasnparent",
+      scrollLineColor: "bg-trasnparent",
+    },
+    {
+      id: 2,
+      title: "Kunime",
+      description: lang.project_section.project_2,
+      link: "https://github.com/kudanilll/kunime",
+      thumbnail: "/assets/images/og.png",
+      bgColor: "bg-trasnparent",
+      scrollLineColor: "bg-trasnparent",
+    },
+    {
+      id: 3,
+      title: "Kupass",
+      description: lang.project_section.project_3,
+      link: "#https://github.com/kudanilll/kupass",
+      thumbnail: "/assets/images/kupass.webp",
+      bgColor: "bg-trasnparent",
+      scrollLineColor: "bg-trasnparent",
+    },
+    {
+      id: 4,
+      title: "Favget",
+      description: lang.project_section.project_4,
+      link: "https://github.com/kudanilll/favget",
+      thumbnail: "/assets/images/og.png",
+      bgColor: "bg-trasnparent",
+      scrollLineColor: "bg-trasnparent",
+    },
+  ];
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>(".project-slide").forEach((slide) => {
-        // Animasi teks saat masuk
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: slide,
-            start: "top 70%", // Animasi dimulai saat 70% bagian atas slide terlihat
+            start: "top 70%",
           },
         });
 
@@ -96,12 +89,12 @@ export default function ProjectsView({ lang }: { lang: any }) {
           slide.querySelector<HTMLElement>(".col__image-wrap");
         gsap.fromTo(
           imageWrapper,
-          { y: "-20vh" }, // Mulai dari atas
+          { y: "-20vh" },
           {
-            y: "20vh", // Bergerak ke bawah saat scroll
+            y: "20vh",
             scrollTrigger: {
               trigger: slide,
-              scrub: true, // Efek mengikuti scroll
+              scrub: true,
               start: "top bottom",
               end: "bottom top",
             },
@@ -119,7 +112,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
       });
     }, containerRef);
 
-    return () => ctx.revert(); // Cleanup otomatis
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -153,18 +146,19 @@ export default function ProjectsView({ lang }: { lang: any }) {
             >
               <h3 className="col__content-title tracking-tight leading-none mb-[6vw] md:mb-[2vw] text-custom-dark">
                 <span className="block overflow-hidden md:text-[2vw] opacity-50 md:ml-2">{`No. ${project.id}`}</span>
-                <span className="block overflow-hidden text-[18vw] md:text-[8vw]">
+                <span className="block text-[18vw] md:text-[8vw] md:tracking-tight">
                   {project.title}
                 </span>
               </h3>
               <div className="col__content-wrap flex flex-col md:flex-row justify-end items-start md:items-center">
-                <a
+                <Link
                   href={project.link}
+                  target="_blank"
                   className="slide-link group relative order-2 md:order-1 self-end md:self-auto flex justify-end w-[75px] h-[53px]"
                 >
-                  {/* <div className="slide-link__circ w-[53px] h-[53px] rounded-full border border-custom-dark"></div>
-                  <div className="slide-link__line absolute top-[25px] left-0 w-16 h-0.5 bg-custom-dark transition-all duration-700 ease-in-out group-hover:scale-x-50 group-hover:translate-x-5 transform-origin-right"></div> */}
-                </a>
+                  <div className="slide-link__circ w-[53px] h-[53px] rounded-full border-2 border-lime-400"></div>
+                  <div className="slide-link__line absolute top-[25px] left-0 w-16 h-0.5 bg-lime-400 transition-all duration-700 ease-in-out group-hover:scale-x-50 group-hover:translate-x-4 transform-origin-right"></div>
+                </Link>
                 <p className="md:text-xl col__content-txt order-1 md:order-2 text-custom-dark max-w-[50vw] md:max-w-[22vw] mb-10 md:mb-0 ml-0 md:ml-8">
                   {project.description}
                 </p>

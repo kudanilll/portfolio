@@ -15,7 +15,11 @@
   },
   "project_section": {
     "title": "— My Awesome Projects",
-    "desc": "I build beautiful projects with the latest technologies and frameworks. I am a passionate developer and designer that loves to build amazing projects."
+    "desc": "I build beautiful projects with the latest technologies and frameworks. I am a passionate developer and designer that loves to build amazing projects.",
+    "project_1": "Nielcode is a platform for hiring website and application development services.",
+    "project_2": "Kunime is a free anime streaming app tailored for Indonesian viewers, featuring Indonesian subtitles and a smooth UI.",
+    "project_3": "Kupass is an open-source password manager for Android, designed with security and convenience in mind.",
+    "project_4": "Favget is a high-performance backend for fetching and delivering favicons across domains with global caching/CDN."
   },
   "service_section": {
     "title": "— Solutions I build for your business",
