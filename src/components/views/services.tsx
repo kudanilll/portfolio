@@ -115,8 +115,8 @@ function MobileDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg"
           alt="Flutter"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="md:p-12"
         />
       </TiltItem>
@@ -124,8 +124,8 @@ function MobileDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kotlin/kotlin-original.svg"
           alt="Kotlin"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="md:p-8"
         />
       </TiltItem>
@@ -133,8 +133,8 @@ function MobileDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/androidstudio/androidstudio-original.svg"
           alt="Android Studio"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="md:p-8"
         />
       </TiltItem>
@@ -155,8 +155,8 @@ function WebsiteDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg"
           alt="Firebase"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="md:p-12"
         />
       </TiltItem>
@@ -164,8 +164,8 @@ function WebsiteDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg"
           alt="TypeScript"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="md:p-8"
         />
       </TiltItem>
@@ -173,8 +173,8 @@ function WebsiteDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg"
           alt="Go"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="md:p-12"
         />
       </TiltItem>
@@ -195,8 +195,8 @@ function IoTDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/arduino/arduino-original.svg"
           alt="Arduino"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="md:p-8"
         />
       </TiltItem>
@@ -204,8 +204,8 @@ function IoTDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg"
           alt="Firebase"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="md:p-12"
         />
       </TiltItem>
@@ -213,8 +213,8 @@ function IoTDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg"
           alt="C++"
-          width={200}
-          height={200}
+          width={220}
+          height={220}
           className="md:p-8"
         />
       </TiltItem>
@@ -269,7 +269,7 @@ export default function ServicesView({ lang }: { lang: any }) {
         <div className="min-h-screen relative bg-neutral-950">
           {/* List Services */}
           <LayoutGroup>
-            <div className="absolute top-8 right-8 flex flex-col items-end text-right">
+            <div className="absolute top-24 right-8 flex flex-col items-end text-right">
               {services.map((service, index) => (
                 <motion.div
                   key={service.title}
@@ -278,10 +278,10 @@ export default function ServicesView({ lang }: { lang: any }) {
                   animate="animate"
                   className="pb-1"
                 >
-                  <h2
+                  <h1
                     onClick={() => setCurrentService(index)}
                     aria-current={currentService === index ? "true" : undefined}
-                    className={`relative inline-flex items-center justify-end gap-3 cursor-pointer md:text-6xl font-semibold tracking-tighter
+                    className={`relative inline-flex items-center justify-end gap-3 cursor-pointer md:text-6xl leading-none font-semibold tracking-tighter
                     ${
                       currentService === index
                         ? "text-lime-400"
@@ -319,7 +319,7 @@ export default function ServicesView({ lang }: { lang: any }) {
                         />
                       )}
                     </span>
-                  </h2>
+                  </h1>
                 </motion.div>
               ))}
             </div>
