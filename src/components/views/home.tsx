@@ -9,7 +9,7 @@ function Title({ lang }: { lang: any }) {
   return (
     <div>
       <span
-        className={`${bebasNeue.className} text-[3rem] md:text-[12rem] font-semibold text-white text-start leading-[0.9] tracking-tight uppercase`}
+        className={`${bebasNeue.className} text-[3rem] md:text-[12rem] font-medium text-white text-start leading-[0.9] tracking-tight uppercase`}
       >
         ACHMAD DANIEL <br /> SYAHPUTRA{" "}
         <span

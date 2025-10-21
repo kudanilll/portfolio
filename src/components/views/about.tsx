@@ -13,7 +13,7 @@ export default function AboutView({ lang }: { lang: any }) {
       className="min-h-screen w-full px-4 md:px-8 relative py-24"
     >
       <h1
-        className={`${bebasNeue.className} absolute top-8 md:left-4 text-[3rem] md:text-[16rem] font-semibold tracking-tight text-white opacity-5`}
+        className={`${bebasNeue.className} absolute top-8 md:left-4 text-[3rem] md:text-[16rem] font-medium tracking-tight text-white opacity-5`}
       >
         {lang.about_section.title}
       </h1>

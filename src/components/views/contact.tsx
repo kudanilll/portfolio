@@ -43,12 +43,12 @@ export default function ContactView({ lang }: { lang: any }) {
     >
       <div className="min-h-screen mx-auto flex flex-col items-center justify-center z-10">
         <h1
-          className={`${bebasNeue.className} text-3xl font-semibold tracking-tight text-neutral-200 md:text-9xl md:leading-[6rem]`}
+          className={`${bebasNeue.className} text-3xl font-medium tracking-tight text-neutral-200 md:text-9xl md:leading-[6rem]`}
         >
           {lang.contact_section.title_1}
         </h1>
         <h2
-          className={`${bebasNeue.className} text-3xl font-semibold tracking-tight text-neutral-500 md:text-9xl md:leading-[6rem]`}
+          className={`${bebasNeue.className} text-3xl font-medium tracking-tight text-neutral-500 md:text-9xl md:leading-[6rem]`}
         >
           {lang.contact_section.title_2}
         </h2>
