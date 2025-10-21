@@ -9,7 +9,7 @@ function Title({ lang }: { lang: any }) {
   return (
     <div>
       <span
-        className={`${bebasNeue.className} text-[3rem] md:text-[12rem] font-bold text-white text-start leading-[0.9] tracking-tight uppercase`}
+        className={`${bebasNeue.className} text-[3rem] md:text-[12rem] font-semibold text-white text-start leading-[0.9] tracking-tight uppercase`}
       >
         ACHMAD DANIEL <br /> SYAHPUTRA{" "}
         <span
@@ -79,7 +79,8 @@ function RightBottomComponent() {
     <div className="hidden md:block absolute bottom-6 md:right-8">
       <div className="flex items-center justify-center text-center gap-3">
         <Link
-          href=""
+          href="https://www.instagram.com/achmaddaniel__"
+          target="_blank"
           className="cursor-pointer w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 overflow-hidden uppercase">
@@ -94,7 +95,8 @@ function RightBottomComponent() {
           </div>
         </Link>
         <Link
-          href=""
+          href="https://github.com/kudanilll"
+          target="_blank"
           className="cursor-pointer w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 overflow-hidden uppercase">
@@ -109,7 +111,8 @@ function RightBottomComponent() {
           </div>
         </Link>
         <Link
-          href=""
+          href="https://x.com/achmaddaniel24"
+          target="_blank"
           className="cursor-pointer w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 overflow-hidden uppercase">
