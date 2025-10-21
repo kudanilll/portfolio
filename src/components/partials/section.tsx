@@ -1,19 +1,19 @@
 "use client";
 
-import HomeView from "@/components/views/home";
+import HeroView from "@/components/views/hero";
 import ProjectsView from "@/components/views/projects";
 import AboutView from "@/components/views/about";
 import ServicesView from "@/components/views/services";
 import ContactView from "@/components/views/contact";
 
 type Props = {
-  id: "home" | "projects" | "about" | "services" | "contact";
+  id: "hero" | "projects" | "about" | "services" | "contact";
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   lang: any;
 };
 
 const Views = {
-  home: HomeView,
+  hero: HeroView,
   about: AboutView,
   projects: ProjectsView,
   services: ServicesView,

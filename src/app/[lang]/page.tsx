@@ -41,7 +41,7 @@ export default async function Page(props: {
             style={{ backgroundImage: "url('/assets/images/background.webp')" }}
           ></div>
 
-          <Section id="home" lang={t}></Section>
+          <Section id="hero" lang={t}></Section>
           <Section id="about" lang={t}></Section>
 
           <div className="py-24">

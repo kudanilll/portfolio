@@ -135,7 +135,7 @@ function RightBottomComponent() {
   );
 }
 
-export default function HomeView({ lang }: { lang: any }) {
+export default function HeroView({ lang }: { lang: any }) {
   return (
     <section
       id="home"
