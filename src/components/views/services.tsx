@@ -55,7 +55,7 @@ const imgRow = {
 };
 
 const imgItem = {
-  hidden: (_tilt: number) => ({
+  hidden: (_: number) => ({
     opacity: 0,
     scale: 0.85,
     rotate: 0,

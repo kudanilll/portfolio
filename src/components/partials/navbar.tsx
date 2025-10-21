@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function NavigationBar() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [_, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
