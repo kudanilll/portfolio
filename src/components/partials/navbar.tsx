@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function NavigationBar() {
-  const [_, setIsScrolled] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
