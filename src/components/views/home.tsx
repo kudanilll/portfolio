@@ -36,20 +36,24 @@ function LetsTalkButton({ lang }: { lang: any }) {
   return (
     <div>
       <a
-        href={process.env.NEXT_PUBLIC_CV_EN}
+        href={
+          lang.lang === "en"
+            ? process.env.NEXT_PUBLIC_CV_EN
+            : process.env.NEXT_PUBLIC_CV_ID
+        }
         className="tracking-normal text-base w-48 h-12 bg-transparent border border-neutral-400 text-white mt-6 group flex items-center justify-center gap-3 relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
       >
         {/* Text */}
         <div className="relative items-center h-5 overflow-hidden uppercase">
           <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
             <div className="flex flex-row items-center">
-              <span className="block leading-[20px] text-center transform origin-right group-hover:rotate-[15deg]">
+              <span className="font-regular block leading-[20px] text-center transform origin-right group-hover:rotate-[15deg]">
                 {lang.home_section.button_text}
               </span>
               <Download className="ml-3 text-white" size={22} />
             </div>
             <div className="flex flex-row items-center">
-              <span className="block text-center transform origin-left translate-y-0 group-hover:rotate-0">
+              <span className="font-regular block text-center transform origin-left translate-y-0 group-hover:rotate-0">
                 {lang.home_section.button_text}
               </span>
               <Download className="ml-3 text-white" size={22} />
