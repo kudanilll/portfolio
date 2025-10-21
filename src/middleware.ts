@@ -2,46 +2,66 @@ import { match } from "@formatjs/intl-localematcher";
 import { NextRequest, NextResponse } from "next/server";
 import Negotiator from "negotiator";
 
-const locales = ["en", "id"];
+const locales = ["en", "id"] as const;
 const defaultLocale = "en";
 const cookieName = "i18nlang";
 
-function getLocale(request: NextRequest): string {
-  if (request.cookies.has(cookieName))
-    return request.cookies.get(cookieName)!.value;
+// Normalize legacy tag: 'in' (Old Indonesian) -> 'id'
+function normalizeLangTag(tag: string) {
+  // in, in-ID -> id, id-ID
+  return tag.replace(/^in(-|$)/i, "id$1");
+}
 
-  const acceptLang = request.headers.get("Accept-Language");
+function getLocale(request: NextRequest): (typeof locales)[number] {
+  const cookieVal = request.cookies.get(cookieName)?.value;
+  if (cookieVal && (locales as readonly string[]).includes(cookieVal)) {
+    return cookieVal as (typeof locales)[number];
+  }
+
+  const acceptLang = request.headers.get("accept-language") ?? "";
   if (!acceptLang) return defaultLocale;
 
   const headers = { "accept-language": acceptLang };
-  const languages = new Negotiator({ headers }).languages();
-  return match(languages, locales, defaultLocale);
+  const raw = new Negotiator({ headers }).languages();
+  const languages = raw.map(normalizeLangTag);
+
+  return match(
+    languages,
+    locales as unknown as string[],
+    defaultLocale
+  ) as (typeof locales)[number];
 }
 
 export function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === "/favicon.ico") return NextResponse.next();
-  if (request.nextUrl.pathname === "/sitemap.xml") return NextResponse.next();
-  if (request.nextUrl.pathname === "/robots.txt") return NextResponse.next();
-
-  if (request.nextUrl.pathname.startsWith("/assets"))
-    return NextResponse.next();
-
-  if (request.nextUrl.pathname.startsWith("/_next")) return NextResponse.next();
-
   const { pathname } = request.nextUrl;
-  const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-  );
 
-  if (pathnameHasLocale) return;
+  const hasLocalePrefix = locales.some(
+    (loc) => pathname === `/${loc}` || pathname.startsWith(`/${loc}/`)
+  );
+  if (hasLocalePrefix) {
+    return NextResponse.next();
+  }
 
   const locale = getLocale(request);
-  request.nextUrl.pathname = `/${locale}${pathname}`;
-  const response = NextResponse.redirect(request.nextUrl);
-  response.cookies.set(cookieName, locale);
-  return response;
+
+  const url = request.nextUrl.clone();
+  url.pathname = `/${locale}${pathname}`;
+
+  const res = NextResponse.redirect(url); // default 307
+  res.cookies.set({
+    name: cookieName,
+    value: locale,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 180,
+    sameSite: "lax",
+  });
+  return res;
 }
 
 export const config = {
-  matcher: ["/((?!_next).*)", "/"],
+  matcher: [
+    // all, except _next, api, assets, sitemap, robots, favicon
+    "/((?!_next|api|assets|sitemap\\.xml|robots\\.txt|favicon\\.ico).*)",
+    "/",
+  ],
 };
