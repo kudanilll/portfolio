@@ -6,11 +6,11 @@
 import { bebasNeue } from "@/common/font";
 import { Mail } from "lucide-react";
 
-function ContactButton({ text }: { text: string }) {
+function ContactButton({ message, text }: { message: string; text: string }) {
   return (
     <div>
       <a
-        href="mailto:achmad24daniel@gmail.com, achmad24daniel@gmail.com?subject=I am interested in working with you."
+        href={`mailto:achmad24daniel@gmail.com, achmad24daniel@gmail.com?subject=${message}`}
         className="w-36 h-10 bg-transparent border border-neutral-400 text-neutral-200 text-md mt-6 group flex items-center justify-center gap-3 relative overflow-hidden"
       >
         {/* Text */}
@@ -52,7 +52,10 @@ export default function ContactView({ lang }: { lang: any }) {
         >
           {lang.contact_section.title_2}
         </h2>
-        <ContactButton text={lang.contact_section.button} />
+        <ContactButton
+          message={lang.contact_section.message}
+          text={lang.contact_section.button}
+        />
       </div>
     </section>
   );

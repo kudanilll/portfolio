@@ -31,6 +31,7 @@
   "contact_section": {
     "title_1": "Contact Me",
     "title_2": "Let's Work Together",
-    "button": "Contact"
+    "button": "Contact",
+    "message": "I am interested in working with you."
   }
 }
