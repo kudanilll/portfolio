@@ -50,7 +50,7 @@ export default async function Page(props: {
           />
         </div>
 
-        <div className="hidden md:block">
+        <div className="">
           <Section id="projects" lang={t}></Section>
         </div>
         <div className="md:translate-y-0 translate-y-[30svh] transform-gpu will-change-transform z-10">

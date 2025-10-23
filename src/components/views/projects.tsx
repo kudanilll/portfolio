@@ -6,7 +6,6 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { ResponsiveComponents } from "@/lib/responsive";
 import Flower from "@/components/svg/flower";
 import Image from "next/image";
 import Link from "next/link";
@@ -119,24 +118,19 @@ export default function ProjectsView({ lang }: { lang: any }) {
 
   return (
     <div ref={containerRef} className="w-full">
-      <div className="h-[8dvh]"></div>
+      <div className="md:h-[8dvh]"></div>
       <div className="relative md:mx-16">
-        <ResponsiveComponents
-          desktopComponents={
-            <h1 className="py-12 px-4 md:px-6 text-5xl text-white tracking-tighter uppercase">
-              {lang.project_section.title}
-            </h1>
-          }
-          mobileComponents={<></>}
-        />
-        <div className="absolute right-8 top-6">
+        <h1 className="md:py-12 px-4 md:px-6 text-3xl md:text-5xl text-white tracking-tighter uppercase">
+          {lang.project_section.title}
+        </h1>
+        <div className="absolute top-14 right-4 md:top-6 md:right-8">
           <Flower />
         </div>
       </div>
       {projects.map((project, i) => (
         <section
           key={i}
-          className="project-slide flex-col md:flex-row flex items-stretch h-screen overflow-hidden border-t last:border-b border-neutral-600"
+          className="hidden md:flex project-slide flex-col md:flex-row items-stretch h-screen overflow-hidden border-t last:border-b border-neutral-600"
         >
           <div className="col relative w-full md:flex-1 h-screen z-[1]">
             <div
