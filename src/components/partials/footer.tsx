@@ -39,10 +39,10 @@ export default function Footer() {
           <div className="group">
             <div className="relative items-center h-5 overflow-hidden uppercase">
               <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
-                <span className="block leading-[22px] text-neutral-400 md:text-white text-center transform origin-right group-hover:rotate-[15deg]">
+                <span className="tracking-tight block leading-[22px] text-neutral-400 md:text-white text-center transform origin-right group-hover:rotate-[15deg]">
                   &copy; {new Date().getFullYear()} Achmad Daniel
                 </span>
-                <span className="block text-neutral-400 md:text-white text-center transform origin-left translate-y-0 group-hover:rotate-0">
+                <span className="tracking-tight block text-neutral-400 md:text-white text-center transform origin-left translate-y-0 group-hover:rotate-0">
                   &copy; {new Date().getFullYear()} Achmad Daniel
                 </span>
               </div>
