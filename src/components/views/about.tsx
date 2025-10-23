@@ -10,27 +10,38 @@ export default function AboutView({ lang }: { lang: any }) {
   return (
     <section
       id="about"
-      className="min-h-screen w-full px-4 md:px-8 relative py-24"
+      className="md:min-h-screen w-full px-4 md:px-8 relative py-24"
     >
       <h1
-        className={`${bebasNeue.className} absolute top-8 md:left-4 text-[3rem] md:text-[16rem] font-medium tracking-tight text-white opacity-5`}
+        className={`${bebasNeue.className} absolute top-8 left-4 text-[4rem] md:text-[16rem] font-bold md:font-medium tracking-tight text-white opacity-10 md:opacity-5 uppercase`}
       >
         {lang.about_section.title}
       </h1>
+
+      {/* Desktop Image */}
       <Image
         src="/assets/images/achmad-daniel.webp"
         alt="Achmad Daniel Syahputra"
         width={450}
         height={450}
-        className="absolute top-3/4 md:left-24 -translate-y-1/2 grayscale"
+        className="hidden md:block absolute top-3/4 left-24 -translate-y-1/2 grayscale"
       />
 
-      <div className="absolute bottom-0 md:right-32 w-[200px] h-[200px]">
+      {/* Mobile Image */}
+      <Image
+        src="/assets/images/achmad-daniel.webp"
+        alt="Achmad Daniel Syahputra"
+        width={250}
+        height={250}
+        className="md:hidden absolute top-[85%] -translate-y-1/2 grayscale"
+      />
+
+      <div className="absolute bottom-[28%] right-4 md:bottom-0 md:right-32 w-[200px] h-[200px]">
         <Dot />
       </div>
 
       <div className="w-full flex justify-between">
-        <div className="w-2/5 h-full"></div>
+        <div className="w-[85%] md:w-2/5 h-full"></div>
         <div className="">
           {/* Desktop Text */}
           <TextReveal className="hidden md:block max-w-4xl text-5xl tracking-wide font-regular">
@@ -38,7 +49,7 @@ export default function AboutView({ lang }: { lang: any }) {
           </TextReveal>
 
           {/* Mobile Text */}
-          <h1 className="md:hidden text-5xl px-4 tracking-wide font-semibold min-h-[80vh]">
+          <h1 className="md:hidden mt-6 text-neutral-400 text-3xl px-4 tracking-tight font-normal min-h-[80vh]">
             {lang.about_section.paragraph}
           </h1>
         </div>
