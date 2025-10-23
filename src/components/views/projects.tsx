@@ -129,13 +129,9 @@ export default function ProjectsView({ lang }: { lang: any }) {
           }
           mobileComponents={<></>}
         />
-
         <div className="absolute right-8 top-6">
           <Flower />
         </div>
-
-        {/* <div className="h-16 w-16 bg-lime-400 absolute right-8 top-8"></div>
-        <div className="h-14 w-14 border border-lime-400 absolute right-16 top-16"></div> */}
       </div>
       {projects.map((project, i) => (
         <section
