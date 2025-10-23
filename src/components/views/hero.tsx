@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Download, Github, Instagram, Twitter } from "lucide-react";
 import { bebasNeue, satoshi } from "@/common/font";
 import gsap from "gsap";
@@ -131,15 +131,14 @@ export default function HeroView({ lang }: { lang: any }) {
   const descRef = useRef<HTMLParagraphElement | null>(null);
   const ctaRef = useRef<HTMLAnchorElement | null>(null);
 
-  useLayoutEffect(() => {
-    // Selalu mulai dari atas
+  useEffect(() => {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
     const html = document.documentElement;
     const body = document.body;
 
-    // Lock scroll yang robust (iOS friendly)
+    // Lock scroll
     const lockScroll = () => {
       const y = window.scrollY;
       body.dataset.scrollY = String(y);
@@ -172,9 +171,18 @@ export default function HeroView({ lang }: { lang: any }) {
     window.addEventListener("touchmove", prevent, { passive: false });
 
     const ctx = gsap.context(() => {
+      // Determine initial scale based on screen size
+      const isMobile = window.innerWidth < 768; // Tailwind's 'md' breakpoint
+      const initialScale = isMobile ? 1 : 1.4;
+
+      // Initial
       gsap.set(heroRef.current, { autoAlpha: 0 });
+      // gsap.set(titleRef.current, { y: 120, opacity: 0, scale: initialScale });
+      // gsap.set(descRef.current, { y: 0, opacity: 0 });
+      // gsap.set(ctaRef.current, { y: 0, opacity: 0 });
+
       const tl = gsap.timeline({
-        defaults: { ease: "power2.out" },
+        defaults: { ease: "power3.out" },
         onComplete: () => {
           window.removeEventListener("wheel", prevent as any);
           window.removeEventListener("touchmove", prevent as any);
@@ -183,13 +191,19 @@ export default function HeroView({ lang }: { lang: any }) {
       });
 
       tl.to(heroRef.current, { autoAlpha: 1, duration: 0.01 })
-        .from(titleRef.current, { autoAlpha: 0, y: 28, duration: 0.6 })
+        .from(titleRef.current, { autoAlpha: 0, y: 120, duration: 0.6 })
         .from(
           descRef.current,
           { autoAlpha: 0, y: 18, duration: 0.45 },
           "-=0.25"
         )
         .from(ctaRef.current, { autoAlpha: 0, y: 12, duration: 0.35 }, "-=0.2");
+
+      // tl.to(titleRef.current, {
+      //   opacity: 1,
+      //   duration: 0.5,
+      //   ease: "power3.out",
+      // });
     }, heroRef);
 
     return () => {
