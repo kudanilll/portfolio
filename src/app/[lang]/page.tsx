@@ -6,7 +6,6 @@ import NavigationBar from "@/components/partials/navbar";
 import PageClientLayout from "@/components/partials/page-client-layout";
 import Section from "@/components/partials/section";
 import CursorPointer from "@/components/ui/cursor-pointer";
-import MobileMenu from "@/components/partials/mobile-menu";
 import VelocityScroll from "@/components/typography/scroll-based-velocity";
 import Marquee from "react-fast-marquee";
 
@@ -33,16 +32,10 @@ export default async function Page(props: {
   const t = await getDictionary(lang);
   return (
     <div>
-      <div className="hidden md:block">
-        <NavigationBar />
-      </div>
-      <div className="md:hidden">
-        <MobileMenu />
-      </div>
-
+      <NavigationBar />
       <PageClientLayout>
         <div
-          className="absolute top-0 left-0 w-screen h-[100svh] md:h-[85vh] bg-cover bg-[position:50%_20%] md:bg-center z-0 opacity-40 md:opacity-30"
+          className="absolute top-0 left-0 w-screen h-[90svh] md:h-[85vh] bg-cover bg-[position:50%_20%] md:bg-center z-0 opacity-45 md:opacity-30"
           style={{ backgroundImage: "url('/assets/images/background.webp')" }}
         />
 
@@ -75,7 +68,7 @@ export default async function Page(props: {
         <div className="relative">
           {/* Background for contact & footer section */}
           <div
-            className="absolute bottom-0 left-0 w-screen h-screen bg-cover bg-center z-0 opacity-30"
+            className="absolute bottom-0 left-0 w-screen h-[90svh] md:h-screen bg-cover bg-center z-0 opacity-45 md:opacity-30"
             style={{
               backgroundImage: "url('/assets/images/background.webp')",
             }}

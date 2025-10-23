@@ -11,7 +11,7 @@ function ContactButton({ message, text }: { message: string; text: string }) {
     <div>
       <a
         href={`mailto:achmad24daniel@gmail.com, achmad24daniel@gmail.com?subject=${message}`}
-        className="w-36 h-10 bg-transparent border border-neutral-400 text-neutral-200 text-md mt-6 group flex items-center justify-center gap-3 relative overflow-hidden"
+        className="w-36 h-14 md:h-10 bg-transparent border tracking-tight border-neutral-400 text-neutral-200 text-md mt-6 group flex items-center justify-center gap-3 relative overflow-hidden"
       >
         {/* Text */}
         <div className="relative items-center h-5 overflow-hidden uppercase">
@@ -39,16 +39,16 @@ export default function ContactView({ lang }: { lang: any }) {
   return (
     <section
       id="contact"
-      className="h-screen w-screen flex flex-col items-center justify-center relative"
+      className="pt-[30dvh] md:pt-0 md:h-screen w-screen flex flex-col items-center justify-center relative"
     >
-      <div className="min-h-screen mx-auto flex flex-col items-center justify-center z-10">
+      <div className="md:min-h-screen mx-auto flex flex-col items-center justify-center z-10">
         <h1
-          className={`${bebasNeue.className} text-3xl font-medium tracking-tight text-neutral-200 md:text-9xl md:leading-[6rem]`}
+          className={`${bebasNeue.className} uppercase text-[3.5rem] font-bold md:font-medium tracking-tight text-neutral-200 md:text-9xl leading-[0.95] md:leading-[6rem]`}
         >
           {lang.contact_section.title_1}
         </h1>
         <h2
-          className={`${bebasNeue.className} text-3xl font-medium tracking-tight text-neutral-500 md:text-9xl md:leading-[6rem]`}
+          className={`${bebasNeue.className} uppercase text-[2.2rem] font-bold md:font-medium tracking-tight text-neutral-500 md:text-9xl leading-[0.95] md:leading-[6rem]`}
         >
           {lang.contact_section.title_2}
         </h2>

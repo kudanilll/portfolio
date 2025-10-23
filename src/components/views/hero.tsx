@@ -15,18 +15,6 @@ export interface StaggeredMenuItem {
   link: string;
 }
 
-export interface StaggeredMenuProps {
-  position?: "left" | "right";
-  colors?: string[];
-  items?: StaggeredMenuItem[];
-  displayItemNumbering?: boolean;
-  className?: string;
-  menuButtonColor?: string;
-  isFixed: boolean;
-  onMenuOpen?: () => void;
-  onMenuClose?: () => void;
-}
-
 function LetsTalkButton({ lang }: { lang: any }) {
   return (
     <a
@@ -35,19 +23,19 @@ function LetsTalkButton({ lang }: { lang: any }) {
           ? process.env.NEXT_PUBLIC_CV_EN
           : process.env.NEXT_PUBLIC_CV_ID
       }
-      className="mx-auto md:mx-0 tracking-normal text-sm md:text-base w-44 md:w-48 h-11 md:h-12 bg-transparent border border-neutral-400 text-white mt-3 md:mt-6 group flex items-center justify-center gap-3 relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
+      className="mx-auto md:mx-0 tracking-tight text-base w-44 md:w-48 h-14 md:h-12 bg-transparent border border-neutral-200 md:border-neutral-400 text-white group flex items-center justify-center gap-3 relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
       data-hero-cta
     >
       <div className="relative items-center h-5 overflow-hidden uppercase">
         <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
           <div className="flex flex-row items-center">
-            <span className="font-regular block leading-[20px] text-center origin-right group-hover:rotate-[15deg]">
+            <span className="font-normal md:font-regular block leading-[20px] text-center origin-right group-hover:rotate-[15deg]">
               {lang.home_section.button_text}
             </span>
             <Download className="ml-3 text-white" size={20} />
           </div>
           <div className="flex flex-row items-center">
-            <span className="font-regular block text-center origin-left translate-y-0 group-hover:rotate-0">
+            <span className="font-normal md:font-regular block text-center origin-left translate-y-0 group-hover:rotate-0">
               {lang.home_section.button_text}
             </span>
             <Download className="ml-3 text-white" size={20} />
@@ -60,11 +48,11 @@ function LetsTalkButton({ lang }: { lang: any }) {
 
 function LeftBottomComponent({ lang }: { lang: any }) {
   return (
-    <div className="hidden md:block absolute bottom-8 md:left-8">
+    <div className="absolute bottom-2 left-4 md:bottom-8 md:left-8 text-start">
       <h1 className="text-neutral-400 text-xl font-semibold uppercase">
         {lang.home_section.location}, Indonesia
       </h1>
-      <h1 className="text-neutral-600 text-base font-medium uppercase">
+      <h1 className="text-neutral-600 text-xl md:text-base font-medium uppercase">
         <span>{lang.contact_section.title_2}</span>
       </h1>
     </div>
@@ -73,12 +61,12 @@ function LeftBottomComponent({ lang }: { lang: any }) {
 
 function RightBottomComponent() {
   return (
-    <div className="hidden md:block absolute bottom-6 md:right-8">
+    <div className="md:absolute md:bottom-6 md:right-8">
       <div className="flex items-center justify-center text-center gap-3">
         <Link
           href="https://www.instagram.com/achmaddaniel__"
           target="_blank"
-          className="cursor-pointer w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 overflow-hidden uppercase">
             <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
@@ -94,7 +82,7 @@ function RightBottomComponent() {
         <Link
           href="https://github.com/kudanilll"
           target="_blank"
-          className="cursor-pointer w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 overflow-hidden uppercase">
             <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
@@ -110,7 +98,7 @@ function RightBottomComponent() {
         <Link
           href="https://x.com/achmaddaniel24"
           target="_blank"
-          className="cursor-pointer w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 overflow-hidden uppercase">
             <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
@@ -224,51 +212,43 @@ export default function HeroView({ lang }: { lang: any }) {
       className="relative h-[100svh] md:h-screen w-screen overflow-x-hidden flex flex-col items-center justify-center text-center md:items-start md:justify-start md:text-left"
     >
       {/* Main Content */}
-      <div
-        className="
-          mt-0 md:mt-28 w-screen px-4 md:px-8
-          flex flex-col md:flex-row items-center md:items-start
-          justify-center md:justify-between gap-4 md:gap-0
-        "
-      >
+      <div className="mt-0 md:mt-28 w-screen px-4 md:px-8 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4 md:gap-0">
         {/* Title */}
         <div className="w-full">
           <span
             ref={titleRef}
-            className={`${bebasNeue.className} block text-[4rem] md:text-[12rem] font-medium text-white leading-[0.95] tracking-tight uppercase`}
+            className={`${bebasNeue.className} block text-start text-[3.2rem] md:text-[12rem] font-bold md:font-medium text-white leading-[0.95] tracking-tight uppercase`}
           >
-            ACHMAD DANIEL <br /> SYAHPUTRA
+            ACHMAD DANIEL <br /> <span>SYAHPUTRA</span>
             <span
-              className={`${satoshi.className} md:ml-4 hidden md:inline-block translate-y-[-16px]`}
+              className={`${satoshi.className} mt-4 md:mt-0 md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-18px]`}
             >
               <span ref={ctaRef as any}>
                 <LetsTalkButton lang={lang} />
               </span>
+              <div className="md:hidden">
+                <RightBottomComponent />
+              </div>
             </span>
           </span>
-
-          <div className="mt-4 md:hidden">
-            <span ref={ctaRef as any}>
-              <LetsTalkButton lang={lang} />
-            </span>
-          </div>
         </div>
 
         {/* Description */}
         <div className="w-full md:w-1/3">
           <p
             ref={descRef}
-            className="text-base sm:text-lg md:text-xl text-neutral-400 uppercase"
+            className="mt-2 md:mt-0 text-start text-base sm:text-lg md:text-xl text-neutral-400 uppercase"
           >
             {lang.home_section.desc}
           </p>
         </div>
       </div>
 
-      {/* Bottom decorations tetap hidden di mobile */}
       <div>
         <LeftBottomComponent lang={lang} />
-        <RightBottomComponent />
+        <div className="hidden md:block">
+          <RightBottomComponent />
+        </div>
       </div>
     </section>
   );
