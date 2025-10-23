@@ -336,7 +336,11 @@ export default function ServicesView({ lang }: { lang: any }) {
           </div>
 
           {/* Description (blur → fade → slide) */}
-          <div className="absolute bottom-20 left-4 right-4 md:bottom-36 md:left-8 md:right-8">
+          <div
+            className={`absolute ${
+              lang.lang === "en" ? "bottom-14" : "bottom-20"
+            } left-4 right-4 md:bottom-36 md:left-8 md:right-8`}
+          >
             <AnimatePresence mode="wait">
               <motion.p
                 key={currentService}
