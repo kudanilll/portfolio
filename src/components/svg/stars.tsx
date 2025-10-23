@@ -6,7 +6,7 @@ const Stars = () => {
       viewBox="0 0 200 200"
       color="#a3e635"
       fill="currentColor"
-      className="w-12 h-12"
+      className="w-6 h-6 md:w-12 md:h-12"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g>

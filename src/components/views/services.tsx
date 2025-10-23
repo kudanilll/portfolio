@@ -5,7 +5,6 @@
 
 import type { ComponentType, ReactNode } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
-import { ResponsiveComponents } from "@/lib/responsive";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Stars from "@/components/svg/stars";
@@ -112,31 +111,31 @@ function MobileDevelopmentServiceImage() {
       animate="show"
       exit="hidden"
     >
-      <TiltItem className="bg-blue-100 md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
+      <TiltItem className="bg-blue-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg"
           alt="Flutter"
           width={220}
           height={220}
-          className="md:p-12"
+          className="p-4 md:p-12"
         />
       </TiltItem>
-      <TiltItem className="bg-purple-100 md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
+      <TiltItem className="bg-purple-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kotlin/kotlin-original.svg"
           alt="Kotlin"
           width={220}
           height={220}
-          className="md:p-8"
+          className="p-4 md:p-8"
         />
       </TiltItem>
-      <TiltItem className="bg-blue-100 md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
+      <TiltItem className="bg-blue-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/androidstudio/androidstudio-original.svg"
           alt="Android Studio"
           width={220}
           height={220}
-          className="md:p-8"
+          className="p-4 md:p-8"
         />
       </TiltItem>
     </motion.div>
@@ -152,31 +151,31 @@ function WebsiteDevelopmentServiceImage() {
       animate="show"
       exit="hidden"
     >
-      <TiltItem className="bg-yellow-100 md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
+      <TiltItem className="bg-yellow-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg"
           alt="Firebase"
           width={220}
           height={220}
-          className="md:p-12"
+          className="p-4 md:p-12"
         />
       </TiltItem>
-      <TiltItem className="bg-[#007acc] md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
+      <TiltItem className="bg-[#007acc] w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg"
           alt="TypeScript"
           width={220}
           height={220}
-          className="md:p-8"
+          className="p-4 md:p-8"
         />
       </TiltItem>
-      <TiltItem className="bg-blue-100 md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
+      <TiltItem className="bg-blue-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg"
           alt="Go"
           width={220}
           height={220}
-          className="md:p-12"
+          className="p-4 md:p-12"
         />
       </TiltItem>
     </motion.div>
@@ -192,31 +191,31 @@ function IoTDevelopmentServiceImage() {
       animate="show"
       exit="hidden"
     >
-      <TiltItem className="bg-blue-100 md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
+      <TiltItem className="bg-blue-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/arduino/arduino-original.svg"
           alt="Arduino"
           width={220}
           height={220}
-          className="md:p-8"
+          className="p-4 md:p-8"
         />
       </TiltItem>
-      <TiltItem className="bg-yellow-100 md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
+      <TiltItem className="bg-yellow-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg"
           alt="Firebase"
           width={220}
           height={220}
-          className="md:p-12"
+          className="p-4 md:p-12"
         />
       </TiltItem>
-      <TiltItem className="bg-blue-100 md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
+      <TiltItem className="bg-blue-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg"
           alt="C++"
           width={220}
           height={220}
-          className="md:p-8"
+          className="p-4 md:p-8"
         />
       </TiltItem>
     </motion.div>
@@ -255,22 +254,17 @@ export default function ServicesView({ lang }: { lang: any }) {
   return (
     <section
       id="services"
-      className="flex flex-col items-center justify-center mt-36 mb-12"
+      className="flex flex-col items-center justify-center md:mt-36 md:mb-12"
     >
-      <div className="hidden md:block w-screen">
-        <ResponsiveComponents
-          desktopComponents={
-            <h1 className="mb-12 px-4 md:px-8 text-5xl text-white tracking-tighter uppercase">
-              {lang.service_section.title}
-            </h1>
-          }
-          mobileComponents={<></>}
-        />
+      <div className="w-screen">
+        <h1 className="mb-12 px-4 md:px-8 text-3xl md:text-5xl text-white tracking-tighter uppercase">
+          {lang.service_section.title}
+        </h1>
 
-        <div className="min-h-screen relative bg-neutral-950">
+        <div className="min-h-[75svh] md:min-h-screen relative bg-neutral-900 md:bg-neutral-950">
           {/* List Services */}
           <LayoutGroup>
-            <div className="absolute top-24 right-8 flex flex-col items-end text-right">
+            <div className="absolute top-10 right-4 md:top-24 md:right-8 flex flex-col items-end text-right">
               {services.map((service, index) => (
                 <motion.div
                   key={service.title}
@@ -282,7 +276,7 @@ export default function ServicesView({ lang }: { lang: any }) {
                   <h1
                     onClick={() => setCurrentService(index)}
                     aria-current={currentService === index ? "true" : undefined}
-                    className={`relative inline-flex items-center justify-end gap-3 cursor-pointer md:text-6xl leading-none font-semibold tracking-tighter
+                    className={`relative inline-flex items-center justify-end gap-3 cursor-pointer text-4xl md:text-6xl leading-none font-semibold tracking-tighter
                     ${
                       currentService === index
                         ? "text-lime-400"
@@ -327,7 +321,7 @@ export default function ServicesView({ lang }: { lang: any }) {
           </LayoutGroup>
 
           {/* Image (swap with spring + staggered children) */}
-          <div className="absolute top-8 left-8">
+          <div className="absolute top-[35%] md:top-8 left-4 md:left-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentService}
@@ -342,7 +336,7 @@ export default function ServicesView({ lang }: { lang: any }) {
           </div>
 
           {/* Description (blur → fade → slide) */}
-          <div className="absolute bottom-36 left-8 right-8">
+          <div className="absolute bottom-20 left-4 right-4 md:bottom-36 md:left-8 md:right-8">
             <AnimatePresence mode="wait">
               <motion.p
                 key={currentService}
@@ -350,7 +344,7 @@ export default function ServicesView({ lang }: { lang: any }) {
                 initial="hidden"
                 animate="show"
                 exit="exit"
-                className="text-white text-start md:text-4xl max-w-7xl tracking-tighter"
+                className="text-neutral-200 text-start text-2xl md:text-4xl max-w-7xl tracking-tight"
               >
                 {services[currentService].description}
               </motion.p>
