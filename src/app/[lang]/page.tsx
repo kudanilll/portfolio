@@ -55,15 +55,15 @@ export default async function Page(props: {
         </div>
         <Section id="services" lang={t}></Section>
 
-        <Marquee>
-          <h1 className="text-4xl font-bold tracking-tighter md:text-8xl overflow-hidden">
-            Web Developer{" "}
-            <span className="text-lime-400 overflow-hidden">✦</span> Mobile
-            Developer <span className="text-lime-400 overflow-hidden">✦</span>{" "}
-            IoT Enthusiast{" "}
-            <span className="text-lime-400 overflow-hidden">✦</span>
-          </h1>
-        </Marquee>
+        <div className="md:translate-y-0 translate-y-[22svh] transform-gpu will-change-transform z-10">
+          <Marquee>
+            <h1 className="font-bold tracking-tighter text-4xl md:text-8xl overflow-hidden">
+              Web Developer <span className="text-lime-400">✦</span> Mobile
+              Developer <span className="text-lime-400">✦</span> IoT Enthusiast{" "}
+              <span className="text-lime-400">✦</span>
+            </h1>
+          </Marquee>
+        </div>
 
         <div className="relative">
           {/* Background for contact & footer section */}
