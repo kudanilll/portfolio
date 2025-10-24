@@ -49,10 +49,10 @@ function LetsTalkButton({ lang }: { lang: any }) {
 function LeftBottomComponent({ lang }: { lang: any }) {
   return (
     <div className="absolute bottom-2 left-4 md:bottom-8 md:left-8 text-start">
-      <h1 className="text-neutral-400 text-xl font-semibold uppercase">
+      <h1 className="text-neutral-400 text-lg md:text-xl font-semibold uppercase tracking-tight">
         {lang.home_section.location}, Indonesia
       </h1>
-      <h1 className="text-neutral-600 text-xl md:text-base font-medium uppercase">
+      <h1 className="text-neutral-600 text-base md:text-base font-medium uppercase tracking-tight">
         <span>{lang.contact_section.title_2}</span>
       </h1>
     </div>
@@ -217,7 +217,7 @@ export default function HeroView({ lang }: { lang: any }) {
         <div className="w-full">
           <span
             ref={titleRef}
-            className={`${bebasNeue.className} block text-start text-[3.2rem] md:text-[12rem] font-bold md:font-medium text-white leading-[0.95] tracking-tight uppercase`}
+            className={`${bebasNeue.className} block text-start text-7xl md:text-[12rem] font-medium text-white leading-[0.95] tracking-tight uppercase`}
           >
             ACHMAD DANIEL <br /> <span>SYAHPUTRA</span>
             <span

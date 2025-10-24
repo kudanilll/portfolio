@@ -13,7 +13,7 @@ export default function AboutView({ lang }: { lang: any }) {
       className="md:min-h-screen w-full px-4 md:px-8 relative py-24"
     >
       <h1
-        className={`${bebasNeue.className} absolute top-8 left-4 text-[4rem] leading-[1] md:text-[16rem] font-bold md:font-medium tracking-tight text-white opacity-10 md:opacity-5 uppercase`}
+        className={`${bebasNeue.className} absolute top-8 left-4 text-8xl leading-[1] md:text-[16rem] font-medium tracking-tight text-white opacity-10 md:opacity-5 uppercase`}
       >
         {lang.about_section.title}
       </h1>
@@ -49,11 +49,7 @@ export default function AboutView({ lang }: { lang: any }) {
           </TextReveal>
 
           {/* Mobile Text */}
-          <h1
-            className={`${
-              lang.lang === "en" ? "mt-6" : "mt-20"
-            } md:hidden text-neutral-400 text-3xl px-4 tracking-tight font-normal min-h-[80vh]`}
-          >
+          <h1 className="mt-10 md:hidden text-neutral-400 text-3xl px-4 tracking-tight font-normal min-h-[80vh]">
             {lang.about_section.paragraph}
           </h1>
         </div>
