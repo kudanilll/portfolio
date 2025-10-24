@@ -14,13 +14,13 @@ export const metadata: Metadata = {
     siteName: "kudaniel",
     images: [
       {
-        url: "https://www.kudaniel.my.id/assets/images/og.png",
+        url: "https://www.kudaniel.my.id/assets/images/og.webp",
         alt: "Portfolio | Achmad Daniel",
         width: 800,
         height: 600,
       },
       {
-        url: "https://www.kudaniel.my.id/assets/images/og.png",
+        url: "https://www.kudaniel.my.id/assets/images/og.webp",
         alt: "Portfolio | Achmad Daniel",
         width: 1800,
         height: 1600,
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     title: "Portfolio | Achmad Daniel",
     description: "Achmad Daniel Syahputra Web Portfolio",
     images: {
-      url: "https://www.kudaniel.my.id/assets/images/og.png",
+      url: "https://www.kudaniel.my.id/assets/images/og.webp",
       alt: "Portfolio | Achmad Daniel",
     },
     creator: "Achmad Daniel Syahputra",
