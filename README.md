@@ -1,51 +1,83 @@
 # Hi 👋 Welcome to My Digital Playground!
 
+![Portfolio Preview](https://github.com/kudanilll/portfolio/blob/master/public/assets/images/og.webp)
+
+<p align="left">
+  <a href="https://nextjs.org/"><img alt="Next.js" src="https://img.shields.io/badge/Next.js-15-black?logo=next.js"></a>
+  <a href="https://www.typescriptlang.org/"><img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white"></a>
+  <a href="https://greensock.com/gsap/"><img alt="GSAP" src="https://img.shields.io/badge/GSAP-3.x-88CE02?logo=greensock&logoColor=white"></a>
+  <a href="https://www.framer.com/motion/"><img alt="Framer Motion" src="https://img.shields.io/badge/Framer%20Motion-11.x-0055FF?logo=framer&logoColor=white"></a>
+</p>
+
 ## 🚀 About This Portfolio
 
-Welcome to my personal portfolio repository – a curated collection of my professional journey, skills, and passion for technology. Built with the cutting-edge **Next.js 15**, this space is more than just a showcase; it's a reflection of my continuous learning and creative problem-solving.
+This is my personal portfolio built with **Next.js 15**. It’s a living space for my work, ideas, and experiments.
+All motion is handcrafted with **GSAP** and **Framer Motion** for smooth micro-interactions and delightful transitions.
 
 ## 🛠 Tech Stack
 
-- **Framework**: Next.js 15
-- **UI Components**:
-  - [Aceternity UI](https://ui.aceternity.com/)
-  - [Magic UI](https://magicui.design/)
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Animations**: GSAP (scroll/parallax/timelines), Framer Motion (mount/unmount, gestures, layout)
+- **Deploy**: Vercel
 
-## 🌟 Key Features
+## ▶️ Getting Started
 
-- Responsive and modern design
-- Performance-optimized
-- Showcasing professional projects and skills
-- Interactive user experience
+> **Requirements:** Node.js 18.18+ or 20+, and your favorite package manager (npm/pnpm/yarn/bun).
 
-## 💡 Acknowledgments
+```bash
+# 1) Install deps
+npm install
 
-A heartfelt thank you to:
+# 2) Start dev server
+npm dev
 
-- [Aceternity UI](https://ui.aceternity.com/) for providing exceptional, free UI components
-- [Magic UI](https://magicui.design/) for their incredible design resources
-- The open-source community for continuous inspiration
+# 3) Build & preview
+npm build
+npm start
+```
 
-## 📞 Get In Touch
+> Common scripts you might find:
 
-Want to collaborate or just say hi? I'm always open to interesting conversations!
+```json
+{
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  }
+}
+```
 
-**Email**: <achmad24daniel@gmail.com>
+## 🧩 Motion Notes (GSAP × Framer Motion)
 
-**LinkedIn**: [Achmad Daniel](https://www.linkedin.com/in/achmad-daniel-72a241268?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+- Use GSAP for scroll/parallax/timeline-dense animations and Framer Motion for mount/unmount transitions, gestures, and layout.
 
-## ☕ Support My Work
+- Avoid double-owning transforms on the same element. If GSAP controls transform, let Framer Motion handle opacity/clipPath (or wrap the element).
 
-If you find value in my projects, consider [buying me a coffee](https://www.buymeacoffee.com/kudanil)! Your support fuels my passion and helps me continue creating.
+- Add will-change only where needed; clear on animation end to avoid raster cache bloat.
+
+- Respect users with prefers-reduced-motion and offer non-animated fallbacks.
 
 ## 🤝 Feedback & Contributions
 
 Your input is valuable!
 
-- Found a bug? [Open an issue](https://github.com/kudanilll/your-repo/issues)
-- Have suggestions? Pull requests are welcome
-- Want to discuss something? Reach out directly
+- Found a bug or have an idea? [Open an issue](https://github.com/kudanilll/your-repo/issues)
 
----
+- PRs are welcome — please keep commits clear (Conventional Commits preferred)
 
-**Made with ❤️ and ☕ by Achmad Daniel**
+## 📞 Get In Touch
+
+Want to collaborate or just say hi? I'm always open to interesting conversations!
+
+- **Email**: <achmad24daniel@gmail.com>
+
+- **LinkedIn**: [Achmad Daniel](https://www.linkedin.com/in/achmad-daniel-syahputra-72a241268/)
+
+## ☕ Support
+
+If you find value in my projects, consider [buying me a coffee](https://www.buymeacoffee.com/kudanil)! Your support fuels my passion and helps me continue creating.
+
+Made with ❤️ and ☕ by Achmad Daniel
