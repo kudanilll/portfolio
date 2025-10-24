@@ -8,6 +8,8 @@ import Section from "@/components/partials/section";
 import CursorPointer from "@/components/ui/cursor-pointer";
 import VelocityScroll from "@/components/typography/scroll-based-velocity";
 import Marquee from "react-fast-marquee";
+import Flower from "@/components/svg/flower";
+import Dot from "@/components/svg/dot";
 
 // Language Dictionary
 import getDictionary from "./dictionaries";
@@ -50,10 +52,14 @@ export default async function Page(props: {
           />
         </div>
 
-        <div className="">
-          <Section id="projects" lang={t}></Section>
-        </div>
+        <Section id="projects" lang={t}></Section>
         <div className="md:translate-y-0 translate-y-[30svh] transform-gpu will-change-transform z-10">
+          <div className="md:hidden absolute -top-[16vh] left-4">
+            <Flower />
+          </div>
+          <div className="md:hidden opacity-20">
+            <Dot />
+          </div>
           <Section id="services" lang={t}></Section>
         </div>
 

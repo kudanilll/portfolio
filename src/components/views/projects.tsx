@@ -104,6 +104,29 @@ export default function ProjectsView({ lang }: { lang: any }) {
         );
       });
 
+      // Mobile
+      gsap.utils
+        .toArray<HTMLElement>(".project-mobile-slide")
+        .forEach((slide) => {
+          const wrap = slide.querySelector<HTMLElement>(".mobile-image-wrap");
+          if (!wrap) return;
+
+          gsap.fromTo(
+            wrap,
+            { y: "-20vh" },
+            {
+              y: "20vh",
+              scrollTrigger: {
+                trigger: slide,
+                scrub: true,
+                start: "top bottom",
+                end: "bottom top",
+              },
+              ease: "none",
+            }
+          );
+        });
+
       gsap.to(".flower-rotate", {
         rotation: 360,
         duration: 12,
@@ -118,19 +141,21 @@ export default function ProjectsView({ lang }: { lang: any }) {
 
   return (
     <div ref={containerRef} className="w-full">
-      <div className="md:h-[8dvh]"></div>
+      <div className="h-fit md:h-[8dvh]"></div>
       <div className="relative md:mx-16">
         <h1 className="md:py-12 px-4 md:px-6 text-3xl md:text-5xl text-white tracking-tighter uppercase">
           {lang.project_section.title}
         </h1>
-        <div className="absolute top-14 right-4 md:top-6 md:right-8">
+        <div className="hidden md:absolute top-6 md:right-8">
           <Flower />
         </div>
       </div>
-      {projects.map((project, i) => (
+
+      {/* Desktop View */}
+      {projects.map((project) => (
         <section
-          key={i}
-          className="hidden md:flex project-slide flex-col md:flex-row items-stretch h-screen overflow-hidden border-t last:border-b border-neutral-600"
+          key={project.title}
+          className="hidden md:flex project-slide flex-col md:flex-row items-stretch h-screen overflow-hidden border-t border-b border-neutral-600"
         >
           <div className="col relative w-full md:flex-1 h-screen z-[1]">
             <div
@@ -169,6 +194,106 @@ export default function ProjectsView({ lang }: { lang: any }) {
           </div>
         </section>
       ))}
+
+      {/* Mobile View */}
+      <div className="md:hidden pt-8 bg-neutral-950">
+        {projects.map((project, idx) => {
+          const isEven = idx % 2 === 0;
+          const justify = isEven ? "items-start" : "items-end";
+          const align = isEven ? "text-left" : "text-right";
+          const gradient = isEven
+            ? "bg-gradient-to-r from-black/70 via-black/40 to-transparent"
+            : "bg-gradient-to-l from-black/70 via-black/40 to-transparent";
+
+          // Perbaiki link yang diawali '#http' (contoh di 'Kupass')
+          const normalizedLink = project.link?.startsWith("#http")
+            ? project.link.slice(1)
+            : project.link;
+
+          return (
+            <section
+              key={project.id ?? idx}
+              aria-labelledby={`project-${project.id ?? idx}-title`}
+              className="project-mobile-slide relative isolate flex min-h-[70svh] items-end overflow-hidden"
+            >
+              {/* Background image (pakai fill) + wrapper untuk parallax */}
+              <div className="absolute inset-0 -z-10">
+                <div className="mobile-image-wrap relative w-full h-[140vh] -top-[20vh]">
+                  <Image
+                    src={project.thumbnail}
+                    alt={project.title}
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                    priority={idx === 0}
+                  />
+                </div>
+              </div>
+
+              {/* Overlay untuk keterbacaan */}
+              <div className="pointer-events-none absolute inset-0 bg-black opacity-35" />
+              <div
+                className={`pointer-events-none absolute inset-0 ${gradient}`}
+              />
+
+              {/* Content */}
+              <div
+                className={`relative z-10 w-full px-4 py-10 flex ${justify}`}
+              >
+                <div className="w-screen">
+                  <span
+                    className={`${align} ml-1 block text-base font-medium tracking-tight text-white/60`}
+                  >
+                    {`No. ${project.id ?? idx + 1}`}
+                  </span>
+
+                  <h2
+                    id={`project-${project.id ?? idx}-title`}
+                    className={[
+                      "mt-1 font-medium leading-[0.95] text-6xl text-white drop-shadow-sm tracking-tight",
+                      align,
+                    ].join(" ")}
+                  >
+                    {project.title}
+                  </h2>
+
+                  {/* Description */}
+                  {project.description && (
+                    <p
+                      className={[
+                        "mt-4 text-lg leading-snug text-white/80",
+                        align,
+                      ].join(" ")}
+                    >
+                      {project.description}
+                    </p>
+                  )}
+
+                  {/* CTA Button */}
+                  {normalizedLink && (
+                    <div
+                      className={[
+                        "mt-4",
+                        isEven ? "" : "flex justify-end",
+                      ].join(" ")}
+                    >
+                      <Link
+                        href={normalizedLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 border border-white/20 bg-white/10 px-4 py-2 text-base font-medium text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                        aria-label={`Visit ${project.title}`}
+                      >
+                        Visit Project <span aria-hidden>↗</span>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          );
+        })}
+      </div>
     </div>
   );
 }
