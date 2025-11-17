@@ -37,7 +37,7 @@ export default async function Page(props: {
       <NavigationBar />
       <PageClientLayout>
         <div
-          className="absolute top-0 left-0 w-screen h-[90svh] md:h-[85vh] bg-cover bg-[position:50%_20%] md:bg-center z-0 opacity-45 md:opacity-30"
+          className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-[position:50%_20%] md:bg-center z-0 opacity-45 md:opacity-30"
           style={{ backgroundImage: "url('/assets/images/background.webp')" }}
         />
 

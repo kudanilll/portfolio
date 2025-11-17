@@ -4,7 +4,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Download, Github, Instagram, Twitter } from "lucide-react";
+import { ArrowDown, Github, Instagram, Twitter } from "lucide-react";
 import { DockText } from "@/components/typography/dock-text";
 import { bebasNeue, satoshi } from "@/common/font";
 import gsap from "gsap";
@@ -24,22 +24,26 @@ function LetsTalkButton({ lang }: { lang: any }) {
           ? process.env.NEXT_PUBLIC_CV_EN
           : process.env.NEXT_PUBLIC_CV_ID
       }
-      className="mx-auto md:mx-0 tracking-tight text-base w-44 md:w-48 h-14 md:h-12 bg-transparent border border-neutral-200 md:border-neutral-400 text-white group flex items-center justify-center gap-3 relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
+      className="mx-auto md:mx-0 text-base md:text-xl tracking-tight w-36 md:w-56 h-12 md:h-16 bg-transparent border border-neutral-200 md:border-neutral-400 text-white group flex items-center justify-center relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
       data-hero-cta
     >
-      <div className="relative items-center h-5 overflow-hidden uppercase">
-        <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
+      <div className="relative items-center h-6 md:h-7 overflow-hidden uppercase">
+        <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-7">
           <div className="flex flex-row items-center">
-            <span className="font-normal md:font-regular block leading-[20px] text-center origin-right group-hover:rotate-[15deg]">
+            <span className="font-normal md:font-regular text-center origin-right">
               {lang.home_section.button_text}
             </span>
-            <Download className="ml-3 text-white" size={20} />
+            <div className="hidden md:block">
+              <ArrowDown className="ml-3 text-white" size={24} />
+            </div>
           </div>
-          <div className="flex flex-row items-center">
-            <span className="font-normal md:font-regular block text-center origin-left translate-y-0 group-hover:rotate-0">
+          <div className="flex flex-row items-center text-base md:text-xl">
+            <span className="font-normal md:font-regular text-center origin-left translate-y-0">
               {lang.home_section.button_text}
             </span>
-            <Download className="ml-3 text-white" size={20} />
+            <div className="hidden md:block">
+              <ArrowDown className="ml-3 text-white" size={24} />
+            </div>
           </div>
         </div>
       </div>
@@ -49,11 +53,11 @@ function LetsTalkButton({ lang }: { lang: any }) {
 
 function LeftBottomComponent({ lang }: { lang: any }) {
   return (
-    <div className="absolute bottom-2 left-4 md:bottom-8 md:left-8 text-start">
-      <h1 className="text-neutral-400 text-lg md:text-xl font-semibold uppercase tracking-tight">
+    <div className="absolute flex flex-col md:gap-1.5 bottom-4 left-4 md:bottom-[4%] md:left-8 text-start">
+      <h1 className="text-neutral-400 text-lg md:text-[clamp(1rem,1.4vw,1.8rem)] font-semibold uppercase tracking-tight">
         {lang.home_section.location}, Indonesia
       </h1>
-      <h1 className="text-neutral-600 text-base md:text-base font-medium uppercase tracking-tight">
+      <h1 className="text-neutral-600 text-base md:text-[clamp(1rem,1.2vw,1.8rem)] font-medium uppercase tracking-tight">
         <span>{lang.contact_section.title_2}</span>
       </h1>
     </div>
@@ -62,20 +66,30 @@ function LeftBottomComponent({ lang }: { lang: any }) {
 
 function RightBottomComponent() {
   return (
-    <div className="md:absolute md:bottom-6 md:right-8">
+    <div className="md:absolute md:bottom-[3%] md:right-8">
       <div className="flex items-center justify-center text-center gap-3">
         <Link
           href="https://www.instagram.com/achmaddaniel__"
           target="_blank"
-          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
-          <div className="relative items-center h-6 overflow-hidden uppercase">
-            <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
+          <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
+            <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
               <div className="flex flex-row items-center">
-                <Instagram />
+                <div className="hidden md:block">
+                  <Instagram size={32} />
+                </div>
+                <div className="md:hidden">
+                  <Instagram />
+                </div>
               </div>
               <div className="flex flex-row items-center">
-                <Instagram />
+                <div className="hidden md:block">
+                  <Instagram size={32} />
+                </div>
+                <div className="md:hidden">
+                  <Instagram />
+                </div>
               </div>
             </div>
           </div>
@@ -83,15 +97,25 @@ function RightBottomComponent() {
         <Link
           href="https://github.com/kudanilll"
           target="_blank"
-          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
-          <div className="relative items-center h-6 overflow-hidden uppercase">
-            <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
+          <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
+            <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
               <div className="flex flex-row items-center">
-                <Github />
+                <div className="hidden md:block">
+                  <Github size={32} />
+                </div>
+                <div className="md:hidden">
+                  <Github />
+                </div>
               </div>
               <div className="flex flex-row items-center">
-                <Github />
+                <div className="hidden md:block">
+                  <Github size={32} />
+                </div>
+                <div className="md:hidden">
+                  <Github />
+                </div>
               </div>
             </div>
           </div>
@@ -99,15 +123,25 @@ function RightBottomComponent() {
         <Link
           href="https://x.com/achmaddaniel24"
           target="_blank"
-          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
-          <div className="relative items-center h-6 overflow-hidden uppercase">
-            <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
+          <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
+            <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
               <div className="flex flex-row items-center">
-                <Twitter />
+                <div className="hidden md:block">
+                  <Twitter size={32} />
+                </div>
+                <div className="md:hidden">
+                  <Twitter />
+                </div>
               </div>
               <div className="flex flex-row items-center">
-                <Twitter />
+                <div className="hidden md:block">
+                  <Twitter size={32} />
+                </div>
+                <div className="md:hidden">
+                  <Twitter />
+                </div>
               </div>
             </div>
           </div>
@@ -213,26 +247,26 @@ export default function HeroView({ lang }: { lang: any }) {
       className="relative h-[100svh] md:h-screen w-screen overflow-x-hidden flex flex-col items-center justify-center text-center md:items-start md:justify-start md:text-left"
     >
       {/* Main Content */}
-      <div className="mt-0 md:mt-28 w-screen px-4 md:px-8 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4 md:gap-0">
+      <div className="mt-[-12%] md:mt-28 w-screen px-4 md:px-8 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4 md:gap-0">
         {/* Title */}
         <div className="w-full">
           <span ref={titleRef}>
             <span
-              className={`${bebasNeue.className} block text-start text-7xl md:text-[clamp(4rem,12vw,14rem)] font-medium text-white leading-[0.95] tracking-tight uppercase`}
+              className={`${bebasNeue.className} block text-start text-8xl md:text-[clamp(4rem,12vw,14rem)] font-medium text-white leading-[0.95] tracking-tight uppercase`}
             >
-              <span className="flex flex-row items-center gap-8">
+              <span className="flex flex-col md:flex-row md:items-center md:gap-8">
                 <DockText text={"ACHMAD"} down={false} />
                 <DockText text={"DANIEL"} down={false} />
               </span>
-              <div className="flex flex-row items-end gap-2">
+              <div className="md:flex flex-row items-end gap-2">
                 <DockText text={"SYAHPUTRA"} down={true} />
                 <span
                   className={`${satoshi.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-2vw]`}
                 >
-                  <span ref={ctaRef as any}>
+                  <span ref={ctaRef as any} className="mt-2 md:mt-0">
                     <LetsTalkButton lang={lang} />
                   </span>
-                  <div className="md:hidden">
+                  <div className="mt-2 md:mt-0 md:hidden">
                     <RightBottomComponent />
                   </div>
                 </span>
@@ -242,10 +276,10 @@ export default function HeroView({ lang }: { lang: any }) {
         </div>
 
         {/* Description */}
-        <div className="w-full md:w-1/3">
+        <div className="hidden md:block w-full md:w-1/3">
           <p
             ref={descRef}
-            className="mt-2 md:mt-0 text-start text-[clamp(1rem,1.2vw,1.6rem)] text-neutral-400 uppercase"
+            className="mt-2 md:mt-0 text-start text-base md:text-[clamp(1rem,1.2vw,1.6rem)] leading-[1.6] text-neutral-400 uppercase"
           >
             {lang.home_section.desc}
           </p>
