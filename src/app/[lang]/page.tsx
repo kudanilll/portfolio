@@ -6,7 +6,7 @@ import NavigationBar from "@/components/partials/navbar";
 import PageClientLayout from "@/components/partials/page-client-layout";
 import Section from "@/components/partials/section";
 import CursorPointer from "@/components/ui/cursor-pointer";
-import VelocityScroll from "@/components/typography/scroll-based-velocity";
+import VelocityScroll from "@/components/ui/scroll-based-velocity";
 import Marquee from "react-fast-marquee";
 import Flower from "@/components/svg/flower";
 import Dot from "@/components/svg/dot";

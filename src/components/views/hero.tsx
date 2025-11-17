@@ -5,6 +5,7 @@
 
 import { useEffect, useRef } from "react";
 import { Download, Github, Instagram, Twitter } from "lucide-react";
+import { DockText } from "@/components/typography/dock-text";
 import { bebasNeue, satoshi } from "@/common/font";
 import gsap from "gsap";
 import Link from "next/link";
@@ -215,19 +216,26 @@ export default function HeroView({ lang }: { lang: any }) {
       <div className="mt-0 md:mt-28 w-screen px-4 md:px-8 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4 md:gap-0">
         {/* Title */}
         <div className="w-full">
-          <span
-            ref={titleRef}
-            className={`${bebasNeue.className} block text-start text-7xl md:text-[12rem] font-medium text-white leading-[0.95] tracking-tight uppercase`}
-          >
-            ACHMAD DANIEL <br /> <span>SYAHPUTRA</span>
+          <span ref={titleRef}>
             <span
-              className={`${satoshi.className} mt-4 md:mt-0 md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-18px]`}
+              className={`${bebasNeue.className} block text-start text-7xl md:text-[clamp(4rem,12vw,14rem)] font-medium text-white leading-[0.95] tracking-tight uppercase`}
             >
-              <span ref={ctaRef as any}>
-                <LetsTalkButton lang={lang} />
+              <span className="flex flex-row items-center gap-8">
+                <DockText text={"ACHMAD"} down={false} />
+                <DockText text={"DANIEL"} down={false} />
               </span>
-              <div className="md:hidden">
-                <RightBottomComponent />
+              <div className="flex flex-row items-end gap-2">
+                <DockText text={"SYAHPUTRA"} down={true} />
+                <span
+                  className={`${satoshi.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-2vw]`}
+                >
+                  <span ref={ctaRef as any}>
+                    <LetsTalkButton lang={lang} />
+                  </span>
+                  <div className="md:hidden">
+                    <RightBottomComponent />
+                  </div>
+                </span>
               </div>
             </span>
           </span>
@@ -237,7 +245,7 @@ export default function HeroView({ lang }: { lang: any }) {
         <div className="w-full md:w-1/3">
           <p
             ref={descRef}
-            className="mt-2 md:mt-0 text-start text-base sm:text-lg md:text-xl text-neutral-400 uppercase"
+            className="mt-2 md:mt-0 text-start text-[clamp(1rem,1.2vw,1.6rem)] text-neutral-400 uppercase"
           >
             {lang.home_section.desc}
           </p>

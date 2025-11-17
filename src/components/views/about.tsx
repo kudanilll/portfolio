@@ -1,7 +1,7 @@
 "use client";
 
 import { bebasNeue } from "@/common/font";
-import { TextReveal } from "@/components/ui/text-reveal";
+import { TextReveal } from "@/components/typography/text-reveal";
 import Dot from "@/components/svg/dot";
 import Image from "next/image";
 
