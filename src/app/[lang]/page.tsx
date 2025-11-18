@@ -59,8 +59,15 @@ export default async function Page(props: {
           <Section id="services" lang={t}></Section>
         </div>
 
-        <div className="md:translate-y-0 translate-y-[8svh] transform-gpu will-change-transform z-10">
+        <div className="md:translate-y-0 translate-y-[5svh] transform-gpu will-change-transform z-10">
           <Marquee>
+            <h1 className="font-bold tracking-tighter text-6xl md:text-8xl overflow-hidden">
+              Web Developer <span className="text-lime-400">✦</span> Mobile
+              Developer <span className="text-lime-400">✦</span> IoT Enthusiast{" "}
+              <span className="text-lime-400">✦</span>
+            </h1>
+          </Marquee>
+          <Marquee direction="right" className="md:hidden mt-2">
             <h1 className="font-bold tracking-tighter text-6xl md:text-8xl overflow-hidden">
               Web Developer <span className="text-lime-400">✦</span> Mobile
               Developer <span className="text-lime-400">✦</span> IoT Enthusiast{" "}
@@ -72,7 +79,7 @@ export default async function Page(props: {
         <div className="relative">
           {/* Background for contact & footer section */}
           <div
-            className="absolute bottom-0 left-0 w-screen h-[90svh] md:h-screen bg-cover bg-center z-0 opacity-45 md:opacity-30"
+            className="absolute bottom-0 left-0 w-screen h-[96svh] md:h-screen bg-cover bg-center z-0 opacity-45 md:opacity-30"
             style={{
               backgroundImage: "url('/assets/images/background.webp')",
             }}

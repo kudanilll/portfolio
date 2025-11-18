@@ -39,7 +39,7 @@ export default function ContactView({ lang }: { lang: any }) {
   return (
     <section
       id="contact"
-      className="pt-[30dvh] md:pt-0 md:h-screen w-screen flex flex-col items-center justify-center relative"
+      className="pt-[18dvh] md:pt-0 md:h-screen w-screen flex flex-col items-center justify-center relative"
     >
       <div className="md:min-h-screen mx-auto text-center flex flex-col items-center justify-center z-10">
         <h1
