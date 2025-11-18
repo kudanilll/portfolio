@@ -195,8 +195,8 @@ function IoTDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/arduino/arduino-original.svg"
           alt="Arduino"
-          width={250}
-          height={250}
+          width={220}
+          height={220}
           className="p-4 md:p-8"
         />
       </TiltItem>
@@ -204,8 +204,8 @@ function IoTDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg"
           alt="Firebase"
-          width={250}
-          height={250}
+          width={220}
+          height={220}
           className="p-4 md:p-12"
         />
       </TiltItem>
@@ -213,8 +213,8 @@ function IoTDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg"
           alt="C++"
-          width={250}
-          height={250}
+          width={220}
+          height={220}
           className="p-4 md:p-8"
         />
       </TiltItem>
