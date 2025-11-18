@@ -195,8 +195,8 @@ function IoTDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/arduino/arduino-original.svg"
           alt="Arduino"
-          width={220}
-          height={220}
+          width={250}
+          height={250}
           className="p-4 md:p-8"
         />
       </TiltItem>
@@ -204,8 +204,8 @@ function IoTDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg"
           alt="Firebase"
-          width={220}
-          height={220}
+          width={250}
+          height={250}
           className="p-4 md:p-12"
         />
       </TiltItem>
@@ -213,8 +213,8 @@ function IoTDevelopmentServiceImage() {
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg"
           alt="C++"
-          width={220}
-          height={220}
+          width={250}
+          height={250}
           className="p-4 md:p-8"
         />
       </TiltItem>
@@ -254,7 +254,7 @@ export default function ServicesView({ lang }: { lang: any }) {
   return (
     <section
       id="services"
-      className="flex flex-col items-center justify-center md:mt-36 md:mb-12"
+      className="flex flex-col items-center justify-center md:mt-28 md:mb-12"
     >
       <div className="w-screen">
         <h1 className="mb-12 px-4 md:px-8 text-3xl md:text-5xl text-white tracking-tighter uppercase">
@@ -276,7 +276,7 @@ export default function ServicesView({ lang }: { lang: any }) {
                   <h1
                     onClick={() => setCurrentService(index)}
                     aria-current={currentService === index ? "true" : undefined}
-                    className={`relative inline-flex items-center justify-end gap-3 cursor-pointer text-4xl md:text-6xl leading-none font-semibold tracking-tighter
+                    className={`relative inline-flex items-center justify-end gap-3 cursor-pointer text-3xl md:text-[clamp(2.5rem,4vw,5rem)] leading-none font-semibold tracking-tighter
                     ${
                       currentService === index
                         ? "text-lime-400"
@@ -310,7 +310,7 @@ export default function ServicesView({ lang }: { lang: any }) {
                       {currentService === index && (
                         <motion.span
                           layoutId="active"
-                          className="absolute -bottom-1 right-0 h-[3px] w-full"
+                          className="absolute -bottom-1 right-0 h-[4vh] w-full"
                         />
                       )}
                     </span>
@@ -348,7 +348,7 @@ export default function ServicesView({ lang }: { lang: any }) {
                 initial="hidden"
                 animate="show"
                 exit="exit"
-                className="text-neutral-200 text-start text-2xl md:text-4xl max-w-7xl tracking-tight"
+                className="text-neutral-200 text-start text-2xl md:text-[clamp(1.5rem,4vw,3rem)] max-w-[90vw] leading-[1.2] tracking-tight"
               >
                 {services[currentService].description}
               </motion.p>

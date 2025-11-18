@@ -8,7 +8,6 @@ import Section from "@/components/partials/section";
 import CursorPointer from "@/components/ui/cursor-pointer";
 import VelocityScroll from "@/components/ui/scroll-based-velocity";
 import Marquee from "react-fast-marquee";
-import Flower from "@/components/svg/flower";
 import Dot from "@/components/svg/dot";
 
 // Language Dictionary
@@ -53,19 +52,16 @@ export default async function Page(props: {
         </div>
 
         <Section id="projects" lang={t}></Section>
-        <div className="md:translate-y-0 translate-y-[30svh] transform-gpu will-change-transform z-10">
-          <div className="md:hidden absolute -top-[16vh] left-4">
-            <Flower />
-          </div>
-          <div className="md:hidden opacity-20">
+        <div className="md:translate-y-0 translate-y-[6svh] transform-gpu will-change-transform z-10">
+          <div className="md:hidden opacity-25">
             <Dot />
           </div>
           <Section id="services" lang={t}></Section>
         </div>
 
-        <div className="md:translate-y-0 translate-y-[23svh] transform-gpu will-change-transform z-10">
+        <div className="md:translate-y-0 translate-y-[8svh] transform-gpu will-change-transform z-10">
           <Marquee>
-            <h1 className="font-bold tracking-tighter text-4xl md:text-8xl overflow-hidden">
+            <h1 className="font-bold tracking-tighter text-6xl md:text-8xl overflow-hidden">
               Web Developer <span className="text-lime-400">✦</span> Mobile
               Developer <span className="text-lime-400">✦</span> IoT Enthusiast{" "}
               <span className="text-lime-400">✦</span>
