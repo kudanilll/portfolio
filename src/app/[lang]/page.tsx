@@ -67,13 +67,15 @@ export default async function Page(props: {
               <span className="text-lime-400">✦</span>
             </h1>
           </Marquee>
-          <Marquee direction="right" className="md:hidden mt-2">
-            <h1 className="font-bold tracking-tighter text-6xl md:text-8xl overflow-hidden">
-              Web Developer <span className="text-lime-400">✦</span> Mobile
-              Developer <span className="text-lime-400">✦</span> IoT Enthusiast{" "}
-              <span className="text-lime-400">✦</span>
-            </h1>
-          </Marquee>
+          <div className="md:hidden mt-2">
+            <Marquee direction="right">
+              <h1 className="font-bold tracking-tighter text-6xl md:text-8xl overflow-hidden">
+                Web Developer <span className="text-lime-400">✦</span> Mobile
+                Developer <span className="text-lime-400">✦</span> IoT
+                Enthusiast <span className="text-lime-400">✦</span>
+              </h1>
+            </Marquee>
+          </div>
         </div>
 
         <div className="relative">
