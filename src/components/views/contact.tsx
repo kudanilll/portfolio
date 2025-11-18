@@ -11,7 +11,7 @@ function ContactButton({ message, text }: { message: string; text: string }) {
     <div>
       <a
         href={`mailto:achmad24daniel@gmail.com, achmad24daniel@gmail.com?subject=${message}`}
-        className="w-36 h-14 md:h-10 bg-transparent border tracking-tight border-neutral-400 text-neutral-200 text-md mt-6 group flex items-center justify-center gap-3 relative overflow-hidden"
+        className="w-36 md:w-48 h-14 bg-transparent border tracking-tight border-neutral-400 text-neutral-200 text-md mt-6 group flex items-center justify-center gap-3 relative overflow-hidden"
       >
         {/* Text */}
         <div className="relative items-center h-5 overflow-hidden uppercase">
@@ -41,7 +41,7 @@ export default function ContactView({ lang }: { lang: any }) {
       id="contact"
       className="pt-[30dvh] md:pt-0 md:h-screen w-screen flex flex-col items-center justify-center relative"
     >
-      <div className="md:min-h-screen mx-auto flex flex-col items-center justify-center z-10">
+      <div className="md:min-h-screen mx-auto text-center flex flex-col items-center justify-center z-10">
         <h1
           className={`${bebasNeue.className} ${
             lang.lang === "en" ? "text-6xl" : "text-5xl"
