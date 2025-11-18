@@ -141,16 +141,15 @@ export default function ProjectsView({ lang }: { lang: any }) {
 
   return (
     <div ref={containerRef} className="w-full">
-      <div className="h-fit md:h-[8dvh]"></div>
-      <div className="relative md:mx-16">
+      <div className="h-fit md:h-[0dvh]"></div>
+      <div className="flex justify-between items-center relative md:mx-16">
         <h1 className="md:py-12 px-4 md:px-6 text-3xl md:text-5xl text-white tracking-tighter uppercase">
           {lang.project_section.title}
         </h1>
-        <div className="hidden md:absolute top-6 md:right-8">
+        <div className="hidden md:block">
           <Flower />
         </div>
       </div>
-
       {/* Desktop View */}
       {projects.map((project) => (
         <section
@@ -176,7 +175,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
                   <div className="slide-link__circ w-[53px] h-[53px] rounded-full border-2 border-lime-400"></div>
                   <div className="slide-link__line absolute top-[25px] left-0 w-16 h-0.5 bg-lime-400 transition-all duration-700 ease-in-out group-hover:scale-x-50 group-hover:translate-x-4 transform-origin-right"></div>
                 </Link>
-                <p className="md:text-xl col__content-txt order-1 md:order-2 text-custom-dark max-w-[50vw] md:max-w-[22vw] mb-10 md:mb-0 ml-0 md:ml-8">
+                <p className="md:text-2xl col__content-txt order-1 md:order-2 text-white/75 max-w-[50vw] md:max-w-[22vw] mb-10 md:mb-0 ml-0 md:ml-8">
                   {project.description}
                 </p>
               </div>
