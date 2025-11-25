@@ -10,7 +10,7 @@ function ContactButton({ message, text }: { message: string; text: string }) {
   return (
     <div>
       <a
-        href={`mailto:achmad24daniel@gmail.com, achmad24daniel@gmail.com?subject=${message}`}
+        href={`mailto:hello.achmaddaniel@gmail.com, hello.achmaddaniel@gmail.com?subject=${message}`}
         className="w-36 md:w-48 h-14 bg-transparent border tracking-tight border-neutral-400 text-neutral-200 text-md mt-6 group flex items-center justify-center gap-3 relative overflow-hidden"
       >
         {/* Text */}
