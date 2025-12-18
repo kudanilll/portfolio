@@ -205,6 +205,7 @@ export default function HeroView({ lang }: { lang: any }) {
       const navbar = document.getElementById("navigation-bar");
       const location = document.getElementById("left-bottom-component");
       const socialMedia = document.getElementById("social-media");
+      const socialMediaMobile = document.getElementById("social-media-mobile");
 
       // Set initial states
       gsap.set(heroRef.current, { opacity: 1 });
@@ -225,6 +226,7 @@ export default function HeroView({ lang }: { lang: any }) {
       gsap.set(ctaRef.current, { opacity: 0 });
       gsap.set(location, { opacity: 0 });
       gsap.set(socialMedia, { opacity: 0 });
+      gsap.set(socialMediaMobile, { opacity: 0 });
 
       // Create animation timeline
       const tl = gsap.timeline({
@@ -271,6 +273,7 @@ export default function HeroView({ lang }: { lang: any }) {
         // Fade in description and CTA
         .to(descRef.current, { opacity: 1, duration: 0.5 }, "-=0.4")
         .to(ctaRef.current, { opacity: 1, duration: 0.5 }, "-=0.3")
+        .to(socialMediaMobile, { opacity: 1, duration: 0.5 }, "-=0.3")
         // Fade in left and right bottom components
         .to(location, { opacity: 1, duration: 0.6 }, "-=0.3")
         .to(socialMedia, { opacity: 1, duration: 0.6 }, "-=0.3");
@@ -315,7 +318,10 @@ export default function HeroView({ lang }: { lang: any }) {
                   <span ref={ctaRef as any} className="mt-2 md:mt-0">
                     <LetsTalkButton lang={lang} />
                   </span>
-                  <div className="mt-2 md:mt-0 md:hidden">
+                  <div
+                    id="social-media-mobile"
+                    className="mt-2 md:mt-0 md:hidden"
+                  >
                     <RightBottomComponent />
                   </div>
                 </span>
