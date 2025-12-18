@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function NavigationBar() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [_, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,7 +17,10 @@ export default function NavigationBar() {
   }, []);
 
   return (
-    <nav className="w-full px-4 md:px-8 absolute top-4 z-50 transition-all duration-300 ease-in-out bg-transparent">
+    <nav
+      id="navigation-bar"
+      className="w-full px-4 md:px-8 absolute top-4 z-50 transition-all duration-300 ease-in-out bg-transparent"
+    >
       <div className="w-full h-16 flex items-center justify-end">
         <div className="flex items-center justify-center text-center gap-3">
           <Link

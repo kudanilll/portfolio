@@ -53,7 +53,10 @@ function LetsTalkButton({ lang }: { lang: any }) {
 
 function LeftBottomComponent({ lang }: { lang: any }) {
   return (
-    <div className="absolute flex flex-col md:gap-1.5 bottom-4 left-4 md:bottom-[4%] md:left-8 text-start">
+    <div
+      id="left-bottom-component"
+      className="absolute flex flex-col md:gap-1.5 bottom-4 left-4 md:bottom-[4%] md:left-8 text-start"
+    >
       <h1 className="text-neutral-400 text-lg md:text-[clamp(1rem,1.4vw,1.8rem)] font-semibold uppercase tracking-tight">
         {lang.home_section.location}, Indonesia
       </h1>
@@ -153,13 +156,14 @@ function RightBottomComponent() {
 
 export default function HeroView({ lang }: { lang: any }) {
   const heroRef = useRef<HTMLDivElement | null>(null);
-  const titleRef = useRef<HTMLSpanElement | null>(null);
+  const titleUpRef = useRef<HTMLSpanElement | null>(null);
+  const titleBottomRef = useRef<HTMLSpanElement | null>(null);
   const descRef = useRef<HTMLParagraphElement | null>(null);
   const ctaRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
     const html = document.documentElement;
     const body = document.body;
@@ -176,7 +180,6 @@ export default function HeroView({ lang }: { lang: any }) {
       html.style.overflow = "hidden";
     };
     const unlockScroll = () => {
-      const y = Number(body.dataset.scrollY || 0);
       body.style.position = "";
       body.style.top = "";
       body.style.left = "";
@@ -197,18 +200,35 @@ export default function HeroView({ lang }: { lang: any }) {
     window.addEventListener("touchmove", prevent, { passive: false });
 
     const ctx = gsap.context(() => {
-      // Determine initial scale based on screen size
-      const isMobile = window.innerWidth < 768; // Tailwind's 'md' breakpoint
-      const initialScale = isMobile ? 1 : 1.4;
+      // Get elements
+      const background = document.getElementById("hero-background");
+      const navbar = document.getElementById("navigation-bar");
+      const location = document.getElementById("left-bottom-component");
+      const socialMedia = document.getElementById("social-media");
 
-      // Initial
-      gsap.set(heroRef.current, { autoAlpha: 0 });
-      // gsap.set(titleRef.current, { y: 120, opacity: 0, scale: initialScale });
-      // gsap.set(descRef.current, { y: 0, opacity: 0 });
-      // gsap.set(ctaRef.current, { y: 0, opacity: 0 });
+      // Set initial states
+      gsap.set(heroRef.current, { opacity: 1 });
+      gsap.set(background, { y: "-100%" });
+      gsap.set(navbar, { opacity: 0 });
 
+      // Set title to center of screen with larger scale
+      gsap.set(titleUpRef.current, {
+        y: 120,
+        opacity: 0,
+      });
+      gsap.set(titleBottomRef.current, {
+        y: 120,
+        opacity: 0,
+      });
+
+      gsap.set(descRef.current, { opacity: 0 });
+      gsap.set(ctaRef.current, { opacity: 0 });
+      gsap.set(location, { opacity: 0 });
+      gsap.set(socialMedia, { opacity: 0 });
+
+      // Create animation timeline
       const tl = gsap.timeline({
-        defaults: { ease: "power3.out" },
+        // defaults: { ease: "power3.out" },
         onComplete: () => {
           window.removeEventListener("wheel", prevent as any);
           window.removeEventListener("touchmove", prevent as any);
@@ -216,20 +236,44 @@ export default function HeroView({ lang }: { lang: any }) {
         },
       });
 
-      tl.to(heroRef.current, { autoAlpha: 1, duration: 0.01 })
-        .from(titleRef.current, { autoAlpha: 0, y: 120, duration: 0.6 })
-        .from(
-          descRef.current,
-          { autoAlpha: 0, y: 18, duration: 0.45 },
-          "-=0.25"
+      // Animation sequence
+      tl
+        // Fade in background
+        .to(background, { y: 0, duration: 0.8 }, 0)
+        .add("title")
+        // Move title to its final position and scale down
+        .to(
+          titleUpRef.current,
+          {
+            x: 0,
+            y: 0,
+            duration: 1,
+            scale: 1,
+            opacity: 1,
+            ease: "power2.out",
+          },
+          "title"
         )
-        .from(ctaRef.current, { autoAlpha: 0, y: 12, duration: 0.35 }, "-=0.2");
-
-      // tl.to(titleRef.current, {
-      //   opacity: 1,
-      //   duration: 0.5,
-      //   ease: "power3.out",
-      // });
+        .to(
+          titleBottomRef.current,
+          {
+            x: 0,
+            y: 0,
+            duration: 0.8,
+            scale: 1,
+            opacity: 1,
+            ease: "power2.out",
+          },
+          "title"
+        )
+        // Fade in and animate navbar
+        .to(navbar, { opacity: 1, duration: 0.6 }, "-=0.4")
+        // Fade in description and CTA
+        .to(descRef.current, { opacity: 1, duration: 0.5 }, "-=0.4")
+        .to(ctaRef.current, { opacity: 1, duration: 0.5 }, "-=0.3")
+        // Fade in left and right bottom components
+        .to(location, { opacity: 1, duration: 0.6 }, "-=0.3")
+        .to(socialMedia, { opacity: 1, duration: 0.6 }, "-=0.3");
     }, heroRef);
 
     return () => {
@@ -250,16 +294,21 @@ export default function HeroView({ lang }: { lang: any }) {
       <div className="mt-[-12%] md:mt-28 w-screen px-4 md:px-8 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4 md:gap-0">
         {/* Title */}
         <div className="w-full">
-          <span ref={titleRef}>
+          <span>
             <span
               className={`${bebasNeue.className} block text-start text-8xl md:text-[clamp(4rem,12vw,14rem)] font-medium text-white leading-[0.95] tracking-tight uppercase`}
             >
-              <span className="flex flex-col md:flex-row md:items-center md:gap-8">
+              <span
+                ref={titleUpRef}
+                className="flex flex-col md:flex-row md:items-center md:gap-8"
+              >
                 <DockText text={"ACHMAD"} down={false} />
                 <DockText text={"DANIEL"} down={false} />
               </span>
               <div className="md:flex flex-row items-end gap-2">
-                <DockText text={"SYAHPUTRA"} down={true} />
+                <span ref={titleBottomRef}>
+                  <DockText text={"SYAHPUTRA"} down={true} />
+                </span>
                 <span
                   className={`${satoshi.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-2vw]`}
                 >
@@ -288,7 +337,7 @@ export default function HeroView({ lang }: { lang: any }) {
 
       <div>
         <LeftBottomComponent lang={lang} />
-        <div className="hidden md:block">
+        <div id="social-media" className="hidden md:block">
           <RightBottomComponent />
         </div>
       </div>
