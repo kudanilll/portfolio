@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { satoshi } from "@/common/font";
+import { Analytics } from "@vercel/analytics/next";
 import "@/app/globals.css";
 
 // Metadata
@@ -109,6 +110,7 @@ export default async function RootLayout({
     >
       <body className={`${satoshi.className} antialiased select-none`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
