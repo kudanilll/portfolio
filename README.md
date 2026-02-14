@@ -72,8 +72,7 @@ Your input is valuable!
 
 Want to collaborate or just say hi? I'm always open to interesting conversations!
 
-- **Email**: <achmad24daniel@gmail.com>
-
+- **Email**: <hello.achmaddaniel@gmail.com>
 - **LinkedIn**: [Achmad Daniel](https://www.linkedin.com/in/achmad-daniel-syahputra-72a241268/)
 
 ## ☕ Support
