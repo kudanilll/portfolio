@@ -33,6 +33,20 @@ export default async function Page(props: {
   const t = await getDictionary(lang);
   return (
     <div>
+      <div
+        id="hero-transition"
+        className="fixed inset-0 z-[1000] pointer-events-none"
+      >
+        <div
+          id="curtain-top"
+          className="absolute top-0 left-0 w-full h-1/2 bg-white"
+        />
+        <div
+          id="curtain-bottom"
+          className="absolute bottom-0 left-0 w-full h-1/2 bg-white"
+        />
+      </div>
+
       <NavigationBar />
       <PageClientLayout>
         <div

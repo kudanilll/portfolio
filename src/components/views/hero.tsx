@@ -201,16 +201,13 @@ export default function HeroView({ lang }: { lang: any }) {
 
     const ctx = gsap.context(() => {
       // Get elements
+      const curtainTop = document.getElementById("curtain-top");
+      const curtainBottom = document.getElementById("curtain-bottom");
       const background = document.getElementById("hero-background");
       const navbar = document.getElementById("navigation-bar");
       const location = document.getElementById("left-bottom-component");
       const socialMedia = document.getElementById("social-media");
       const socialMediaMobile = document.getElementById("social-media-mobile");
-
-      // Set initial states
-      gsap.set(heroRef.current, { opacity: 1 });
-      gsap.set(background, { y: "-100%" });
-      gsap.set(navbar, { opacity: 0 });
 
       // Set title to center of screen with larger scale
       gsap.set(titleUpRef.current, {
@@ -230,7 +227,7 @@ export default function HeroView({ lang }: { lang: any }) {
 
       // Create animation timeline
       const tl = gsap.timeline({
-        // defaults: { ease: "power3.out" },
+        defaults: { ease: "power3.inOut" },
         onComplete: () => {
           window.removeEventListener("wheel", prevent as any);
           window.removeEventListener("touchmove", prevent as any);
@@ -238,45 +235,34 @@ export default function HeroView({ lang }: { lang: any }) {
         },
       });
 
-      // Animation sequence
+      // initial states
+      gsap.set(background, { y: "100%" });
+      gsap.set(navbar, { opacity: 0, y: -20 });
+
       tl
-        // Fade in background
-        .to(background, { y: 0, duration: 0.8 }, 0)
-        .add("title")
-        // Move title to its final position and scale down
-        .to(
-          titleUpRef.current,
-          {
-            x: 0,
-            y: 0,
-            duration: 1,
-            scale: 1,
-            opacity: 1,
-            ease: "power2.out",
-          },
-          "title"
-        )
+        // curtain split
+        .to(curtainTop, { y: "-100%", duration: 1 }, 0)
+        .to(curtainBottom, { y: "100%", duration: 1 }, 0)
+
+        // background reveal
+        .to(background, { y: 0, duration: 1 }, "-=0.6")
+
+        // title snap-in
+        .to(titleUpRef.current, { y: 0, opacity: 1, duration: 0.8 }, "-=0.4")
         .to(
           titleBottomRef.current,
-          {
-            x: 0,
-            y: 0,
-            duration: 0.8,
-            scale: 1,
-            opacity: 1,
-            ease: "power2.out",
-          },
-          "title"
+          { y: 0, opacity: 1, duration: 0.8 },
+          "-=0.6",
         )
-        // Fade in and animate navbar
-        .to(navbar, { opacity: 1, duration: 0.6 }, "-=0.4")
-        // Fade in description and CTA
-        .to(descRef.current, { opacity: 1, duration: 0.5 }, "-=0.4")
-        .to(ctaRef.current, { opacity: 1, duration: 0.5 }, "-=0.3")
-        .to(socialMediaMobile, { opacity: 1, duration: 0.5 }, "-=0.3")
-        // Fade in left and right bottom components
-        .to(location, { opacity: 1, duration: 0.6 }, "-=0.3")
-        .to(socialMedia, { opacity: 1, duration: 0.6 }, "-=0.3");
+
+        // navbar + desc
+        .to(navbar, { opacity: 1, y: 0, duration: 0.4 }, "-=0.3")
+        .to(descRef.current, { opacity: 1, duration: 0.4 }, "-=0.2")
+
+        // CTA & socials last
+        .to(ctaRef.current, { opacity: 1, duration: 0.3 }, "-=0.2")
+        .to(location, { opacity: 1, duration: 0.3 }, "-=0.3")
+        .to(socialMedia, { opacity: 1, duration: 0.3 }, "-=0.3");
     }, heroRef);
 
     return () => {
