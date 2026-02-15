@@ -187,7 +187,7 @@ export default function HeroView({ lang }: { lang: any }) {
       body.style.width = "";
       html.style.overflow = "";
       delete body.dataset.scrollY;
-      window.scrollTo(0, 0);
+      // window.scrollTo(0, 0);
     };
 
     const prevent = (e: Event) => {
@@ -211,11 +211,11 @@ export default function HeroView({ lang }: { lang: any }) {
 
       // Set title to center of screen with larger scale
       gsap.set(titleUpRef.current, {
-        y: 120,
+        y: 0,
         opacity: 0,
       });
       gsap.set(titleBottomRef.current, {
-        y: 120,
+        y: 0,
         opacity: 0,
       });
 
@@ -243,6 +243,7 @@ export default function HeroView({ lang }: { lang: any }) {
         // curtain split
         .to(curtainTop, { y: "-100%", duration: 1 }, 0)
         .to(curtainBottom, { y: "100%", duration: 1 }, 0)
+        .to(curtainBottom, { opacity: 0, duration: 1 }, "-=0.6")
 
         // background reveal
         .to(background, { y: 0, duration: 1 }, "-=0.6")
@@ -262,7 +263,8 @@ export default function HeroView({ lang }: { lang: any }) {
         // CTA & socials last
         .to(ctaRef.current, { opacity: 1, duration: 0.3 }, "-=0.2")
         .to(location, { opacity: 1, duration: 0.3 }, "-=0.3")
-        .to(socialMedia, { opacity: 1, duration: 0.3 }, "-=0.3");
+        .to(socialMedia, { opacity: 1, duration: 0.3 }, "-=0.3")
+        .to(socialMediaMobile, { opacity: 1, duration: 0.3 }, "-=0.1");
     }, heroRef);
 
     return () => {
@@ -277,7 +279,7 @@ export default function HeroView({ lang }: { lang: any }) {
     <section
       id="home"
       ref={heroRef}
-      className="relative h-[100svh] md:h-screen w-screen overflow-x-hidden flex flex-col items-center justify-center text-center md:items-start md:justify-start md:text-left"
+      className="relative h-svh md:h-screen w-screen overflow-x-hidden flex flex-col items-center justify-center text-center md:items-start md:justify-start md:text-left"
     >
       {/* Main Content */}
       <div className="mt-[-12%] md:mt-28 w-screen px-4 md:px-8 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4 md:gap-0">
