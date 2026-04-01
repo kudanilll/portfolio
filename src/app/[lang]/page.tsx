@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @next/next/no-async-client-component */
-
+import type { Metadata } from "next";
 import Footer from "@/components/partials/footer";
 import NavigationBar from "@/components/partials/navbar";
 import PageClientLayout from "@/components/partials/page-client-layout";
@@ -9,30 +7,42 @@ import CursorPointer from "@/components/ui/cursor-pointer";
 import VelocityScroll from "@/components/ui/scroll-based-velocity";
 import Marquee from "react-fast-marquee";
 import Dot from "@/components/svg/dot";
+import {
+  buildSeoMetadata,
+  getHomeStructuredData,
+  type AppLocale,
+} from "@/common/seo-metadata";
 
 // Language Dictionary
 import getDictionary from "./dictionaries";
 
 export async function generateMetadata(props: {
   params: Promise<{ lang: string }>;
-}) {
+}): Promise<Metadata> {
   const params = await props.params;
-  const { lang } = params;
-  const t = await getDictionary(lang);
-  return {
-    title: t.page.title,
-    description: t.page.desc,
-  };
+  const lang = params.lang as AppLocale;
+
+  return buildSeoMetadata({ lang });
 }
 
 export default async function Page(props: {
   params: Promise<{ lang: string }>;
 }) {
   const params = await props.params;
-  const { lang } = params;
+  const lang = params.lang as AppLocale;
   const t = await getDictionary(lang);
+  const structuredData = getHomeStructuredData(lang);
+
   return (
     <div>
+      {structuredData.map((schema, index) => (
+        <script
+          key={`${lang}-schema-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+
       <div
         id="hero-transition"
         className="fixed inset-0 z-[1000] pointer-events-none"

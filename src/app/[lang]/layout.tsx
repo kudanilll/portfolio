@@ -1,18 +1,25 @@
 import type { Metadata } from "next";
 import { satoshi } from "@/common/font";
 import { Analytics } from "@vercel/analytics/next";
-import SeoMetadata from "@/common/seo-metadata";
+import { buildSeoMetadata, type AppLocale } from "@/common/seo-metadata";
 import "@/app/globals.css";
 
-// Metadata
-export const metadata: Metadata = SeoMetadata;
-
 interface LangParams {
-  lang: "en" | "id";
+  lang: AppLocale;
 }
 
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "id" }];
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<LangParams>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+
+  return buildSeoMetadata({ lang });
 }
 
 export default async function RootLayout({

@@ -60,8 +60,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // all, except _next, api, assets, sitemap, robots, favicon
-    "/((?!_next|api|assets|sitemap\\.xml|robots\\.txt|favicon\\.ico).*)",
+    // all, except _next, api, assets, sitemap, robots, manifest, favicon
+    "/((?!_next|api|assets|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest|favicon\\.ico).*)",
     "/",
   ],
 };
