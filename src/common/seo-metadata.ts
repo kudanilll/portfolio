@@ -126,7 +126,6 @@ export function buildSeoMetadata({
       icon: "/favicon.ico",
       apple: "/favicon.ico",
     },
-    manifest: "/manifest.webmanifest",
     alternates: {
       canonical: canonicalUrl,
       languages: getLanguageAlternates(path),
