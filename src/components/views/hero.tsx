@@ -3,7 +3,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ArrowDown, Github, Instagram, Twitter } from "lucide-react";
+import { ArrowDown, Github, Instagram, Linkedin } from "lucide-react";
 import { DockText } from "@/components/typography/dock-text";
 import { bebasNeue, satoshi } from "@/common/font";
 import gsap from "gsap";
@@ -123,7 +123,7 @@ function RightBottomComponent() {
           </div>
         </Link>
         <Link
-          href="https://x.com/achmaddaniel24"
+          href="https://www.linkedin.com/in/achmaddaniel"
           target="_blank"
           className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
@@ -131,18 +131,18 @@ function RightBottomComponent() {
             <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
               <div className="flex flex-row items-center">
                 <div className="hidden md:block">
-                  <Twitter size={32} />
+                  <Linkedin size={32} />
                 </div>
                 <div className="md:hidden">
-                  <Twitter />
+                  <Linkedin />
                 </div>
               </div>
               <div className="flex flex-row items-center">
                 <div className="hidden md:block">
-                  <Twitter size={32} />
+                  <Linkedin size={32} />
                 </div>
                 <div className="md:hidden">
-                  <Twitter />
+                  <Linkedin />
                 </div>
               </div>
             </div>
