@@ -4,7 +4,7 @@ export const locales = ["en", "id"] as const;
 
 export type AppLocale = (typeof locales)[number];
 
-const siteUrl = "https://www.kudaniel.my.id";
+const siteUrl = "https://kudaniel.my.id";
 const siteName = "Achmad Daniel Portfolio";
 const personName = "Achmad Daniel Syahputra";
 const defaultOgImage = `${siteUrl}/assets/images/og.webp`;
@@ -64,7 +64,7 @@ const localizedSeo = {
 
 const socialProfiles = [
   "https://github.com/kudanilll",
-  "https://www.linkedin.com/in/achmad-daniel-syahputra-72a241268/",
+  "https://www.linkedin.com/in/achmaddaniel",
   "https://www.instagram.com/achmaddaniel__",
   "https://x.com/achmaddaniel24",
 ];

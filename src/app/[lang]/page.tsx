@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
-import Footer from "@/components/partials/footer";
-import NavigationBar from "@/components/partials/navbar";
-import PageClientLayout from "@/components/partials/page-client-layout";
-import Section from "@/components/partials/section";
-import CursorPointer from "@/components/ui/cursor-pointer";
-import VelocityScroll from "@/components/ui/scroll-based-velocity";
-import Marquee from "react-fast-marquee";
-import Dot from "@/components/svg/dot";
 import {
   buildSeoMetadata,
   getHomeStructuredData,
   type AppLocale,
 } from "@/common/seo-metadata";
+import Footer from "@/components/partials/footer";
+import NavigationBar from "@/components/partials/navbar";
+import PageClientLayout from "@/components/partials/page-client-layout";
+import Section from "@/components/partials/section";
+import CursorPointer from "@/components/ui/cursor-pointer";
+import MobileCurtain from "@/components/ui/mobile-curtain";
+import VelocityScroll from "@/components/ui/scroll-based-velocity";
+import Marquee from "react-fast-marquee";
+import Dot from "@/components/svg/dot";
 
 // Language Dictionary
 import getDictionary from "./dictionaries";
