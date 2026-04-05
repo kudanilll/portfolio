@@ -13,11 +13,11 @@ export const SeoMetadata: Metadata = {
     title: "Achmad Daniel | Fullstack & Mobile Developer",
     description:
       "Explore the portfolio of Achmad Daniel, a developer specializing in web and mobile applications with a focus on performance, usability, and clean architecture.",
-    url: "https://www.kudaniel.my.id",
+    url: "https://kudaniel.my.id",
     siteName: "Achmad Daniel Portfolio",
     images: [
       {
-        url: "https://www.kudaniel.my.id/assets/images/og.webp",
+        url: "https://kudaniel.my.id/assets/images/og.webp",
         width: 1200,
         height: 630,
         alt: "Achmad Daniel – Fullstack & Mobile Developer Portfolio",
@@ -32,15 +32,15 @@ export const SeoMetadata: Metadata = {
     title: "Achmad Daniel | Fullstack & Mobile Developer",
     description:
       "Portfolio showcasing web and mobile projects by Achmad Daniel, focused on performance, scalability, and real-world solutions.",
-    images: ["https://www.kudaniel.my.id/assets/images/og.webp"],
+    images: ["https://kudaniel.my.id/assets/images/og.webp"],
     creator: "@achmaddaniel24",
   },
 
   alternates: {
-    canonical: "https://www.kudaniel.my.id",
+    canonical: "https://kudaniel.my.id",
     languages: {
-      "en-US": "https://www.kudaniel.my.id/en",
-      "id-ID": "https://www.kudaniel.my.id/id",
+      "en-US": "https://kudaniel.my.id/en",
+      "id-ID": "https://kudaniel.my.id/id",
     },
   },
 
@@ -73,7 +73,7 @@ export const SeoMetadata: Metadata = {
   authors: [
     {
       name: "Achmad Daniel Syahputra",
-      url: "https://www.kudaniel.my.id",
+      url: "https://kudaniel.my.id",
     },
   ],
 };
