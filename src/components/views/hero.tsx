@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use client";
 
@@ -209,6 +208,15 @@ export default function HeroView({ lang }: { lang: any }) {
       const socialMedia = document.getElementById("social-media");
       const socialMediaMobile = document.getElementById("social-media-mobile");
 
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        gsap.set(curtainTop, { display: "none" });
+        gsap.set(curtainBottom, { display: "none" });
+      } else {
+        gsap.set(curtainTop, { display: "block", y: 0 });
+        gsap.set(curtainBottom, { display: "block", y: 0 });
+      }
+
       // Set title to center of screen with larger scale
       gsap.set(titleUpRef.current, {
         y: 0,
@@ -236,7 +244,7 @@ export default function HeroView({ lang }: { lang: any }) {
       });
 
       // initial states
-      gsap.set(background, { y: "100%" });
+      gsap.set(background, { opacity: 0 });
       gsap.set(navbar, { opacity: 0, y: -20 });
 
       tl
@@ -246,7 +254,7 @@ export default function HeroView({ lang }: { lang: any }) {
         .to(curtainBottom, { opacity: 0, duration: 1 }, "-=0.6")
 
         // background reveal
-        .to(background, { y: 0, duration: 1 }, "-=0.6")
+        .to(background, { opacity: 0.3, duration: 1 }, "-=0.6")
 
         // title snap-in
         .to(titleUpRef.current, { y: 0, opacity: 1, duration: 0.8 }, "-=0.4")

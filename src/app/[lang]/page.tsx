@@ -9,6 +9,7 @@ import CursorPointer from "@/components/ui/cursor-pointer";
 import VelocityScroll from "@/components/ui/scroll-based-velocity";
 import Marquee from "react-fast-marquee";
 import Dot from "@/components/svg/dot";
+import MobileCurtain from "@/components/ui/mobile-curtain";
 
 // Language Dictionary
 import getDictionary from "./dictionaries";
@@ -45,6 +46,7 @@ export default async function Page(props: {
           id="curtain-bottom"
           className="absolute bottom-0 left-0 w-full h-1/2 bg-white"
         />
+        <MobileCurtain />
       </div>
 
       <NavigationBar />
