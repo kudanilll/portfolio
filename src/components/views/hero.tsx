@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ArrowDown, Github, Instagram, Twitter } from "lucide-react";
+import { ArrowDown, Github, Instagram, Linkedin } from "lucide-react";
 import { DockText } from "@/components/typography/dock-text";
 import { bebasNeue, satoshi } from "@/common/font";
 import gsap from "gsap";
@@ -124,7 +123,7 @@ function RightBottomComponent() {
           </div>
         </Link>
         <Link
-          href="https://x.com/achmaddaniel24"
+          href="https://www.linkedin.com/in/achmaddaniel"
           target="_blank"
           className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
@@ -132,18 +131,18 @@ function RightBottomComponent() {
             <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
               <div className="flex flex-row items-center">
                 <div className="hidden md:block">
-                  <Twitter size={32} />
+                  <Linkedin size={32} />
                 </div>
                 <div className="md:hidden">
-                  <Twitter />
+                  <Linkedin />
                 </div>
               </div>
               <div className="flex flex-row items-center">
                 <div className="hidden md:block">
-                  <Twitter size={32} />
+                  <Linkedin size={32} />
                 </div>
                 <div className="md:hidden">
-                  <Twitter />
+                  <Linkedin />
                 </div>
               </div>
             </div>
@@ -209,6 +208,15 @@ export default function HeroView({ lang }: { lang: any }) {
       const socialMedia = document.getElementById("social-media");
       const socialMediaMobile = document.getElementById("social-media-mobile");
 
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        gsap.set(curtainTop, { display: "none" });
+        gsap.set(curtainBottom, { display: "none" });
+      } else {
+        gsap.set(curtainTop, { display: "block", y: 0 });
+        gsap.set(curtainBottom, { display: "block", y: 0 });
+      }
+
       // Set title to center of screen with larger scale
       gsap.set(titleUpRef.current, {
         y: 0,
@@ -236,7 +244,7 @@ export default function HeroView({ lang }: { lang: any }) {
       });
 
       // initial states
-      gsap.set(background, { y: "100%" });
+      gsap.set(background, { opacity: 0 });
       gsap.set(navbar, { opacity: 0, y: -20 });
 
       tl
@@ -246,7 +254,7 @@ export default function HeroView({ lang }: { lang: any }) {
         .to(curtainBottom, { opacity: 0, duration: 1 }, "-=0.6")
 
         // background reveal
-        .to(background, { y: 0, duration: 1 }, "-=0.6")
+        .to(background, { opacity: 0.3, duration: 1 }, "-=0.6")
 
         // title snap-in
         .to(titleUpRef.current, { y: 0, opacity: 1, duration: 0.8 }, "-=0.4")

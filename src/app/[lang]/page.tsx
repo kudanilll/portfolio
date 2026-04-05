@@ -55,6 +55,7 @@ export default async function Page(props: {
           id="curtain-bottom"
           className="absolute bottom-0 left-0 w-full h-1/2 bg-white"
         />
+        <MobileCurtain />
       </div>
 
       <NavigationBar />

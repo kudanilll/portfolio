@@ -28,26 +28,38 @@ function getLocale(request: NextRequest): (typeof locales)[number] {
   return match(
     languages,
     locales as unknown as string[],
-    defaultLocale
+    defaultLocale,
   ) as (typeof locales)[number];
 }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  const isPublicFile = [
+    "/sitemap.xml",
+    "/robots.txt",
+    "/favicon.ico",
+    "/assets",
+  ].some((path) => pathname === path || pathname.startsWith(path));
+
+  if (isPublicFile) {
+    return NextResponse.next();
+  }
+
   const hasLocalePrefix = locales.some(
-    (loc) => pathname === `/${loc}` || pathname.startsWith(`/${loc}/`)
+    (loc) => pathname === `/${loc}` || pathname.startsWith(`/${loc}/`),
   );
+
   if (hasLocalePrefix) {
     return NextResponse.next();
   }
 
   const locale = getLocale(request);
-
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname}`;
 
-  const res = NextResponse.redirect(url); // default 307
+  const res = NextResponse.redirect(url, 301);
+
   res.cookies.set({
     name: cookieName,
     value: locale,
@@ -55,13 +67,10 @@ export function middleware(request: NextRequest) {
     maxAge: 60 * 60 * 24 * 180,
     sameSite: "lax",
   });
+
   return res;
 }
 
 export const config = {
-  matcher: [
-    // all, except _next, api, assets, sitemap, robots, manifest, favicon
-    "/((?!_next|api|assets|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest|favicon\\.ico).*)",
-    "/",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)"],
 };

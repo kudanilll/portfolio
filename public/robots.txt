@@ -1,4 +1,4 @@
 User-Agent: *
 Allow: /
 
-Sitemap: https://www.kudaniel.my.id/sitemap.xml
+Sitemap: https://kudaniel.my.id/sitemap.xml
