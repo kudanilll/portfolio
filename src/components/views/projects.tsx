@@ -183,12 +183,15 @@ export default function ProjectsView({ lang }: { lang: any }) {
           </div>
           <div className="col absolute md:relative top-0 left-0 w-full md:flex-1 h-screen overflow-hidden z-0">
             <div className="col__image-wrap relative w-full h-[140vh] -top-[20vh]">
-              <Image
-                src={project.thumbnail}
-                alt={project.title}
-                fill
-                className="object-cover w-full h-full"
-              />
+              <Link
+                href={project.link}
+                target="_blank">
+                <Image
+                  src={project.thumbnail}
+                  alt={project.title}
+                  fill
+                  className="object-cover w-full h-full" />
+              </Link>
             </div>
           </div>
         </section>
