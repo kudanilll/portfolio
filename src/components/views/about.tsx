@@ -30,7 +30,7 @@ export default function AboutView({ lang }: { lang: any }) {
         <div className="w-[85%] md:w-2/5 h-full"></div>
         <div className="flex flex-col">
           {/* Desktop Text */}
-          <TextReveal className="hidden md:block max-w-[56vw] text-[clamp(1.2rem,4vw,3.5rem)] leading-[1.2] tracking-wide font-regular">
+          <TextReveal className="hidden md:block max-w-[56vw] text-[clamp(1.2rem,4vw,3.5rem)] leading-[1.2]">
             {lang.about_section.paragraph}
           </TextReveal>
 

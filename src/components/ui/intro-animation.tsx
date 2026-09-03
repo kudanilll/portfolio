@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { isMobileViewport } from "@/hooks/use-is-mobile";
+import { useRouter } from "next/navigation";
 
 /**
  * Intro curtain animation:
@@ -16,26 +17,33 @@ export default function IntroAnimation() {
   const mobileBottomRef = useRef<HTMLDivElement>(null);
   const topBlocksRef = useRef<(HTMLDivElement | null)[]>([]);
   const bottomBlocksRef = useRef<(HTMLDivElement | null)[]>([]);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isActive, setIsActive] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setIsVisible(false);
+      setIsActive(false);
       return;
     }
 
     document.body.style.overflow = "hidden";
 
+    const skipDelay = sessionStorage.getItem("skipIntroDelay") === "true";
+    sessionStorage.removeItem("skipIntroDelay");
+    const delay = skipDelay ? 0 : 1.0;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         onComplete: () => {
           document.body.style.overflow = "";
-          setIsVisible(false);
+          setIsActive(false);
         },
       });
 
       // Hold sebentar sebelum mulai buka
-      tl.to({}, { duration: 0.3 });
+      tl.to({}, { duration: delay });
 
       const isMobile = isMobileViewport();
 
@@ -48,7 +56,7 @@ export default function IntroAnimation() {
             duration: 0.8,
             ease: "power4.inOut",
           },
-          0.3
+          delay,
         ).to(
           mobileBottomRef.current,
           {
@@ -56,7 +64,7 @@ export default function IntroAnimation() {
             duration: 0.8,
             ease: "power4.inOut",
           },
-          0.3
+          delay,
         );
       } else {
         // Desktop: 4 blok ke atas & 4 blok ke bawah, animasi berurutan dari kanan ke kiri
@@ -74,7 +82,7 @@ export default function IntroAnimation() {
               each: 0.1,
             },
           },
-          0.3
+          delay,
         ).to(
           bottomBlocks,
           {
@@ -86,23 +94,82 @@ export default function IntroAnimation() {
               each: 0.1,
             },
           },
-          0.3
+          delay,
         );
       }
     }, containerRef);
 
+    const handlePageTransition = (e: Event) => {
+      const customEvent = e as CustomEvent<{ href: string }>;
+      const href = customEvent.detail.href;
+
+      sessionStorage.setItem("skipIntroDelay", "true");
+      setIsActive(true);
+      document.body.style.overflow = "hidden";
+
+      const outCtx = gsap.context(() => {
+        const outTl = gsap.timeline({
+          onComplete: () => {
+            router.push(href);
+          },
+        });
+
+        const isMobile = isMobileViewport();
+
+        if (isMobile) {
+          outTl
+            .to(
+              mobileTopRef.current,
+              { yPercent: 0, duration: 0.8, ease: "power4.inOut" },
+              0,
+            )
+            .to(
+              mobileBottomRef.current,
+              { yPercent: 0, duration: 0.8, ease: "power4.inOut" },
+              0,
+            );
+        } else {
+          const topBlocks = topBlocksRef.current.filter(Boolean);
+          const bottomBlocks = bottomBlocksRef.current.filter(Boolean);
+
+          outTl
+            .to(
+              topBlocks,
+              {
+                yPercent: 0,
+                duration: 0.8,
+                ease: "power4.inOut",
+                stagger: { from: "start", each: 0.1 },
+              },
+              0,
+            )
+            .to(
+              bottomBlocks,
+              {
+                yPercent: 0,
+                duration: 0.8,
+                ease: "power4.inOut",
+                stagger: { from: "start", each: 0.1 },
+              },
+              0,
+            );
+        }
+      }, containerRef);
+    };
+
+    window.addEventListener("page-transition", handlePageTransition);
+
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("page-transition", handlePageTransition);
       ctx.revert();
     };
-  }, []);
-
-  if (!isVisible) return null;
+  }, [router]);
 
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[9999]"
+      className={`fixed inset-0 z-[9999] ${isActive ? "" : "pointer-events-none"}`}
       aria-hidden="true"
     >
       {/* Mobile: Split 2 blok (atas & bawah) */}

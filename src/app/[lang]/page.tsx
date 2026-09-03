@@ -43,7 +43,7 @@ export default async function Page(props: {
         />
       ))}
 
-      <IntroAnimation />
+      <IntroAnimation key={lang} />
 
       <NavigationBar />
       <PageClientLayout>
@@ -68,18 +68,18 @@ export default async function Page(props: {
 
         <div className="md:translate-y-0 translate-y-[5svh] transform-gpu will-change-transform z-10">
           <Marquee>
-            <h1 className="font-bold tracking-tighter text-6xl md:text-8xl overflow-hidden">
+            <h1 className="font-bold text-6xl md:text-8xl overflow-hidden">
               Web Developer <span className="text-lime-400">✦</span> Mobile
-              Developer <span className="text-lime-400">✦</span> IoT Enthusiast{" "}
-              <span className="text-lime-400">✦</span>
+              Developer <span className="text-lime-400">✦</span> Creative
+              Developer <span className="text-lime-400">✦</span>
             </h1>
           </Marquee>
           <div className="md:hidden mt-2">
             <Marquee direction="right">
-              <h1 className="font-bold tracking-tighter text-6xl md:text-8xl overflow-hidden">
+              <h1 className="font-bold text-6xl md:text-8xl overflow-hidden">
                 Web Developer <span className="text-lime-400">✦</span> Mobile
-                Developer <span className="text-lime-400">✦</span> IoT
-                Enthusiast <span className="text-lime-400">✦</span>
+                Developer <span className="text-lime-400">✦</span> Creative
+                Developer <span className="text-lime-400">✦</span>
               </h1>
             </Marquee>
           </div>

@@ -6,10 +6,15 @@ const satoshi = localFont({
   display: "swap",
 });
 
+const layGrotesk = localFont({
+  src: "./fonts/laygrotesk-regular.otf",
+  display: "swap",
+});
+
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
   display: "swap",
   weight: "400",
 });
 
-export { satoshi, bebasNeue };
+export { satoshi, layGrotesk, bebasNeue };

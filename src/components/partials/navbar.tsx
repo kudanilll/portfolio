@@ -23,8 +23,14 @@ export default function NavigationBar() {
     >
       <div className="w-full h-16 flex items-center justify-end">
         <div className="flex items-center justify-center text-center gap-3">
-          <Link
+          <a
             href="/en"
+            onClick={(e) => {
+              e.preventDefault();
+              window.dispatchEvent(
+                new CustomEvent("page-transition", { detail: { href: "/en" } })
+              );
+            }}
             className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
           >
             {/* Text */}
@@ -38,9 +44,15 @@ export default function NavigationBar() {
                 </div>
               </div>
             </div>
-          </Link>
-          <Link
+          </a>
+          <a
             href="/id"
+            onClick={(e) => {
+              e.preventDefault();
+              window.dispatchEvent(
+                new CustomEvent("page-transition", { detail: { href: "/id" } })
+              );
+            }}
             className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-14 h-14 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
           >
             {/* Text */}
@@ -54,7 +66,7 @@ export default function NavigationBar() {
                 </div>
               </div>
             </div>
-          </Link>
+          </a>
         </div>
       </div>
     </nav>

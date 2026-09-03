@@ -3,7 +3,7 @@
 "use client";
 
 import { DockText } from "@/components/typography/dock-text";
-import { bebasNeue, satoshi } from "@/common/font";
+import { bebasNeue, layGrotesk } from "@/common/font";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
 import { InstagramLogoIcon } from "@phosphor-icons/react/dist/csr/InstagramLogo";
 import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
@@ -25,7 +25,7 @@ function LetsTalkButton({ lang }: { lang: any }) {
           : (process.env.NEXT_PUBLIC_CV_ID as string)
       }
       target="_blank"
-      className="mx-auto md:mx-0 text-base md:text-xl tracking-tight w-36 md:w-56 h-12 md:h-16 bg-transparent border border-neutral-200 md:border-neutral-400 text-white group flex items-center justify-center relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
+      className="mx-auto md:mx-0 text-base md:text-xl w-36 md:w-56 h-12 md:h-16 bg-transparent border border-neutral-200 md:border-neutral-400 text-white group flex items-center justify-center relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
       data-hero-cta
     >
       <div className="relative items-center h-6 md:h-7 overflow-hidden uppercase">
@@ -58,10 +58,10 @@ function LeftBottomComponent({ lang }: { lang: any }) {
       id="left-bottom-component"
       className="absolute flex flex-col md:gap-1.5 bottom-4 left-4 md:bottom-[4%] md:left-8 text-start"
     >
-      <h1 className="text-neutral-400 text-lg md:text-[clamp(1rem,1.4vw,1.8rem)] font-semibold uppercase tracking-tight">
+      <h1 className="text-neutral-400 text-lg md:text-[clamp(1rem,1.4vw,1.8rem)] font-semibold uppercase">
         {lang.home_section.location}, Indonesia
       </h1>
-      <h1 className="text-neutral-600 text-base md:text-[clamp(1rem,1.2vw,1.8rem)] font-medium uppercase tracking-tight">
+      <h1 className="text-neutral-600 text-base md:text-[clamp(1rem,1.2vw,1.8rem)] font-medium uppercase">
         <span>{lang.contact_section.title_2}</span>
       </h1>
     </div>
@@ -75,7 +75,7 @@ function RightBottomComponent() {
         <Link
           href="https://www.instagram.com/achmaddaniel__"
           target="_blank"
-          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
             <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
@@ -101,7 +101,7 @@ function RightBottomComponent() {
         <Link
           href="https://github.com/kudanilll"
           target="_blank"
-          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
             <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
@@ -127,7 +127,7 @@ function RightBottomComponent() {
         <Link
           href="https://www.linkedin.com/in/achmaddaniel"
           target="_blank"
-          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl tracking-tight text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
             <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
@@ -165,41 +165,60 @@ export default function HeroView({ lang }: { lang: any }) {
       <div className="mt-[-12%] md:mt-28 w-screen px-4 md:px-8 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4 md:gap-0">
         {/* Title */}
         <div className="w-full">
-          <span>
-            <span
-              className={`${bebasNeue.className} block text-start text-8xl md:text-[clamp(4rem,12vw,14rem)] font-medium text-white leading-[0.95] tracking-tight uppercase`}
-            >
-              <span className="flex flex-col md:flex-row md:items-center md:gap-8">
-                <DockText text={"ACHMAD"} down={false} />
-                <DockText text={"DANIEL"} down={false} />
-              </span>
-              <div className="md:flex flex-row items-end gap-2">
-                <span>
-                  <DockText text={"SYAHPUTRA"} down={true} />
-                </span>
-                <span
-                  className={`${satoshi.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-2vw]`}
-                >
-                  <span className="mt-2 md:mt-0">
-                    <LetsTalkButton lang={lang} />
-                  </span>
-                  <div
-                    id="social-media-mobile"
-                    className="mt-2 md:mt-0 md:hidden"
-                  >
-                    <RightBottomComponent />
-                  </div>
-                </span>
-              </div>
+          <span
+            className={`${bebasNeue.className} block text-start text-8xl md:text-[clamp(4rem,8vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.95] uppercase`}
+          >
+            <span className="flex flex-col md:flex-row md:items-center md:gap-8">
+              <DockText
+                text={"ACHMAD"}
+                down={false}
+                className="text-neutral-300"
+              />
+              <DockText
+                text={"DANIEL"}
+                down={false}
+                className="text-neutral-300"
+              />
             </span>
+            <div className="md:flex flex-row items-end gap-2">
+              <span>
+                <DockText
+                  text={"SYAHPUTRA"}
+                  down={true}
+                  className="text-neutral-300"
+                />
+              </span>
+              <span
+                className={`${layGrotesk.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-2vw]`}
+              >
+                <span className="mt-2 md:mt-0 tracking-normal">
+                  <LetsTalkButton lang={lang} />
+                </span>
+                <div
+                  id="social-media-mobile"
+                  className="mt-2 md:mt-0 md:hidden tracking-normal"
+                >
+                  <RightBottomComponent />
+                </div>
+              </span>
+            </div>
           </span>
         </div>
 
         {/* Description */}
-        <div className="hidden md:block w-full md:w-1/3">
+        {/* <div className="hidden md:block w-full md:w-1/3">
           <p className="mt-2 md:mt-0 text-start text-base md:text-[clamp(1rem,1.2vw,1.6rem)] leading-[1.6] text-neutral-400 uppercase">
             {lang.home_section.desc}
           </p>
+        </div> */}
+
+        <div className="hidden md:block w-full mt-[28vh]">
+          <span
+            className={`${bebasNeue.className} block text-end text-8xl md:text-[clamp(4rem,16vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.8] uppercase`}
+          >
+            <DockText text={"CREATIVE"} down={false} />
+            <DockText text={"DEVELOPER"} down={true} />
+          </span>
         </div>
       </div>
 
