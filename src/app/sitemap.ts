@@ -7,7 +7,6 @@ import {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
-
   return locales.map((lang) => ({
     url: getLocalizedUrl(lang),
     lastModified,

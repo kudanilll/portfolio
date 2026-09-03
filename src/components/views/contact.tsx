@@ -4,7 +4,7 @@
 "use client";
 
 import { bebasNeue } from "@/common/font";
-import { Mail } from "lucide-react";
+import { EnvelopeSimpleIcon } from "@phosphor-icons/react/dist/csr/EnvelopeSimple";
 
 function ContactButton({ message, text }: { message: string; text: string }) {
   return (
@@ -20,13 +20,13 @@ function ContactButton({ message, text }: { message: string; text: string }) {
               <span className="block leading-[20px] text-center transform origin-right group-hover:rotate-[15deg]">
                 {text}
               </span>
-              <Mail className="ml-3 text-white" size={22} />
+              <EnvelopeSimpleIcon className="ml-3 text-white" size={22} />
             </div>
             <div className="flex flex-row items-center">
               <span className="block text-center transform origin-left translate-y-0 group-hover:rotate-0">
                 {text}
               </span>
-              <Mail className="ml-3 text-white" size={22} />
+              <EnvelopeSimpleIcon className="ml-3 text-white" size={22} />
             </div>
           </div>
         </div>
@@ -52,7 +52,7 @@ export default function ContactView({ lang }: { lang: any }) {
         <h2
           className={`${bebasNeue.className} ${
             lang.lang === "en" ? "text-6xl" : "text-5xl"
-          } uppercase font-medium tracking-tight text-neutral-500 md:text-9xl leading-[0.95] md:leading-[6rem]`}
+          } md:mt-4 uppercase font-medium tracking-tight text-neutral-500 md:text-9xl leading-[0.95] md:leading-[6rem]`}
         >
           {lang.contact_section.title_2}
         </h2>

@@ -9,7 +9,7 @@ import NavigationBar from "@/components/partials/navbar";
 import PageClientLayout from "@/components/partials/page-client-layout";
 import Section from "@/components/partials/section";
 import CursorPointer from "@/components/ui/cursor-pointer";
-import MobileCurtain from "@/components/ui/mobile-curtain";
+import IntroAnimation from "@/components/ui/intro-animation";
 import VelocityScroll from "@/components/ui/scroll-based-velocity";
 import Marquee from "react-fast-marquee";
 import Dot from "@/components/svg/dot";
@@ -44,20 +44,7 @@ export default async function Page(props: {
         />
       ))}
 
-      <div
-        id="hero-transition"
-        className="fixed inset-0 z-[1000] pointer-events-none"
-      >
-        <div
-          id="curtain-top"
-          className="absolute top-0 left-0 w-full h-1/2 bg-white"
-        />
-        <div
-          id="curtain-bottom"
-          className="absolute bottom-0 left-0 w-full h-1/2 bg-white"
-        />
-        <MobileCurtain />
-      </div>
+      <IntroAnimation />
 
       <NavigationBar />
       <PageClientLayout>

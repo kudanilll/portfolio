@@ -4,8 +4,8 @@ export const locales = ["en", "id"] as const;
 
 export type AppLocale = (typeof locales)[number];
 
-const siteUrl = "https://kudaniel.my.id";
-const siteName = "Achmad Daniel Portfolio";
+const siteUrl = "https://achmaddaniel.nielcode.com";
+const siteName = "Achmad Daniel Syahputra";
 const personName = "Achmad Daniel Syahputra";
 const defaultOgImage = `${siteUrl}/assets/images/og.webp`;
 const profileImage = `${siteUrl}/assets/images/achmad-daniel.webp`;
@@ -13,9 +13,9 @@ const profileImage = `${siteUrl}/assets/images/achmad-daniel.webp`;
 const localizedSeo = {
   en: {
     locale: "en_US",
-    title: "Achmad Daniel | Programmer",
+    title: "Achmad Daniel - Creative Developer • Bekasi, ID",
     description:
-      "Portfolio of Achmad Daniel, a Programmer building high-performance websites, mobile apps, and scalable digital products.",
+      "Portfolio of Achmad Daniel, a Software Engineer building high-performance websites, mobile apps, and scalable digital products.",
     siteDescription:
       "Explore selected work, services, and technical expertise in web development, mobile engineering, and IoT-focused solutions.",
     keywords: [
@@ -33,11 +33,11 @@ const localizedSeo = {
   },
   id: {
     locale: "id_ID",
-    title: "Achmad Daniel | Programmer",
+    title: "Achmad Daniel | Software Engineer",
     description:
-      "Portfolio Achmad Daniel, seorang Programmer yang membangun website cepat, aplikasi mobile, dan produk digital yang scalable.",
+      "Portofolio Achmad Daniel, seorang Software Engineer yang membangun website cepat, aplikasi mobile, dan produk digital yang scalable.",
     siteDescription:
-      "Jelajahi proyek pilihan, layanan, dan keahlian teknis di bidang web development, mobile engineering, dan solusi berbasis IoT.",
+      "Jelajahi proyek pilihan, layanan, dan keahlian teknis di bidang pengembangan web, pengembangan aplikasi mobile, dan solusi berbasis IoT.",
     keywords: [
       "Achmad Daniel",
       "Achmad Daniel Syahputra",
