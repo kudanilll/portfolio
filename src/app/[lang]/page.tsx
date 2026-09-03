@@ -10,7 +10,6 @@ import PageClientLayout from "@/components/partials/page-client-layout";
 import Section from "@/components/partials/section";
 import CursorPointer from "@/components/ui/cursor-pointer";
 import IntroAnimation from "@/components/ui/intro-animation";
-import VelocityScroll from "@/components/ui/scroll-based-velocity";
 import Marquee from "react-fast-marquee";
 import Dot from "@/components/svg/dot";
 
@@ -57,13 +56,7 @@ export default async function Page(props: {
         <Section id="hero" lang={t}></Section>
         <Section id="about" lang={t}></Section>
 
-        <div className="py-24">
-          <VelocityScroll
-            text="Web Developer ✦ Mobile Developer ✦ IoT Enthusiast ✦ "
-            defaultVelocity={3}
-            className="text-center text-4xl font-bold tracking-tighter drop-shadow-sm md:text-8xl md:leading-[6rem] uppercase"
-          />
-        </div>
+        <div className="py-12"></div>
 
         <Section id="projects" lang={t}></Section>
         <div className="md:translate-y-0 translate-y-[6svh] transform-gpu will-change-transform z-10">

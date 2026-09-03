@@ -6,7 +6,6 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import Flower from "@/components/svg/flower";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -78,12 +77,12 @@ export default function ProjectsView({ lang }: { lang: any }) {
           .from(
             slide.querySelectorAll(".col__content-txt"),
             { x: 100, opacity: 0, duration: 1.5, ease: "power4" },
-            "-=1.2"
+            "-=1.2",
           )
           .from(
             slide.querySelectorAll(".slide-link"),
             { x: -100, opacity: 0, duration: 1.5, ease: "power4" },
-            "<"
+            "<",
           );
 
         const imageWrapper =
@@ -100,7 +99,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
               end: "bottom top",
             },
             ease: "none",
-          }
+          },
         );
       });
 
@@ -123,17 +122,9 @@ export default function ProjectsView({ lang }: { lang: any }) {
                 end: "bottom top",
               },
               ease: "none",
-            }
+            },
           );
         });
-
-      gsap.to(".flower-rotate", {
-        rotation: 360,
-        duration: 12,
-        ease: "linear",
-        repeat: -1, // infinite
-        transformOrigin: "50% 50%",
-      });
     }, containerRef);
 
     return () => ctx.revert();
@@ -146,9 +137,6 @@ export default function ProjectsView({ lang }: { lang: any }) {
         <h1 className="md:py-12 px-4 md:px-6 text-3xl md:text-5xl text-white tracking-tighter uppercase">
           {lang.project_section.title}
         </h1>
-        <div className="hidden md:block">
-          <Flower />
-        </div>
       </div>
       {/* Desktop View */}
       {projects.map((project) => (
@@ -183,14 +171,13 @@ export default function ProjectsView({ lang }: { lang: any }) {
           </div>
           <div className="col absolute md:relative top-0 left-0 w-full md:flex-1 h-screen overflow-hidden z-0">
             <div className="col__image-wrap relative w-full h-[140vh] -top-[20vh]">
-              <Link
-                href={project.link}
-                target="_blank">
+              <Link href={project.link} target="_blank">
                 <Image
                   src={project.thumbnail}
                   alt={project.title}
                   fill
-                  className="object-cover w-full h-full" />
+                  className="object-cover w-full h-full"
+                />
               </Link>
             </div>
           </div>

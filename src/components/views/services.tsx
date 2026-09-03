@@ -1,76 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use client";
 
 import type { ComponentType, ReactNode } from "react";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Stars from "@/components/svg/stars";
-
-const listItem = {
-  initial: { opacity: 0, x: 8 },
-  animate: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.28, ease: "easeOut" },
-  },
-};
-
-const descVariants = {
-  hidden: { opacity: 0, y: 12, filter: "blur(6px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
-  exit: {
-    opacity: 0,
-    y: -10,
-    filter: "blur(6px)",
-    transition: { duration: 0.25 },
-  },
-};
-
-const imageSwap = {
-  hidden: { opacity: 0, x: -16, rotate: -2 },
-  show: {
-    opacity: 1,
-    x: 0,
-    rotate: 0,
-    transition: { type: "spring", stiffness: 300, damping: 24 },
-  },
-  exit: { opacity: 0, x: -16, rotate: 2, transition: { duration: 0.2 } },
-};
-
-const imgRow = {
-  hidden: { opacity: 0, y: 10 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
-  },
-};
-
-const imgItem = {
-  hidden: (_: number) => ({
-    opacity: 0,
-    scale: 0.85,
-    rotate: 0,
-    y: 8,
-  }),
-  show: (tilt: number) => ({
-    opacity: 1,
-    scale: 1,
-    rotate: tilt,
-    y: 0,
-    transition: { type: "spring", stiffness: 320, damping: 18 },
-  }),
-  hover: { scale: 1.08, rotate: 0, zIndex: 10 },
-  tap: { scale: 1.06, rotate: 0, zIndex: 10 },
-};
+import gsap from "gsap";
+import { cn } from "@/lib/utils";
 
 function useRandomTilt(range = 10) {
   const [tilt, setTilt] = useState(0);
@@ -90,27 +27,21 @@ function TiltItem({
 }) {
   const tilt = useRandomTilt(10);
   return (
-    <motion.div
-      variants={imgItem}
-      custom={tilt}
-      whileHover="hover"
-      whileTap="tap"
-      className={className}
+    <div
+      style={{ transform: `rotate(${tilt}deg)` }}
+      className={cn(
+        "transition-all duration-300 ease-out hover:scale-110 hover:!rotate-0 hover:z-20 active:scale-105",
+        className
+      )}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
 function MobileDevelopmentServiceImage() {
   return (
-    <motion.div
-      className="flex items-center justify-center md:ml-8 md:mt-16"
-      variants={imgRow}
-      initial="hidden"
-      animate="show"
-      exit="hidden"
-    >
+    <div className="flex items-center justify-center md:ml-8 md:mt-16">
       <TiltItem className="bg-blue-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg"
@@ -138,19 +69,13 @@ function MobileDevelopmentServiceImage() {
           className="p-4 md:p-8"
         />
       </TiltItem>
-    </motion.div>
+    </div>
   );
 }
 
 function WebsiteDevelopmentServiceImage() {
   return (
-    <motion.div
-      className="flex items-center justify-center md:ml-8 md:mt-16"
-      variants={imgRow}
-      initial="hidden"
-      animate="show"
-      exit="hidden"
-    >
+    <div className="flex items-center justify-center md:ml-8 md:mt-16">
       <TiltItem className="bg-yellow-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg"
@@ -178,19 +103,13 @@ function WebsiteDevelopmentServiceImage() {
           className="p-4 md:p-12"
         />
       </TiltItem>
-    </motion.div>
+    </div>
   );
 }
 
 function IoTDevelopmentServiceImage() {
   return (
-    <motion.div
-      className="flex items-center justify-center md:ml-8 md:mt-16"
-      variants={imgRow}
-      initial="hidden"
-      animate="show"
-      exit="hidden"
-    >
+    <div className="flex items-center justify-center md:ml-8 md:mt-16">
       <TiltItem className="bg-blue-100 w-24 h-24 md:w-fit md:h-fit rounded-lg md:rounded-2xl -mr-4 shadow-xl hover:shadow-2xl shrink-0 overflow-hidden">
         <Image
           src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/arduino/arduino-original.svg"
@@ -218,7 +137,7 @@ function IoTDevelopmentServiceImage() {
           className="p-4 md:p-8"
         />
       </TiltItem>
-    </motion.div>
+    </div>
   );
 }
 
@@ -230,6 +149,9 @@ type Service = {
 
 export default function ServicesView({ lang }: { lang: any }) {
   const [currentService, setCurrentService] = useState<number>(0);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const descRef = useRef<HTMLParagraphElement>(null);
+  const starsRef = useRef<HTMLSpanElement>(null);
 
   const services: Service[] = [
     {
@@ -249,6 +171,33 @@ export default function ServicesView({ lang }: { lang: any }) {
     },
   ];
 
+  // GSAP animation when currentService changes
+  useEffect(() => {
+    if (descRef.current) {
+      gsap.fromTo(
+        descRef.current,
+        { opacity: 0, y: 15, filter: "blur(6px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "power2.out" }
+      );
+    }
+
+    if (imageRef.current) {
+      gsap.fromTo(
+        imageRef.current,
+        { opacity: 0, x: -20, rotate: -2 },
+        { opacity: 1, x: 0, rotate: 0, duration: 0.45, ease: "back.out(1.4)" }
+      );
+    }
+
+    if (starsRef.current) {
+      gsap.fromTo(
+        starsRef.current,
+        { opacity: 0, scale: 0.6, rotate: -15 },
+        { opacity: 1, scale: 1, rotate: 0, duration: 0.35, ease: "back.out(2)" }
+      );
+    }
+  }, [currentService]);
+
   const ImageComp = services[currentService].image;
 
   return (
@@ -263,76 +212,37 @@ export default function ServicesView({ lang }: { lang: any }) {
 
         <div className="min-h-[75svh] md:min-h-screen relative bg-neutral-900 md:bg-neutral-950">
           {/* List Services */}
-          <LayoutGroup>
-            <div className="absolute top-10 right-4 md:top-24 md:right-8 flex flex-col items-end text-right">
-              {services.map((service, index) => (
-                <motion.div
-                  key={service.title}
-                  variants={listItem}
-                  initial="initial"
-                  animate="animate"
-                  className="pb-1"
+          <div className="absolute top-10 right-4 md:top-24 md:right-8 flex flex-col items-end text-right">
+            {services.map((service, index) => (
+              <div key={service.title} className="pb-1">
+                <h1
+                  onClick={() => setCurrentService(index)}
+                  aria-current={currentService === index ? "true" : undefined}
+                  className={`relative inline-flex items-center justify-end gap-3 cursor-pointer text-3xl md:text-[clamp(2.5rem,4vw,5rem)] leading-none font-semibold tracking-tighter transition-colors duration-300 ${
+                    currentService === index
+                      ? "text-lime-400"
+                      : "text-white/30 hover:text-white/70"
+                  }`}
                 >
-                  <h1
-                    onClick={() => setCurrentService(index)}
-                    aria-current={currentService === index ? "true" : undefined}
-                    className={`relative inline-flex items-center justify-end gap-3 cursor-pointer text-3xl md:text-[clamp(2.5rem,4vw,5rem)] leading-none font-semibold tracking-tighter
-                    ${
-                      currentService === index
-                        ? "text-lime-400"
-                        : "text-white/30 hover:text-white/70 transition-colors duration-300"
-                    }`}
-                  >
-                    {/* Moving Stars beside active item */}
-                    <AnimatePresence mode="sync">
-                      {currentService === index && (
-                        <motion.span
-                          key="stars"
-                          layoutId="active-stars"
-                          initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                          exit={{ opacity: 0, scale: 0.8, rotate: 5 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 420,
-                            damping: 26,
-                          }}
-                          className="inline-flex"
-                        >
-                          <Stars />
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-
-                    {/* Title text */}
-                    <span className="relative">
-                      {service.title}
-                      {currentService === index && (
-                        <motion.span
-                          layoutId="active"
-                          className="absolute -bottom-1 right-0 h-[4vh] w-full"
-                        />
-                      )}
+                  {/* Moving Stars beside active item */}
+                  {currentService === index && (
+                    <span ref={starsRef} className="inline-flex">
+                      <Stars />
                     </span>
-                  </h1>
-                </motion.div>
-              ))}
-            </div>
-          </LayoutGroup>
+                  )}
 
-          {/* Image (swap with spring + staggered children) */}
+                  {/* Title text */}
+                  <span className="relative">{service.title}</span>
+                </h1>
+              </div>
+            ))}
+          </div>
+
+          {/* Image (swap with spring) */}
           <div className="absolute top-[35%] md:top-8 left-4 md:left-8">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentService}
-                variants={imageSwap}
-                initial="hidden"
-                animate="show"
-                exit="exit"
-              >
-                <ImageComp />
-              </motion.div>
-            </AnimatePresence>
+            <div ref={imageRef}>
+              <ImageComp />
+            </div>
           </div>
 
           {/* Description (blur → fade → slide) */}
@@ -341,18 +251,12 @@ export default function ServicesView({ lang }: { lang: any }) {
               lang.lang === "en" ? "bottom-14" : "bottom-20"
             } left-4 right-4 md:bottom-36 md:left-8 md:right-8`}
           >
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={currentService}
-                variants={descVariants}
-                initial="hidden"
-                animate="show"
-                exit="exit"
-                className="text-neutral-200 text-start text-2xl md:text-[clamp(1.5rem,4vw,3rem)] max-w-[90vw] leading-[1.2] tracking-tight"
-              >
-                {services[currentService].description}
-              </motion.p>
-            </AnimatePresence>
+            <p
+              ref={descRef}
+              className="text-neutral-200 text-start text-2xl md:text-[clamp(1.5rem,4vw,3rem)] max-w-[90vw] leading-[1.2] tracking-tight"
+            >
+              {services[currentService].description}
+            </p>
           </div>
         </div>
       </div>
