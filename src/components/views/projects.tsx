@@ -134,7 +134,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
     <div ref={containerRef} className="w-full">
       <div className="h-fit md:h-[0dvh]"></div>
       <div className="flex justify-between items-center relative md:mx-16">
-        <h1 className="md:py-12 px-4 md:px-6 text-3xl md:text-5xl text-white tracking-tighter uppercase">
+        <h1 className="md:py-12 px-4 md:px-6 text-3xl md:text-5xl text-white uppercase">
           {lang.project_section.title}
         </h1>
       </div>
