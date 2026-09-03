@@ -34,7 +34,7 @@ export default async function RootLayout({
   return (
     <html
       lang={lang}
-      className="scroll-smooth no-scrollbar bg-black text-white"
+      className="scroll-smooth no-scrollbar bg-[#0a0a0a] text-white"
       style={{ scrollBehavior: "smooth" }}
     >
       <body className={`${satoshi.className} antialiased select-none`}>

@@ -1,6 +1,5 @@
 "use client";
 
-import { bebasNeue } from "@/common/font";
 import { TextReveal } from "@/components/typography/text-reveal";
 import Dot from "@/components/svg/dot";
 import Image from "next/image";
@@ -12,20 +11,16 @@ export default function AboutView({ lang }: { lang: any }) {
       id="about"
       className="md:min-h-screen w-full px-4 md:px-8 relative pt-24 pb-0 md:pt-24 md:pb-24"
     >
-      <span
-        className={`${bebasNeue.className} absolute top-8 left-4 text-8xl md:text-[clamp(4rem,18vw,20rem)] font-medium leading-[0.95] tracking-tight text-white opacity-10 md:opacity-5 uppercase`}
-      >
-        {lang.about_section.title}
-      </span>
-
       {/* Desktop Image */}
-      <Image
-        src="/assets/images/achmad-daniel.webp"
-        alt="Achmad Daniel Syahputra"
-        width={500}
-        height={500}
-        className="hidden md:block absolute top-3/4 left-24 -translate-y-1/2 grayscale"
-      />
+      <div className="hidden md:block w-[28vw] h-auto absolute top-3/4 left-24 -translate-y-1/2 aspect-[3/4] overflow-hidden">
+        <Image
+          src="/assets/images/achmad-daniel.webp"
+          alt="Achmad Daniel Syahputra"
+          width={500}
+          height={500}
+          className="grayscale scale-125"
+        />
+      </div>
 
       <div className="hidden md:block absolute bottom-0 right-32 w-[18vw] h-[18vh]">
         <Dot />

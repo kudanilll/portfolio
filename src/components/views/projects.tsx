@@ -155,15 +155,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
                 </span>
               </h3>
               <div className="col__content-wrap flex flex-col md:flex-row justify-end items-start md:items-center">
-                <Link
-                  href={project.link}
-                  target="_blank"
-                  className="slide-link group relative order-2 md:order-1 self-end md:self-auto flex justify-end w-[75px] h-[53px]"
-                >
-                  <div className="slide-link__circ w-[53px] h-[53px] rounded-full border-2 border-lime-400"></div>
-                  <div className="slide-link__line absolute top-[25px] left-0 w-16 h-0.5 bg-lime-400 transition-all duration-700 ease-in-out group-hover:scale-x-50 group-hover:translate-x-4 transform-origin-right"></div>
-                </Link>
-                <p className="md:text-2xl col__content-txt order-1 md:order-2 text-white/75 max-w-[50vw] md:max-w-[22vw] mb-10 md:mb-0 ml-0 md:ml-8">
+                <p className="md:text-2xl col__content-txt order-1 md:order-2 text-white/75 max-w-[50vw] md:max-w-[32vw] mb-10 md:mb-0 ml-0 md:ml-8">
                   {project.description}
                 </p>
               </div>
