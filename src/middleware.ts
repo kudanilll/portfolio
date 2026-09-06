@@ -35,12 +35,15 @@ function getLocale(request: NextRequest): (typeof locales)[number] {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isPublicFile = [
-    "/sitemap.xml",
-    "/robots.txt",
-    "/favicon.ico",
-    "/assets",
-  ].some((path) => pathname === path || pathname.startsWith(path));
+  const isPublicFile =
+    [
+      "/sitemap.xml",
+      "/robots.txt",
+      "/favicon.ico",
+      "/assets",
+    ].some((path) => pathname === path || pathname.startsWith(path)) ||
+    /^\/google[a-z0-9]+\.html$/i.test(pathname) ||
+    pathname.includes(".");
 
   if (isPublicFile) {
     return NextResponse.next();
@@ -72,5 +75,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|.*\\..*).*)",
+  ],
 };
