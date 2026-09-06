@@ -163,17 +163,33 @@ function RightBottomComponent() {
 }
 
 export default function HeroView({ lang }: { lang: any }) {
-  const containerRef = useRef<HTMLElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const isMobile = window.innerWidth < 768;
 
+      // 1. Pin Background & Text Layer for 250%
+      // This stays fixed while the footer and next section slide over it.
+      // pinSpacing: false ensures it doesn't affect document flow.
+      ScrollTrigger.create({
+        trigger: bgRef.current,
+        start: "top top",
+        end: "+=250%",
+        pin: true,
+        pinSpacing: false,
+      });
+
+      // 2. Pin Footer Layer for 150% and drive animation
+      // This drives the document scroll height. Pinned for 150%.
+      // Once the pin ends (at 150%, exactly when text is centered), it scrolls up naturally!
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: containerRef.current?.parentElement || containerRef.current,
+          trigger: footerRef.current,
           start: "top top",
-          end: "+=150%", // Scroll distance to complete animation
+          end: "+=150%", // Animation finishes at 150%, then pin ends and covering starts!
           pin: true,
           scrub: 1,
         },
@@ -229,8 +245,7 @@ export default function HeroView({ lang }: { lang: any }) {
       const targetCenterX = viewportW / 2;
       const targetCenterY = bgHeight / 2;
 
-      // Delta to move (in pre-scale space, so divide by finalScale is NOT needed
-      // because GSAP applies transforms in order: translate then scale)
+      // Delta to move
       const deltaX = targetCenterX - currentCenterX;
       const deltaY = targetCenterY - currentCenterY;
 
@@ -240,7 +255,7 @@ export default function HeroView({ lang }: { lang: any }) {
         force3D: true,
       });
 
-      // 2. Animate wrapper to viewport center using ONLY transforms (no layout reflow)
+      // 2. Animate wrapper to viewport center
       tl.to(
         ".creative-wrapper",
         {
@@ -253,9 +268,7 @@ export default function HeroView({ lang }: { lang: any }) {
         0,
       );
 
-      // 3. Merge into 1 line — move children relative to wrapper
-      // Both elements are currently right-aligned to the wrapper (right edge = wrapperW).
-      // The merged line is centered in the wrapper.
+      // 3. Merge into 1 line
       const creativeTargetX = creativeW - mergedW / 2 - wrapperW / 2;
       const devTargetX = mergedW / 2 - wrapperW / 2;
 
@@ -283,89 +296,110 @@ export default function HeroView({ lang }: { lang: any }) {
         0,
       );
     },
-    { scope: containerRef },
+    { scope: heroRef },
   );
 
   return (
-    <section
-      id="home"
-      ref={containerRef}
-      className="relative h-svh md:h-screen w-screen overflow-x-hidden flex flex-col"
-    >
-      <NavigationBar />
+    <div id="home" ref={heroRef} className="relative w-screen">
+      {/* 
+        1. Background & Text Layer (GSAP Pinned for 250vh)
+        This layer is pinned with pinSpacing: false, so it stays fixed for the entire 250vh scroll distance,
+        allowing the footer and next section to scroll up over it!
+      */}
       <div
-        id="hero-background"
-        className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-[position:50%_20%] md:bg-center z-0 opacity-45 md:opacity-30 pointer-events-none"
-        style={{ backgroundImage: "url('/assets/images/background.webp')" }}
-      />
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col w-screen px-4 md:px-8 pt-[12vh] z-10">
-        {/* Title */}
-        <div className="hero-left-area w-full">
-          <span
-            className={`${bebasNeue.className} block text-start text-[clamp(4rem,14vw,6rem)] md:text-[clamp(4rem,8vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.85] uppercase`}
-          >
-            <span className="flex flex-col md:flex-row md:items-center md:gap-8">
-              <DockText
-                text={"ACHMAD"}
-                down={false}
-                className="text-neutral-300"
-              />
-              <DockText
-                text={"DANIEL"}
-                down={false}
-                className="text-neutral-300"
-              />
-            </span>
-            <div className="md:flex flex-row items-end gap-2">
-              <DockText
-                text={"SYAHPUTRA"}
-                down={true}
-                className="text-neutral-300"
-              />
-              <span
-                className={`${layGrotesk.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-1vw]`}
-              >
-                <span className="mt-2 md:mt-0 tracking-normal">
-                  <LetsTalkButton lang={lang} />
-                </span>
-                <div
-                  id="social-media-mobile"
-                  className="mt-2 md:mt-0 md:hidden tracking-normal"
+        ref={bgRef}
+        className="absolute top-0 w-full h-svh md:h-screen overflow-x-hidden flex flex-col pointer-events-auto z-0"
+      >
+        <NavigationBar />
+        <div
+          id="hero-background"
+          className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-[position:50%_20%] md:bg-center z-0 opacity-45 md:opacity-30 pointer-events-none"
+          style={{ backgroundImage: "url('/assets/images/background.webp')" }}
+        />
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col w-screen px-4 md:px-8 pt-[12vh] z-10">
+          {/* Title */}
+          <div className="hero-left-area w-full">
+            <span
+              className={`${bebasNeue.className} block text-start text-[clamp(4rem,14vw,6rem)] md:text-[clamp(4rem,8vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.85] uppercase`}
+            >
+              <span className="flex flex-col md:flex-row md:items-center md:gap-8">
+                <DockText
+                  text={"ACHMAD"}
+                  down={false}
+                  className="text-neutral-300"
+                />
+                <DockText
+                  text={"DANIEL"}
+                  down={false}
+                  className="text-neutral-300"
+                />
+              </span>
+              <div className="md:flex flex-row items-end gap-2">
+                <DockText
+                  text={"SYAHPUTRA"}
+                  down={true}
+                  className="text-neutral-300"
+                />
+                <span
+                  className={`${layGrotesk.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-1vw]`}
                 >
-                  <RightBottomComponent />
-                </div>
+                  <span className="mt-2 md:mt-0 tracking-normal">
+                    <LetsTalkButton lang={lang} />
+                  </span>
+                  <div
+                    id="social-media-mobile"
+                    className="mt-2 md:mt-0 md:hidden tracking-normal"
+                  >
+                    <RightBottomComponent />
+                  </div>
+                </span>
+              </div>
+            </span>
+          </div>
+
+          {/* CREATIVE DEVELOPER - Push to bottom */}
+          <div className="w-full">
+            <div className="creative-wrapper absolute bottom-[18vh] md:bottom-[16vh] right-4 md:right-8 flex flex-col items-end">
+              <span
+                className={`${bebasNeue.className} creative-text block text-end text-[clamp(3rem,12vw,5rem)] md:text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.1rem] md:tracking-[-0.2rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
+              >
+                <span className="flex flex-row items-center md:gap-6 justify-end">
+                  <DockText text={"CREATIVE"} down={false} />
+                  <span className="text-lime-400">✦</span>
+                </span>
+              </span>
+              <span
+                className={`${bebasNeue.className} developer-text block text-end text-[clamp(3rem,12vw,5rem)] md:text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.1rem] md:tracking-[-0.2rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
+              >
+                <DockText text={"DEVELOPER"} down={true} />
               </span>
             </div>
-          </span>
-        </div>
-
-        {/* CREATIVE DEVELOPER - Push to bottom */}
-        <div className="w-full">
-          <div className="creative-wrapper absolute bottom-[18vh] md:bottom-[16vh] right-4 md:right-8 flex flex-col items-end">
-            <span
-              className={`${bebasNeue.className} creative-text block text-end text-[clamp(3rem,12vw,5rem)] md:text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.1rem] md:tracking-[-0.2rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
-            >
-              <span className="flex flex-row items-center md:gap-6 justify-end">
-                <DockText text={"CREATIVE"} down={false} />
-                <span className="text-lime-400">✦</span>
-              </span>
-            </span>
-            <span
-              className={`${bebasNeue.className} developer-text block text-end text-[clamp(3rem,12vw,5rem)] md:text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.1rem] md:tracking-[-0.2rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
-            >
-              <DockText text={"DEVELOPER"} down={true} />
-            </span>
           </div>
         </div>
       </div>
 
-      <div className="hero-social-area">
-        <LeftBottomComponent lang={lang} />
-        <div id="social-media" className="hidden md:block">
-          <RightBottomComponent />
+      {/* 
+        2. Footer Layer (GSAP Pinned for 150vh)
+        This drives the document scroll height. Pinned for 150%.
+        Once the pin ends (at 150%, exactly when text is centered), it scrolls up naturally!
+      */}
+      <div
+        ref={footerRef}
+        className="relative w-full h-svh md:h-screen flex flex-col justify-end pointer-events-none z-10"
+      >
+        <div className="hero-social-area bg-[#0a0a0a] w-full pt-24 pb-[4vh] flex justify-between items-end pointer-events-auto relative">
+          {/* Subpixel gap fix: Overhang to cover GSAP pin-spacer rounding errors */}
+          <div className="absolute -bottom-[2px] left-0 w-full h-[4px] bg-[#0a0a0a]"></div>
+
+          <div className="relative z-10 w-full">
+            <LeftBottomComponent lang={lang} />
+          </div>
+          <div id="social-media" className="hidden md:block relative z-10">
+            <RightBottomComponent />
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
