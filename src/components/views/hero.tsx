@@ -11,9 +11,9 @@ import { LinkedinLogoIcon } from "@phosphor-icons/react/dist/csr/LinkedinLogo";
 import { useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import NavigationBar from "@/components/partials/navbar";
 import Link from "next/link";
 import gsap from "gsap";
-import NavigationBar from "@/components/partials/navbar";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -226,14 +226,15 @@ export default function HeroView({ lang }: { lang: any }) {
       const mergedW = creativeW + mergedGap + devW;
 
       // --- Step 2: Move the wrapper from its initial position to viewport center ---
-      // Get current position (initial: absolute, bottom-right area)
+      // Get current position relative to the viewport
       const wrapperRect = wrapperEl.getBoundingClientRect();
       const viewportW = window.innerWidth;
       const viewportH = window.innerHeight;
 
-      // Target: center of merged content in background center
-      // Find background height to properly vertically center against it
+      // Find background to properly vertically center against it
       const bgEl = document.getElementById("hero-background");
+      const bgRect = bgEl?.getBoundingClientRect();
+
       const bgHeight = bgEl
         ? bgEl.offsetHeight
         : isMobile
@@ -242,8 +243,17 @@ export default function HeroView({ lang }: { lang: any }) {
 
       const currentCenterX = wrapperRect.left + wrapperW / 2;
       const currentCenterY = wrapperRect.top + wrapperH / 2;
-      const targetCenterX = viewportW / 2;
-      const targetCenterY = bgHeight / 2;
+
+      // Target: center of background element
+      // CRITICAL: We MUST add bgRect.left and bgRect.top here.
+      // This ensures that if the page is scrolled (e.g. on refresh), the scroll offset
+      // in wrapperRect.top is perfectly cancelled out by the scroll offset in bgRect.top!
+      const targetCenterX = bgRect
+        ? bgRect.left + bgRect.width / 2
+        : viewportW / 2;
+      const targetCenterY = bgRect
+        ? bgRect.top + bgRect.height / 2
+        : bgHeight / 2;
 
       // Delta to move
       const deltaX = targetCenterX - currentCenterX;
