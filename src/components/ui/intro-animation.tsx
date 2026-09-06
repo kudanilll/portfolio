@@ -108,7 +108,7 @@ export default function IntroAnimation() {
       document.body.style.overflow = "hidden";
 
       setTimeout(() => {
-        const outCtx = gsap.context(() => {
+        gsap.context(() => {
           const outTl = gsap.timeline({
             onComplete: () => {
               router.push(href);

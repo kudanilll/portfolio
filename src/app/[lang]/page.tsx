@@ -5,7 +5,6 @@ import {
   type AppLocale,
 } from "@/common/seo-metadata";
 import Footer from "@/components/partials/footer";
-import NavigationBar from "@/components/partials/navbar";
 import PageClientLayout from "@/components/partials/page-client-layout";
 import Section from "@/components/partials/section";
 import CursorPointer from "@/components/ui/cursor-pointer";
@@ -45,14 +44,7 @@ export default async function Page(props: {
 
       <IntroAnimation key={lang} />
 
-      <NavigationBar />
       <PageClientLayout>
-        <div
-          id="hero-background"
-          className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-[position:50%_20%] md:bg-center z-0 opacity-45 md:opacity-30"
-          style={{ backgroundImage: "url('/assets/images/background.webp')" }}
-        />
-
         <Section id="hero" lang={t}></Section>
         <Section id="about" lang={t}></Section>
 

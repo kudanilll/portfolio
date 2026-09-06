@@ -8,7 +8,14 @@ import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
 import { InstagramLogoIcon } from "@phosphor-icons/react/dist/csr/InstagramLogo";
 import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
 import { LinkedinLogoIcon } from "@phosphor-icons/react/dist/csr/LinkedinLogo";
+import { useRef } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import Link from "next/link";
+import gsap from "gsap";
+import NavigationBar from "@/components/partials/navbar";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export interface StaggeredMenuItem {
   label: string;
@@ -70,7 +77,7 @@ function LeftBottomComponent({ lang }: { lang: any }) {
 
 function RightBottomComponent() {
   return (
-    <div className="md:absolute md:bottom-[3%] md:right-8">
+    <div className="md:absolute md:bottom-[4%] md:right-8">
       <div className="flex items-center justify-center text-center gap-3">
         <Link
           href="https://www.instagram.com/achmaddaniel__"
@@ -156,15 +163,145 @@ function RightBottomComponent() {
 }
 
 export default function HeroView({ lang }: { lang: any }) {
+  const containerRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const isMobile = window.innerWidth < 768;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current?.parentElement || containerRef.current,
+          start: "top top",
+          end: "+=150%", // Scroll distance to complete animation
+          pin: true,
+          scrub: 1,
+        },
+      });
+
+      // 1. Move the left area (Name + Button) out and fade
+      tl.to(
+        ".hero-left-area",
+        { xPercent: -30, opacity: 0, duration: 1, ease: "power2.inOut" },
+        0,
+      );
+
+      // Calculate perfect centering for "CREATIVE DEVELOPER"
+      const creativeEl = document.querySelector(
+        ".creative-text",
+      ) as HTMLElement;
+      const devEl = document.querySelector(".developer-text") as HTMLElement;
+      const wrapperEl = document.querySelector(
+        ".creative-wrapper",
+      ) as HTMLElement;
+
+      if (!creativeEl || !devEl || !wrapperEl) return;
+
+      const creativeW = creativeEl.offsetWidth;
+      const devW = devEl.offsetWidth;
+      const wrapperW = wrapperEl.offsetWidth;
+      const wrapperH = wrapperEl.offsetHeight;
+      const finalScale = isMobile ? 1.1 : 1.2;
+
+      // The visual gap between CREATIVE✦ and DEVELOPER when merged (1 line)
+      const mergedGap = isMobile ? 12 : 24;
+
+      // Width of the final merged line: CREATIVE✦ + gap + DEVELOPER
+      const mergedW = creativeW + mergedGap + devW;
+
+      // --- Step 2: Move the wrapper from its initial position to viewport center ---
+      // Get current position (initial: absolute, bottom-right area)
+      const wrapperRect = wrapperEl.getBoundingClientRect();
+      const viewportW = window.innerWidth;
+      const viewportH = window.innerHeight;
+
+      // Target: center of merged content in background center
+      // Find background height to properly vertically center against it
+      const bgEl = document.getElementById("hero-background");
+      const bgHeight = bgEl
+        ? bgEl.offsetHeight
+        : isMobile
+          ? viewportH * 0.88
+          : viewportH * 0.85;
+
+      const currentCenterX = wrapperRect.left + wrapperW / 2;
+      const currentCenterY = wrapperRect.top + wrapperH / 2;
+      const targetCenterX = viewportW / 2;
+      const targetCenterY = bgHeight / 2;
+
+      // Delta to move (in pre-scale space, so divide by finalScale is NOT needed
+      // because GSAP applies transforms in order: translate then scale)
+      const deltaX = targetCenterX - currentCenterX;
+      const deltaY = targetCenterY - currentCenterY;
+
+      // Promote animated elements to GPU layers
+      gsap.set([".creative-wrapper", ".creative-text", ".developer-text"], {
+        willChange: "transform",
+        force3D: true,
+      });
+
+      // 2. Animate wrapper to viewport center using ONLY transforms (no layout reflow)
+      tl.to(
+        ".creative-wrapper",
+        {
+          x: deltaX,
+          y: deltaY,
+          scale: finalScale,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        0,
+      );
+
+      // 3. Merge into 1 line — move children relative to wrapper
+      // Both elements are currently right-aligned to the wrapper (right edge = wrapperW).
+      // The merged line is centered in the wrapper.
+      const creativeTargetX = creativeW - mergedW / 2 - wrapperW / 2;
+      const devTargetX = mergedW / 2 - wrapperW / 2;
+
+      tl.to(
+        ".creative-text",
+        {
+          x: creativeTargetX,
+          yPercent: 50,
+          duration: 1,
+          ease: "power2.inOut",
+          force3D: true,
+        },
+        0,
+      );
+
+      tl.to(
+        ".developer-text",
+        {
+          x: devTargetX,
+          yPercent: -50,
+          duration: 1,
+          ease: "power2.inOut",
+          force3D: true,
+        },
+        0,
+      );
+    },
+    { scope: containerRef },
+  );
+
   return (
     <section
       id="home"
+      ref={containerRef}
       className="relative h-svh md:h-screen w-screen overflow-x-hidden flex flex-col"
     >
+      <NavigationBar />
+      <div
+        id="hero-background"
+        className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-[position:50%_20%] md:bg-center z-0 opacity-45 md:opacity-30 pointer-events-none"
+        style={{ backgroundImage: "url('/assets/images/background.webp')" }}
+      />
       {/* Main Content */}
-      <div className="flex-1 flex flex-col w-screen px-4 md:px-8 pt-[12vh]">
+      <div className="flex-1 flex flex-col w-screen px-4 md:px-8 pt-[12vh] z-10">
         {/* Title */}
-        <div className="w-full">
+        <div className="hero-left-area w-full">
           <span
             className={`${bebasNeue.className} block text-start text-[clamp(4rem,14vw,6rem)] md:text-[clamp(4rem,8vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.85] uppercase`}
           >
@@ -205,35 +342,25 @@ export default function HeroView({ lang }: { lang: any }) {
 
         {/* CREATIVE DEVELOPER - Push to bottom */}
         <div className="w-full">
-          {/* Desktop */}
-          <div className="hidden md:block w-full">
+          <div className="creative-wrapper absolute bottom-[18vh] md:bottom-[16vh] right-4 md:right-8 flex flex-col items-end">
             <span
-              className={`${bebasNeue.className} block text-end text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.8] uppercase`}
+              className={`${bebasNeue.className} creative-text block text-end text-[clamp(3rem,12vw,5rem)] md:text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.1rem] md:tracking-[-0.2rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
             >
-              <span className="flex flex-row items-center md:gap-4 justify-end">
+              <span className="flex flex-row items-center md:gap-6 justify-end">
                 <DockText text={"CREATIVE"} down={false} />
                 <span className="text-lime-400">✦</span>
               </span>
-              <DockText text={"DEVELOPER"} down={true} />
             </span>
-          </div>
-
-          {/* Mobile */}
-          <div className="md:hidden w-full text-end mt-8">
             <span
-              className={`${bebasNeue.className} block text-end text-[clamp(3rem,12vw,5rem)] tracking-[-0.1rem] font-medium text-white leading-[0.85] uppercase opacity-70`}
+              className={`${bebasNeue.className} developer-text block text-end text-[clamp(3rem,12vw,5rem)] md:text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.1rem] md:tracking-[-0.2rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
             >
-              <span className="flex flex-row items-center gap-2 justify-end">
-                <DockText text={"CREATIVE"} down={false} />
-                <span className="text-lime-400">✦</span>
-              </span>
               <DockText text={"DEVELOPER"} down={true} />
             </span>
           </div>
         </div>
       </div>
 
-      <div>
+      <div className="hero-social-area">
         <LeftBottomComponent lang={lang} />
         <div id="social-media" className="hidden md:block">
           <RightBottomComponent />
