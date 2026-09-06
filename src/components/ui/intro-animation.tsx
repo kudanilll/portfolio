@@ -107,54 +107,56 @@ export default function IntroAnimation() {
       setIsActive(true);
       document.body.style.overflow = "hidden";
 
-      const outCtx = gsap.context(() => {
-        const outTl = gsap.timeline({
-          onComplete: () => {
-            router.push(href);
-          },
-        });
+      setTimeout(() => {
+        const outCtx = gsap.context(() => {
+          const outTl = gsap.timeline({
+            onComplete: () => {
+              router.push(href);
+            },
+          });
 
-        const isMobile = isMobileViewport();
+          const isMobile = isMobileViewport();
 
-        if (isMobile) {
-          outTl
-            .to(
-              mobileTopRef.current,
-              { yPercent: 0, duration: 0.8, ease: "power4.inOut" },
-              0,
-            )
-            .to(
-              mobileBottomRef.current,
-              { yPercent: 0, duration: 0.8, ease: "power4.inOut" },
-              0,
-            );
-        } else {
-          const topBlocks = topBlocksRef.current.filter(Boolean);
-          const bottomBlocks = bottomBlocksRef.current.filter(Boolean);
+          if (isMobile) {
+            outTl
+              .to(
+                mobileTopRef.current,
+                { yPercent: 0, duration: 0.8, ease: "power4.inOut" },
+                0,
+              )
+              .to(
+                mobileBottomRef.current,
+                { yPercent: 0, duration: 0.8, ease: "power4.inOut" },
+                0,
+              );
+          } else {
+            const topBlocks = topBlocksRef.current.filter(Boolean);
+            const bottomBlocks = bottomBlocksRef.current.filter(Boolean);
 
-          outTl
-            .to(
-              topBlocks,
-              {
-                yPercent: 0,
-                duration: 0.8,
-                ease: "power4.inOut",
-                stagger: { from: "start", each: 0.1 },
-              },
-              0,
-            )
-            .to(
-              bottomBlocks,
-              {
-                yPercent: 0,
-                duration: 0.8,
-                ease: "power4.inOut",
-                stagger: { from: "start", each: 0.1 },
-              },
-              0,
-            );
-        }
-      }, containerRef);
+            outTl
+              .to(
+                topBlocks,
+                {
+                  yPercent: 0,
+                  duration: 0.8,
+                  ease: "power4.inOut",
+                  stagger: { from: "start", each: 0.1 },
+                },
+                0,
+              )
+              .to(
+                bottomBlocks,
+                {
+                  yPercent: 0,
+                  duration: 0.8,
+                  ease: "power4.inOut",
+                  stagger: { from: "start", each: 0.1 },
+                },
+                0,
+              );
+          }
+        }, containerRef);
+      }, 10); // Wait for React to remove 'hidden' class
     };
 
     window.addEventListener("page-transition", handlePageTransition);
@@ -169,7 +171,7 @@ export default function IntroAnimation() {
   return (
     <div
       ref={containerRef}
-      className={`fixed inset-0 z-[9999] ${isActive ? "" : "pointer-events-none"}`}
+      className={`fixed inset-0 z-[9999] ${isActive ? "" : "hidden"}`}
       aria-hidden="true"
     >
       {/* Mobile: Split 2 blok (atas & bawah) */}
