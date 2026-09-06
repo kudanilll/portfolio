@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
 import { isMobileViewport } from "@/hooks/use-is-mobile";
 import { useRouter } from "next/navigation";
+import gsap from "gsap";
 
 /**
  * Intro curtain animation:
