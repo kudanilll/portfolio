@@ -166,7 +166,7 @@ export default function HeroView({ lang }: { lang: any }) {
         {/* Title */}
         <div className="w-full">
           <span
-            className={`${bebasNeue.className} block text-start text-8xl md:text-[clamp(4rem,8vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.95] uppercase`}
+            className={`${bebasNeue.className} block text-start text-8xl md:text-[clamp(4rem,8vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.85] uppercase`}
           >
             <span className="flex flex-col md:flex-row md:items-center md:gap-8">
               <DockText
@@ -181,15 +181,13 @@ export default function HeroView({ lang }: { lang: any }) {
               />
             </span>
             <div className="md:flex flex-row items-end gap-2">
-              <span>
-                <DockText
-                  text={"SYAHPUTRA"}
-                  down={true}
-                  className="text-neutral-300"
-                />
-              </span>
+              <DockText
+                text={"SYAHPUTRA"}
+                down={true}
+                className="text-neutral-300"
+              />
               <span
-                className={`${layGrotesk.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-2vw]`}
+                className={`${layGrotesk.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-1vw]`}
               >
                 <span className="mt-2 md:mt-0 tracking-normal">
                   <LetsTalkButton lang={lang} />
@@ -216,7 +214,10 @@ export default function HeroView({ lang }: { lang: any }) {
           <span
             className={`${bebasNeue.className} block text-end text-8xl md:text-[clamp(4rem,16vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.8] uppercase`}
           >
-            <DockText text={"CREATIVE"} down={false} />
+            <span className="flex flex-row items-center md:gap-4 justify-end">
+              <DockText text={"CREATIVE"} down={false} />
+              <span className="text-lime-400">✦</span>
+            </span>
             <DockText text={"DEVELOPER"} down={true} />
           </span>
         </div>

@@ -1,4 +1,4 @@
-const Stars = () => {
+const Stars = ({ className }: { className?: string }) => {
   return (
     <svg
       width="200"
@@ -6,7 +6,7 @@ const Stars = () => {
       viewBox="0 0 200 200"
       color="#a3e635"
       fill="currentColor"
-      className="w-6 h-6 md:w-14 md:h-14"
+      className={className || "w-6 h-6 md:w-14 md:h-14"}
       xmlns="http://www.w3.org/2000/svg"
     >
       <g>
