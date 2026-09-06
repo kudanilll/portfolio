@@ -159,14 +159,14 @@ export default function HeroView({ lang }: { lang: any }) {
   return (
     <section
       id="home"
-      className="relative h-svh md:h-screen w-screen overflow-x-hidden flex flex-col items-center justify-center text-center md:items-start md:justify-start md:text-left"
+      className="relative h-svh md:h-screen w-screen overflow-x-hidden flex flex-col"
     >
       {/* Main Content */}
-      <div className="mt-[-12%] md:mt-28 w-screen px-4 md:px-8 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4 md:gap-0">
+      <div className="flex-1 flex flex-col w-screen px-4 md:px-8 pt-[12vh]">
         {/* Title */}
         <div className="w-full">
           <span
-            className={`${bebasNeue.className} block text-start text-8xl md:text-[clamp(4rem,8vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.85] uppercase`}
+            className={`${bebasNeue.className} block text-start text-[clamp(4rem,14vw,6rem)] md:text-[clamp(4rem,8vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.85] uppercase`}
           >
             <span className="flex flex-col md:flex-row md:items-center md:gap-8">
               <DockText
@@ -203,23 +203,33 @@ export default function HeroView({ lang }: { lang: any }) {
           </span>
         </div>
 
-        {/* Description */}
-        {/* <div className="hidden md:block w-full md:w-1/3">
-          <p className="mt-2 md:mt-0 text-start text-base md:text-[clamp(1rem,1.2vw,1.6rem)] leading-[1.6] text-neutral-400 uppercase">
-            {lang.home_section.desc}
-          </p>
-        </div> */}
-
-        <div className="hidden md:block w-full mt-[28vh]">
-          <span
-            className={`${bebasNeue.className} block text-end text-8xl md:text-[clamp(4rem,16vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.8] uppercase`}
-          >
-            <span className="flex flex-row items-center md:gap-4 justify-end">
-              <DockText text={"CREATIVE"} down={false} />
-              <span className="text-lime-400">✦</span>
+        {/* CREATIVE DEVELOPER - Push to bottom */}
+        <div className="w-full">
+          {/* Desktop */}
+          <div className="hidden md:block w-full">
+            <span
+              className={`${bebasNeue.className} block text-end text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.8] uppercase`}
+            >
+              <span className="flex flex-row items-center md:gap-4 justify-end">
+                <DockText text={"CREATIVE"} down={false} />
+                <span className="text-lime-400">✦</span>
+              </span>
+              <DockText text={"DEVELOPER"} down={true} />
             </span>
-            <DockText text={"DEVELOPER"} down={true} />
-          </span>
+          </div>
+
+          {/* Mobile */}
+          <div className="md:hidden w-full text-end mt-8">
+            <span
+              className={`${bebasNeue.className} block text-end text-[clamp(3rem,12vw,5rem)] tracking-[-0.1rem] font-medium text-white leading-[0.85] uppercase opacity-70`}
+            >
+              <span className="flex flex-row items-center gap-2 justify-end">
+                <DockText text={"CREATIVE"} down={false} />
+                <span className="text-lime-400">✦</span>
+              </span>
+              <DockText text={"DEVELOPER"} down={true} />
+            </span>
+          </div>
         </div>
       </div>
 

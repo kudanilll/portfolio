@@ -23,7 +23,9 @@ const Views = {
 export default function Section(props: Props) {
   const View = Views[props.id];
   return (
-    <section className="flex w-screen min-h-screen">
+    <section
+      className={`flex w-screen ${props.id === "hero" ? "h-svh md:h-screen" : "min-h-screen"}`}
+    >
       <View lang={props.lang} />
     </section>
   );
