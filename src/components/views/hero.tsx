@@ -323,7 +323,7 @@ export default function HeroView({ lang }: { lang: any }) {
         <NavigationBar />
         <div
           id="hero-background"
-          className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-[position:50%_20%] md:bg-center z-0 opacity-45 md:opacity-30 pointer-events-none"
+          className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-position-[50%_20%] md:bg-center z-0 opacity-45 md:opacity-30 pointer-events-none"
           style={{ backgroundImage: "url('/assets/images/background.webp')" }}
         />
         {/* Main Content */}
@@ -400,7 +400,7 @@ export default function HeroView({ lang }: { lang: any }) {
       >
         <div className="hero-social-area bg-[#0a0a0a] w-full pt-24 pb-[4vh] flex justify-between items-end pointer-events-auto relative">
           {/* Subpixel gap fix: Overhang to cover GSAP pin-spacer rounding errors */}
-          <div className="absolute -bottom-[2px] left-0 w-full h-[4px] bg-[#0a0a0a]"></div>
+          <div className="absolute -bottom-0.5 left-0 w-full h-1 bg-[#0a0a0a]"></div>
 
           <div className="relative z-10 w-full">
             <LeftBottomComponent lang={lang} />

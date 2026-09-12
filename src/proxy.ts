@@ -32,7 +32,7 @@ function getLocale(request: NextRequest): (typeof locales)[number] {
   ) as (typeof locales)[number];
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isPublicFile =
@@ -73,6 +73,9 @@ export function middleware(request: NextRequest) {
 
   return res;
 }
+
+// Backward compatibility
+export const middleware = proxy;
 
 export const config = {
   matcher: [

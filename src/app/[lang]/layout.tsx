@@ -4,10 +4,6 @@ import { Analytics } from "@vercel/analytics/next";
 import { buildSeoMetadata, type AppLocale } from "@/common/seo-metadata";
 import "@/app/globals.css";
 
-interface LangParams {
-  lang: AppLocale;
-}
-
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "id" }];
 }
@@ -15,9 +11,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<LangParams>;
+  params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  const { lang } = await params;
+  const resolvedParams = await params;
+  const lang = resolvedParams.lang as AppLocale;
 
   return buildSeoMetadata({ lang });
 }
@@ -27,9 +24,10 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<LangParams>;
+  params: Promise<{ lang: string }>;
 }>) {
-  const { lang } = await params;
+  const resolvedParams = await params;
+  const lang = resolvedParams.lang as AppLocale;
 
   return (
     <html

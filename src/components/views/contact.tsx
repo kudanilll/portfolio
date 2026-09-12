@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use client";
 
@@ -17,7 +16,7 @@ function ContactButton({ message, text }: { message: string; text: string }) {
         <div className="relative items-center h-5 overflow-hidden uppercase">
           <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6">
             <div className="flex flex-row items-center">
-              <span className="block leading-[20px] text-center transform origin-right group-hover:rotate-[15deg]">
+              <span className="block leading-5 text-center transform origin-right group-hover:rotate-15">
                 {text}
               </span>
               <EnvelopeSimpleIcon className="ml-3 text-white" size={22} />
@@ -45,14 +44,14 @@ export default function ContactView({ lang }: { lang: any }) {
         <h1
           className={`${bebasNeue.className} ${
             lang.lang === "en" ? "text-6xl" : "text-5xl"
-          } uppercase font-medium tracking-tight text-neutral-200 md:text-9xl leading-[0.95] md:leading-[6rem]`}
+          } uppercase font-medium tracking-tight text-neutral-200 md:text-9xl leading-[0.95] md:leading-24`}
         >
           {lang.contact_section.title_1}
         </h1>
         <h2
           className={`${bebasNeue.className} ${
             lang.lang === "en" ? "text-6xl" : "text-5xl"
-          } md:mt-4 uppercase font-medium tracking-tight text-neutral-500 md:text-9xl leading-[0.95] md:leading-[6rem]`}
+          } md:mt-4 uppercase font-medium tracking-tight text-neutral-500 md:text-9xl leading-[0.95] md:leading-24`}
         >
           {lang.contact_section.title_2}
         </h2>

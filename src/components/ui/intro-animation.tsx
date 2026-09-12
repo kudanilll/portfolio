@@ -24,8 +24,8 @@ export default function IntroAnimation() {
     window.scrollTo(0, 0);
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setIsActive(false);
-      return;
+      const raf = requestAnimationFrame(() => setIsActive(false));
+      return () => cancelAnimationFrame(raf);
     }
 
     document.body.style.overflow = "hidden";
@@ -171,7 +171,7 @@ export default function IntroAnimation() {
   return (
     <div
       ref={containerRef}
-      className={`fixed inset-0 z-[9999] ${isActive ? "" : "hidden"}`}
+      className={`fixed inset-0 z-9999 ${isActive ? "" : "hidden"}`}
       aria-hidden="true"
     >
       {/* Mobile: Split 2 blok (atas & bawah) */}

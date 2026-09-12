@@ -12,12 +12,13 @@ export default function AboutView({ lang }: { lang: any }) {
       className="md:min-h-screen w-full px-4 md:px-8 relative pt-24 pb-0 md:pt-24 md:pb-24"
     >
       {/* Desktop Image */}
-      <div className="hidden md:block w-[28vw] h-auto absolute top-3/4 left-24 -translate-y-1/2 aspect-[3/4] overflow-hidden">
+      <div className="hidden md:block w-[28vw] h-auto absolute top-3/4 left-24 -translate-y-1/2 aspect-3/4 overflow-hidden">
         <Image
           src="/assets/images/achmad-daniel.webp"
           alt="Achmad Daniel Syahputra"
           width={500}
           height={500}
+          style={{ height: "auto" }}
           className="grayscale scale-125"
         />
       </div>
@@ -41,7 +42,7 @@ export default function AboutView({ lang }: { lang: any }) {
         </div>
       </div>
       <div className="md:hidden flex flex-col w-full">
-        <div className="mt-10 w-[200px] self-end">
+        <div className="mt-10 w-50 self-end">
           <Dot />
         </div>
 
@@ -52,6 +53,7 @@ export default function AboutView({ lang }: { lang: any }) {
             alt="Achmad Daniel Syahputra"
             width={250}
             height={250}
+            style={{ height: "auto" }}
             className="grayscale mt-10 items-start"
           />
         </div>

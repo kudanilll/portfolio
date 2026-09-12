@@ -68,22 +68,33 @@ export default function ProjectsView({ lang }: { lang: any }) {
           linesClass: "line",
         });
 
-        tl.from(slide.querySelectorAll(".line"), {
-          y: 200,
-          duration: 1.5,
-          ease: "power4",
-          stagger: 0.1,
-        })
-          .from(
-            slide.querySelectorAll(".col__content-txt"),
+        const lines = slide.querySelectorAll(".line");
+        if (lines.length > 0) {
+          tl.from(lines, {
+            y: 200,
+            duration: 1.5,
+            ease: "power4",
+            stagger: 0.1,
+          });
+        }
+
+        const contentTxt = slide.querySelectorAll(".col__content-txt");
+        if (contentTxt.length > 0) {
+          tl.from(
+            contentTxt,
             { x: 100, opacity: 0, duration: 1.5, ease: "power4" },
             "-=1.2",
-          )
-          .from(
-            slide.querySelectorAll(".slide-link"),
+          );
+        }
+
+        const slideLink = slide.querySelectorAll(".slide-link");
+        if (slideLink.length > 0) {
+          tl.from(
+            slideLink,
             { x: -100, opacity: 0, duration: 1.5, ease: "power4" },
             "<",
           );
+        }
 
         const imageWrapper =
           slide.querySelector<HTMLElement>(".col__image-wrap");
@@ -132,7 +143,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
 
   return (
     <div ref={containerRef} className="w-full">
-      <div className="h-fit md:h-[0dvh]"></div>
+      <div className="h-fit md:h-0"></div>
       <div className="flex justify-between items-center relative md:mx-16">
         <h1 className="md:py-12 px-4 md:px-6 text-3xl md:text-5xl text-white uppercase">
           {lang.project_section.title}
@@ -144,7 +155,7 @@ export default function ProjectsView({ lang }: { lang: any }) {
           key={project.title}
           className="hidden md:flex project-slide flex-col md:flex-row items-stretch h-screen overflow-hidden border-t border-b border-neutral-600"
         >
-          <div className="col relative w-full md:flex-1 h-screen z-[1]">
+          <div className="col relative w-full md:flex-1 h-screen z-1">
             <div
               className={`col__content flex flex-col justify-end h-full overflow-hidden p-[6vw_6vw_10vw] w-full md:w-auto ${project.bgColor} bg-opacity-90 md:bg-opacity-100`}
             >
@@ -162,12 +173,17 @@ export default function ProjectsView({ lang }: { lang: any }) {
             </div>
           </div>
           <div className="col absolute md:relative top-0 left-0 w-full md:flex-1 h-screen overflow-hidden z-0">
-            <div className="col__image-wrap relative w-full h-[140vh] -top-[20vh]">
-              <Link href={project.link} target="_blank">
+            <div className="col__image-wrap relative w-full h-[140vh] top-[-20vh]">
+              <Link
+                href={project.link}
+                target="_blank"
+                className="block relative w-full h-full"
+              >
                 <Image
                   src={project.thumbnail}
                   alt={project.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover w-full h-full"
                 />
               </Link>
@@ -199,12 +215,12 @@ export default function ProjectsView({ lang }: { lang: any }) {
             >
               {/* Background image (pakai fill) + wrapper untuk parallax */}
               <div className="absolute inset-0 -z-10">
-                <div className="mobile-image-wrap relative w-full h-[140vh] -top-[20vh]">
+                <div className="mobile-image-wrap relative w-full h-[140vh] top-[-20vh]">
                   <Image
                     src={project.thumbnail}
                     alt={project.title}
                     fill
-                    sizes="100vw"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover"
                     priority={idx === 0}
                   />

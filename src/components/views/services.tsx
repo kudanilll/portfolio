@@ -13,7 +13,10 @@ function useRandomTilt(range = 10) {
   const [tilt, setTilt] = useState(0);
   useEffect(() => {
     const v = (Math.random() * 2 - 1) * range; // -range .. +range
-    setTilt(+v.toFixed(2));
+    const raf = requestAnimationFrame(() => {
+      setTilt(+v.toFixed(2));
+    });
+    return () => cancelAnimationFrame(raf);
   }, [range]);
   return tilt;
 }
@@ -30,7 +33,7 @@ function TiltItem({
     <div
       style={{ transform: `rotate(${tilt}deg)` }}
       className={cn(
-        "transition-all duration-300 ease-out hover:scale-110 hover:!rotate-0 hover:z-20 active:scale-105",
+        "transition-all duration-300 ease-out hover:scale-110 hover:rotate-0! hover:z-20 active:scale-105",
         className,
       )}
     >
