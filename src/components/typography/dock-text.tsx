@@ -8,13 +8,29 @@ interface DockTextProps {
   text: string;
   down?: boolean;
   className?: string;
+  /**
+   * Element to render. Defaults to "span" so that decorative display
+   * type never emits a heading. Every DockText used to render its own
+   * <h1>, which put 13 of them on the homepage: meaningless for
+   * screen readers and it gave the page no single topical heading.
+   * Pass as="h1" exactly once per page if the text IS the heading.
+   */
+  as?: "span" | "div" | "h1" | "h2" | "h3";
 }
 
-export function DockText({ text, down = false, className }: DockTextProps) {
-  const containerRef = useRef<HTMLHeadingElement>(null);
+export function DockText({
+  text,
+  down = false,
+  className,
+  as = "span",
+}: DockTextProps) {
+  // Widened to ElementType so TS does not try to intersect the props of
+  // every tag in the union (which makes `ref` unassignable).
+  const Tag = as as React.ElementType;
+  const containerRef = useRef<HTMLElement>(null);
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLHeadingElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const container = containerRef.current;
     if (!container) return;
 
@@ -40,7 +56,7 @@ export function DockText({ text, down = false, className }: DockTextProps) {
     letters.forEach((letter, index) => {
       if (!letter) return;
       const distFromClosest = Math.abs(index - closestIndex);
-      const targetScale = Math.max(1, 1.3638 - distFromClosest * 0.1);
+      const targetScale = Math.max(1, 1.2 - distFromClosest * 0.1);
       gsap.to(letter, {
         scaleY: targetScale,
         duration: 0.25,
@@ -64,11 +80,11 @@ export function DockText({ text, down = false, className }: DockTextProps) {
   };
 
   return (
-    <h1
+    <Tag
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={cn("cursor-pointer", className)}
+      className={cn("block cursor-pointer", className)}
     >
       {text.split("").map((letter, index) => (
         <span
@@ -84,6 +100,6 @@ export function DockText({ text, down = false, className }: DockTextProps) {
           {letter}
         </span>
       ))}
-    </h1>
+    </Tag>
   );
 }

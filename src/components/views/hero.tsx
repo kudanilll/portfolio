@@ -32,25 +32,27 @@ function LetsTalkButton({ lang }: { lang: any }) {
           : (process.env.NEXT_PUBLIC_CV_ID as string)
       }
       target="_blank"
-      className="mx-auto md:mx-0 text-base md:text-xl w-36 md:w-56 h-12 md:h-16 bg-transparent border border-neutral-200 md:border-neutral-400 text-white group flex items-center justify-center relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
+      rel="noopener"
+      aria-label={`${lang.home_section.button_text} - Achmad Daniel Syahputra (PDF)`}
+      className="mx-auto md:mx-0 text-base md:text-xl w-36 md:w-56 h-12 md:h-14 bg-transparent border border-neutral-200 md:border-neutral-400 group flex items-center justify-center relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
       data-hero-cta
     >
       <div className="relative items-center h-6 md:h-7 overflow-hidden uppercase">
-        <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-7">
+        <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-7 text-neutral-300 hover:text-white">
           <div className="flex flex-row items-center">
-            <span className="font-normal md:font-regular text-center origin-right">
+            <span className="font-normal text-center origin-right">
               {lang.home_section.button_text}
             </span>
             <div className="hidden md:block">
-              <ArrowUpRightIcon className="ml-3 text-white" size={24} />
+              <ArrowUpRightIcon className="ml-3" size={24} />
             </div>
           </div>
           <div className="flex flex-row items-center text-base md:text-xl">
-            <span className="font-normal md:font-regular text-center origin-left translate-y-0">
+            <span className="font-normal text-center origin-left translate-y-0">
               {lang.home_section.button_text}
             </span>
             <div className="hidden md:block">
-              <ArrowUpRightIcon className="ml-3 text-white" size={24} />
+              <ArrowUpRightIcon className="ml-3" size={24} />
             </div>
           </div>
         </div>
@@ -63,14 +65,14 @@ function LeftBottomComponent({ lang }: { lang: any }) {
   return (
     <div
       id="left-bottom-component"
-      className="absolute flex flex-col md:gap-1.5 bottom-4 left-4 md:bottom-[4%] md:left-8 text-start"
+      className="absolute flex flex-col -space-y-1 bottom-4 left-4 md:bottom-[4%] md:left-8 text-start"
     >
-      <h1 className="text-neutral-400 text-lg md:text-[clamp(1rem,1.4vw,1.8rem)] font-semibold uppercase">
+      <p className="text-neutral-400 text-lg md:text-[clamp(1rem,1.3vw,1.8rem)] font-semibold uppercase">
         {lang.home_section.location}, Indonesia
-      </h1>
-      <h1 className="text-neutral-600 text-base md:text-[clamp(1rem,1.2vw,1.8rem)] font-medium uppercase">
+      </p>
+      <p className="text-neutral-600 text-base md:text-[clamp(1rem,1vw,1.8rem)] font-medium uppercase">
         <span>{lang.contact_section.title_2}</span>
-      </h1>
+      </p>
     </div>
   );
 }
@@ -82,6 +84,8 @@ function RightBottomComponent() {
         <Link
           href="https://www.instagram.com/achmaddaniel__"
           target="_blank"
+          rel="noopener noreferrer me"
+          aria-label="Instagram: @achmaddaniel__ (opens in a new tab)"
           className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
@@ -108,6 +112,8 @@ function RightBottomComponent() {
         <Link
           href="https://github.com/kudanilll"
           target="_blank"
+          rel="noopener noreferrer me"
+          aria-label="GitHub: @kudanilll (opens in a new tab)"
           className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
@@ -134,6 +140,8 @@ function RightBottomComponent() {
         <Link
           href="https://www.linkedin.com/in/achmaddaniel"
           target="_blank"
+          rel="noopener noreferrer me"
+          aria-label="LinkedIn: Achmad Daniel Syahputra (opens in a new tab)"
           className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
         >
           <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
@@ -185,6 +193,13 @@ export default function HeroView({ lang }: { lang: any }) {
       // 2. Pin Footer Layer for 150% and drive animation
       // This drives the document scroll height. Pinned for 150%.
       // Once the pin ends (at 150%, exactly when text is centered), it scrolls up naturally!
+      const disableFooterSpacerPointerEvents = () => {
+        const spacer = footerRef.current?.parentElement;
+        if (spacer?.classList.contains("pin-spacer")) {
+          gsap.set(spacer, { pointerEvents: "none" });
+        }
+      };
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: footerRef.current,
@@ -192,6 +207,8 @@ export default function HeroView({ lang }: { lang: any }) {
           end: "+=150%", // Animation finishes at 150%, then pin ends and covering starts!
           pin: true,
           scrub: 1,
+          invalidateOnRefresh: true,
+          onRefresh: disableFooterSpacerPointerEvents,
         },
       });
 
@@ -203,61 +220,43 @@ export default function HeroView({ lang }: { lang: any }) {
       );
 
       // Calculate perfect centering for "CREATIVE DEVELOPER"
-      const creativeEl = document.querySelector(
+      const creativeEl = heroRef.current?.querySelector(
         ".creative-text",
       ) as HTMLElement;
-      const devEl = document.querySelector(".developer-text") as HTMLElement;
-      const wrapperEl = document.querySelector(
+      const devEl = heroRef.current?.querySelector(
+        ".developer-text",
+      ) as HTMLElement;
+      const wrapperEl = heroRef.current?.querySelector(
         ".creative-wrapper",
       ) as HTMLElement;
 
       if (!creativeEl || !devEl || !wrapperEl) return;
 
-      const creativeW = creativeEl.offsetWidth;
-      const devW = devEl.offsetWidth;
-      const wrapperW = wrapperEl.offsetWidth;
-      const wrapperH = wrapperEl.offsetHeight;
-      const finalScale = isMobile ? 1.1 : 1.2;
+      const getFinalLayout = () => {
+        const creativeW = creativeEl.offsetWidth;
+        const devW = devEl.offsetWidth;
+        const wrapperW = wrapperEl.offsetWidth;
+        const wrapperH = wrapperEl.offsetHeight;
+        const mergedGap = isMobile ? 12 : 24;
+        const mergedW = creativeW + mergedGap + devW;
+        const wrapperRect = wrapperEl.getBoundingClientRect();
+        const bgRect = bgRef.current?.getBoundingClientRect();
+        const availableWidth = (bgRect?.width ?? window.innerWidth) - 64;
 
-      // The visual gap between CREATIVE✦ and DEVELOPER when merged (1 line)
-      const mergedGap = isMobile ? 12 : 24;
-
-      // Width of the final merged line: CREATIVE✦ + gap + DEVELOPER
-      const mergedW = creativeW + mergedGap + devW;
-
-      // --- Step 2: Move the wrapper from its initial position to viewport center ---
-      // Get current position relative to the viewport
-      const wrapperRect = wrapperEl.getBoundingClientRect();
-      const viewportW = window.innerWidth;
-      const viewportH = window.innerHeight;
-
-      // Find background to properly vertically center against it
-      const bgEl = document.getElementById("hero-background");
-      const bgRect = bgEl?.getBoundingClientRect();
-
-      const bgHeight = bgEl
-        ? bgEl.offsetHeight
-        : isMobile
-          ? viewportH * 0.88
-          : viewportH * 0.85;
-
-      const currentCenterX = wrapperRect.left + wrapperW / 2;
-      const currentCenterY = wrapperRect.top + wrapperH / 2;
-
-      // Target: center of background element
-      // CRITICAL: We MUST add bgRect.left and bgRect.top here.
-      // This ensures that if the page is scrolled (e.g. on refresh), the scroll offset
-      // in wrapperRect.top is perfectly cancelled out by the scroll offset in bgRect.top!
-      const targetCenterX = bgRect
-        ? bgRect.left + bgRect.width / 2
-        : viewportW / 2;
-      const targetCenterY = bgRect
-        ? bgRect.top + bgRect.height / 2
-        : bgHeight / 2;
-
-      // Delta to move
-      const deltaX = targetCenterX - currentCenterX;
-      const deltaY = targetCenterY - currentCenterY;
+        return {
+          scale: isMobile ? 1.1 : Math.min(1.2, availableWidth / mergedW),
+          wrapperX:
+            (bgRect?.left ?? 0) +
+            (bgRect?.width ?? window.innerWidth) / 2 -
+            (wrapperRect.left + wrapperW / 2),
+          wrapperY:
+            (bgRect?.top ?? 0) +
+            (bgRect?.height ?? window.innerHeight) / 2 -
+            (wrapperRect.top + wrapperH / 2),
+          creativeX: creativeW - mergedW / 2 - wrapperW / 2,
+          developerX: mergedW / 2 - wrapperW / 2,
+        };
+      };
 
       // Promote animated elements to GPU layers
       gsap.set([".creative-wrapper", ".creative-text", ".developer-text"], {
@@ -269,9 +268,9 @@ export default function HeroView({ lang }: { lang: any }) {
       tl.to(
         ".creative-wrapper",
         {
-          x: deltaX,
-          y: deltaY,
-          scale: finalScale,
+          x: () => getFinalLayout().wrapperX,
+          y: () => getFinalLayout().wrapperY,
+          scale: () => getFinalLayout().scale,
           duration: 1,
           ease: "power2.inOut",
         },
@@ -279,13 +278,10 @@ export default function HeroView({ lang }: { lang: any }) {
       );
 
       // 3. Merge into 1 line
-      const creativeTargetX = creativeW - mergedW / 2 - wrapperW / 2;
-      const devTargetX = mergedW / 2 - wrapperW / 2;
-
       tl.to(
         ".creative-text",
         {
-          x: creativeTargetX,
+          x: () => getFinalLayout().creativeX,
           yPercent: 50,
           duration: 1,
           ease: "power2.inOut",
@@ -297,7 +293,7 @@ export default function HeroView({ lang }: { lang: any }) {
       tl.to(
         ".developer-text",
         {
-          x: devTargetX,
+          x: () => getFinalLayout().developerX,
           yPercent: -50,
           duration: 1,
           ease: "power2.inOut",
@@ -311,7 +307,20 @@ export default function HeroView({ lang }: { lang: any }) {
 
   return (
     <div id="home" ref={heroRef} className="relative w-screen">
-      {/* 
+      {/*
+        The visible hero type is split into per-letter DockText spans across
+        two flex containers, with the CTA sitting between them. Marking any
+        of those up as a heading produced 13 <h1> tags and heading text like
+        "AchmadDanielSyahputraResumeResume". This is the single real <h1>
+        for the page: same wording as what is on screen, just not fragmented.
+        If the hero layout is ever restructured, promote the name container
+        to <h1> and delete this.
+      */}
+      <h1 className="sr-only">
+        {`Achmad Daniel Syahputra, ${lang.home_section.role}. ${lang.home_section.location}, Indonesia.`}
+      </h1>
+
+      {/*
         1. Background & Text Layer (GSAP Pinned for 250vh)
         This layer is pinned with pinSpacing: false, so it stays fixed for the entire 250vh scroll distance,
         allowing the footer and next section to scroll up over it!
@@ -330,29 +339,27 @@ export default function HeroView({ lang }: { lang: any }) {
         <div className="flex-1 flex flex-col w-screen px-4 md:px-8 pt-[12vh] z-10">
           {/* Title */}
           <div className="hero-left-area w-full">
-            <span
-              className={`${bebasNeue.className} block text-start text-[clamp(4rem,14vw,6rem)] md:text-[clamp(4rem,8vw,14rem)] tracking-[-0.2rem] font-medium text-white leading-[0.85] uppercase`}
-            >
+            <span className="block text-start md:text-[clamp(4rem,5.5vw,14rem)] tracking-[-0.4rem] font-medium text-white leading-[0.85] uppercase">
               <span className="flex flex-col md:flex-row md:items-center md:gap-8">
                 <DockText
-                  text={"ACHMAD"}
+                  text={"Achmad"}
                   down={false}
                   className="text-neutral-300"
                 />
                 <DockText
-                  text={"DANIEL"}
+                  text={"Daniel"}
                   down={false}
                   className="text-neutral-300"
                 />
               </span>
               <div className="md:flex flex-row items-end gap-2">
                 <DockText
-                  text={"SYAHPUTRA"}
+                  text={"Syahputra"}
                   down={true}
                   className="text-neutral-300"
                 />
                 <span
-                  className={`${layGrotesk.className} md:ml-4 flex gap-3 md:gap-0 md:inline-block md:translate-y-[-1vw]`}
+                  className={`${layGrotesk.className} md:ml-4 flex gap-3 md:gap-4 md:inline-block md:translate-y-[-0.6vw]`}
                 >
                   <span className="mt-2 md:mt-0 tracking-normal">
                     <LetsTalkButton lang={lang} />
@@ -372,15 +379,15 @@ export default function HeroView({ lang }: { lang: any }) {
           <div className="w-full">
             <div className="creative-wrapper absolute bottom-[18vh] md:bottom-[16vh] right-4 md:right-8 flex flex-col items-end">
               <span
-                className={`${bebasNeue.className} creative-text block text-end text-[clamp(3rem,12vw,5rem)] md:text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.1rem] md:tracking-[-0.2rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
+                className={`${bebasNeue.className} creative-text block text-end md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.1rem] md:tracking-[-0.4rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
               >
-                <span className="flex flex-row items-center md:gap-6 justify-end">
+                <span className="flex flex-row items-center space-x-2 justify-end">
                   <DockText text={"CREATIVE"} down={false} />
                   <span className="text-lime-400">✦</span>
                 </span>
               </span>
               <span
-                className={`${bebasNeue.className} developer-text block text-end text-[clamp(3rem,12vw,5rem)] md:text-[clamp(4rem,11.5vw,14rem)] tracking-[-0.1rem] md:tracking-[-0.2rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
+                className={`${bebasNeue.className} developer-text block text-end md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.1rem] md:tracking-[-0.4rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
               >
                 <DockText text={"DEVELOPER"} down={true} />
               </span>

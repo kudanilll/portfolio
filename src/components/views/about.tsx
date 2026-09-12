@@ -9,8 +9,14 @@ export default function AboutView({ lang }: { lang: any }) {
   return (
     <section
       id="about"
-      className="md:min-h-screen w-full px-4 md:px-8 relative pt-24 pb-0 md:pt-24 md:pb-24"
+      aria-labelledby="about-heading"
+      className="md:min-h-screen w-full px-4 md:px-8 relative pt-24 pb-0 md:pt-24 md:pb-24 overflow-hidden"
     >
+      {/* The design shows no visible section title, but the section still
+          needs one so the document outline is not a flat list of divs. */}
+      <h2 id="about-heading" className="sr-only">
+        {lang.about_section.title}
+      </h2>
       {/* Desktop Image */}
       <div className="hidden md:block w-[28vw] h-auto absolute top-3/4 left-24 -translate-y-1/2 aspect-3/4 overflow-hidden">
         <Image
@@ -27,7 +33,7 @@ export default function AboutView({ lang }: { lang: any }) {
         <Dot />
       </div>
 
-      <div className="w-full flex justify-between">
+      <div className="w-full flex justify-between relative z-10">
         <div className="w-[85%] md:w-2/5 h-full"></div>
         <div className="flex flex-col">
           {/* Desktop Text */}
@@ -36,9 +42,9 @@ export default function AboutView({ lang }: { lang: any }) {
           </TextReveal>
 
           {/* Mobile Text */}
-          <h1 className="mt-10 md:hidden text-neutral-400 text-3xl px-4 tracking-tight font-normal">
+          <p className="mt-10 md:hidden text-neutral-400 text-3xl px-4 tracking-tight font-normal">
             {lang.about_section.paragraph}
-          </h1>
+          </p>
         </div>
       </div>
       <div className="md:hidden flex flex-col w-full">

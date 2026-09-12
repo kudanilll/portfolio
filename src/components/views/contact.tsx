@@ -41,20 +41,20 @@ export default function ContactView({ lang }: { lang: any }) {
       className="pt-[18dvh] md:pt-0 md:h-screen w-screen flex flex-col items-center justify-center relative"
     >
       <div className="md:min-h-screen mx-auto text-center flex flex-col items-center justify-center z-10">
-        <h1
+        <h2
           className={`${bebasNeue.className} ${
             lang.lang === "en" ? "text-6xl" : "text-5xl"
           } uppercase font-medium tracking-tight text-neutral-200 md:text-9xl leading-[0.95] md:leading-24`}
         >
           {lang.contact_section.title_1}
-        </h1>
-        <h2
+        </h2>
+        <p
           className={`${bebasNeue.className} ${
             lang.lang === "en" ? "text-6xl" : "text-5xl"
           } md:mt-4 uppercase font-medium tracking-tight text-neutral-500 md:text-9xl leading-[0.95] md:leading-24`}
         >
           {lang.contact_section.title_2}
-        </h2>
+        </p>
         <ContactButton
           message={lang.contact_section.message}
           text={lang.contact_section.button}

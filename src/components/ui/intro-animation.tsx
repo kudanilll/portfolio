@@ -32,7 +32,7 @@ export default function IntroAnimation() {
 
     const skipDelay = sessionStorage.getItem("skipIntroDelay") === "true";
     sessionStorage.removeItem("skipIntroDelay");
-    const delay = skipDelay ? 0 : 1.0;
+    const delay = skipDelay ? 0 : 0.5;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({

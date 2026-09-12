@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import { works } from "@/data/works";
 
 export const locales = ["en", "id"] as const;
+
+/** Must stay in sync with `defaultLocale` in src/proxy.ts. */
+export const defaultLocale = "en" as const;
 
 export type AppLocale = (typeof locales)[number];
 
@@ -13,9 +17,11 @@ const profileImage = `${siteUrl}/assets/images/achmad-daniel.webp`;
 const localizedSeo = {
   en: {
     locale: "en_US",
-    title: "Achmad Daniel - Creative Developer • Bekasi, ID",
+    // Lead with the full name: that is the query the old domain,
+    // LinkedIn and GitHub currently win. Keep it under ~60 chars.
+    title: "Achmad Daniel Syahputra | Software Engineer, Bekasi",
     description:
-      "Portfolio of Achmad Daniel, a Software Engineer building high-performance websites, mobile apps, and scalable digital products.",
+      "Portfolio of Achmad Daniel Syahputra, a software engineer in Bekasi, Indonesia building fast websites, Android apps and scalable backends with Next.js, Go and Flutter.",
     siteDescription:
       "Explore selected work, services, and technical expertise in web development, mobile engineering, and IoT-focused solutions.",
     keywords: [
@@ -33,9 +39,9 @@ const localizedSeo = {
   },
   id: {
     locale: "id_ID",
-    title: "Achmad Daniel | Software Engineer",
+    title: "Achmad Daniel Syahputra | Software Engineer Bekasi",
     description:
-      "Portofolio Achmad Daniel, seorang Software Engineer yang membangun website cepat, aplikasi mobile, dan produk digital yang scalable.",
+      "Portofolio Achmad Daniel Syahputra, software engineer asal Bekasi, Indonesia yang membangun website cepat, aplikasi Android, dan backend scalable dengan Next.js, Go, dan Flutter.",
     siteDescription:
       "Jelajahi proyek pilihan, layanan, dan keahlian teknis di bidang pengembangan web, pengembangan aplikasi mobile, dan solusi berbasis IoT.",
     keywords: [
@@ -84,9 +90,15 @@ export function getLocalizedUrl(lang: AppLocale, path = "") {
 
 export function getLanguageAlternates(path = "") {
   return {
-    "en-US": getLocalizedUrl("en", path),
-    "id-ID": getLocalizedUrl("id", path),
-    "x-default": siteUrl,
+    // Broad language targets first: "en"/"id" match any region,
+    // so an Indonesian user in Singapore still gets the /id page.
+    en: getLocalizedUrl("en", path),
+    id: getLocalizedUrl("id", path),
+    // x-default MUST resolve with HTTP 200. Pointing it at the bare
+    // siteUrl was the bug: "/" 301-redirects to "/en", so Google kept
+    // crawling a URL it could never index ("Crawled - currently not
+    // indexed" in Search Console). defaultLocale in proxy.ts is "en".
+    "x-default": getLocalizedUrl(defaultLocale, path),
   };
 }
 
@@ -182,25 +194,61 @@ export function getHomeStructuredData(lang: AppLocale) {
       "@type": "Person",
       "@id": `${siteUrl}#person`,
       name: personName,
-      url: siteUrl,
-      image: profileImage,
-      jobTitle: "Programmer",
+      givenName: "Achmad Daniel",
+      familyName: "Syahputra",
+      alternateName: ["Achmad Daniel", "kudanilll", "Nielcode"],
+      url: getLocalizedUrl(lang),
+      mainEntityOfPage: { "@id": `${getLocalizedUrl(lang)}#webpage` },
+      image: {
+        "@type": "ImageObject",
+        url: profileImage,
+        caption: personName,
+      },
+      jobTitle: "Software Engineer",
       description: seo.description,
       email: "mailto:hello.achmaddaniel@gmail.com",
       sameAs: socialProfiles,
+      // Local signals: this is what lets "web developer Bekasi" style
+      // queries connect the entity to a place.
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Bekasi",
+        addressRegion: "Jawa Barat",
+        addressCountry: "ID",
+      },
+      nationality: { "@type": "Country", name: "Indonesia" },
+      knowsLanguage: [
+        { "@type": "Language", name: "Indonesian", alternateName: "id" },
+        { "@type": "Language", name: "English", alternateName: "en" },
+      ],
       knowsAbout: [
         "Web Development",
         "Mobile App Development",
         "Next.js",
+        "React",
         "Flutter",
+        "Kotlin",
         "TypeScript",
         "Go",
-        "IoT",
+        "PostgreSQL",
+        "Docker",
+        "Internet of Things",
       ],
       worksFor: {
         "@type": "Organization",
-        name: personName,
+        "@id": "https://nielcode.com#organization",
+        name: "Nielcode",
+        url: "https://nielcode.com",
       },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://nielcode.com#organization",
+      name: "Nielcode",
+      url: "https://nielcode.com",
+      founder: { "@id": `${siteUrl}#person` },
+      areaServed: { "@type": "Country", name: "Indonesia" },
     },
     {
       "@context": "https://schema.org",
@@ -216,22 +264,46 @@ export function getHomeStructuredData(lang: AppLocale) {
     },
     {
       "@context": "https://schema.org",
-      "@type": "WebPage",
+      // ProfilePage is the correct type for a page that IS a person's
+      // profile. WebPage is generic and tells Google nothing extra.
+      "@type": "ProfilePage",
       "@id": `${pageUrl}#webpage`,
       url: pageUrl,
       name: seo.title,
       description: seo.description,
       inLanguage: lang,
-      isPartOf: {
-        "@id": `${siteUrl}#website`,
-      },
-      about: {
-        "@id": `${siteUrl}#person`,
-      },
+      isPartOf: { "@id": `${siteUrl}#website` },
+      about: { "@id": `${siteUrl}#person` },
+      mainEntity: { "@id": `${siteUrl}#person` },
       primaryImageOfPage: {
         "@type": "ImageObject",
         url: defaultOgImage,
       },
+      hasPart: { "@id": `${pageUrl}#works` },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "@id": `${pageUrl}#works`,
+      name: lang === "id" ? "Proyek Pilihan" : "Selected Works",
+      numberOfItems: works.length,
+      itemListOrder: "https://schema.org/ItemListOrderAscending",
+      itemListElement: works.map((work, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "CreativeWork",
+          "@id": `${pageUrl}#work-${work.title.toLowerCase()}`,
+          name: work.title,
+          description: work.description[lang],
+          url: work.href,
+          image: `${siteUrl}${work.image}`,
+          genre: work.category,
+          inLanguage: lang,
+          author: { "@id": `${siteUrl}#person` },
+          creator: { "@id": `${siteUrl}#person` },
+        },
+      })),
     },
   ];
 }

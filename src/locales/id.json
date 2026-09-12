@@ -7,14 +7,15 @@
   "home_section": {
     "desc": "selalu bersemangat untuk menciptakan solusi inovatif dan pengalaman pengguna yang menarik",
     "button_text": "Resume",
+    "role": "Creative Developer dan Software Engineer",
     "location": "Berlokasi di Bekasi"
   },
   "about_section": {
     "title": "Tentang Saya",
     "paragraph": "seorang programmer yang lahir di bekasi, indonesia. sejak 2019, saya telah mendalami dunia pemrograman, fokus utama pada pengembangan website dan aplikasi mobile"
   },
-  "project_section": {
-    "title": "— Kumpulan Projek Saya",
+  "works_section": {
+    "title": "Pekerjaan pilihan",
     "desc": "Saya membuat projek menarik dengan teknologi terbaru. Saya adalah developer yang senang untuk membuat projek-projek menarik.",
     "project_1": "Nielcode adalah platform untuk menyewa jasa pembuatan website dan aplikasi.",
     "project_2": "Kunime adalah aplikasi streaming anime gratis untuk penonton Indonesia, lengkap dengan subtitle Bahasa Indonesia dan antarmuka yang ringan.",

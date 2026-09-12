@@ -7,15 +7,15 @@
   "home_section": {
     "desc": "i am always excited to create innovative solutions and engaging user experiences",
     "button_text": "Resume",
+    "role": "Creative Developer and Software Engineer",
     "location": "Based in Bekasi"
   },
   "about_section": {
     "title": "Biography",
-
     "paragraph": "a developer who was born in bekasi, indonesia. since 2019, i've immersed myself in the world of coding, with a primary focus on website and mobile application development"
   },
-  "project_section": {
-    "title": "— My Awesome Projects",
+  "works_section": {
+    "title": "Selected works",
     "desc": "I build beautiful projects with the latest technologies and frameworks. I am a passionate developer and designer that loves to build amazing projects.",
     "project_1": "Nielcode is a platform for hiring website and application development services.",
     "project_2": "Kunime is a free anime streaming app tailored for Indonesian viewers, featuring Indonesian subtitles and a smooth UI.",

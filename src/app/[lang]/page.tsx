@@ -4,13 +4,12 @@ import {
   getHomeStructuredData,
   type AppLocale,
 } from "@/common/seo-metadata";
-import Footer from "@/components/partials/footer";
+// import Marquee from "react-fast-marquee";
+// import Footer from "@/components/partials/footer";
 import PageClientLayout from "@/components/partials/page-client-layout";
 import Section from "@/components/partials/section";
 import CursorPointer from "@/components/ui/cursor-pointer";
 import IntroAnimation from "@/components/ui/intro-animation";
-import Marquee from "react-fast-marquee";
-import Dot from "@/components/svg/dot";
 
 // Language Dictionary
 import getDictionary from "./dictionaries";
@@ -47,18 +46,12 @@ export default async function Page(props: {
       <PageClientLayout>
         <Section id="hero" lang={t}></Section>
         <Section id="about" lang={t}></Section>
+        <Section id="services" lang={t}></Section>
+        {/* Hidden temporarily */}
+        {/* <Section id="expertise" lang={t}></Section> */}
+        <Section id="works" lang={t}></Section>
 
-        <div className="py-12"></div>
-
-        <Section id="projects" lang={t}></Section>
-        <div className="md:translate-y-0 translate-y-[6svh] transform-gpu will-change-transform z-10">
-          <div className="md:hidden opacity-25">
-            <Dot />
-          </div>
-          <Section id="services" lang={t}></Section>
-        </div>
-
-        <div className="md:translate-y-0 translate-y-[5svh] transform-gpu will-change-transform z-10">
+        {/* <div className="md:translate-y-0 translate-y-[5svh] transform-gpu will-change-transform z-10">
           <Marquee>
             <h1 className="font-bold text-6xl md:text-8xl overflow-hidden">
               Web Developer <span className="text-lime-400">✦</span> Mobile
@@ -78,7 +71,6 @@ export default async function Page(props: {
         </div>
 
         <div className="relative">
-          {/* Background for contact & footer section */}
           <div
             className="absolute bottom-0 left-0 w-screen h-[96svh] md:h-screen bg-cover bg-center z-0 opacity-45 md:opacity-30"
             style={{
@@ -87,7 +79,7 @@ export default async function Page(props: {
           ></div>
           <Section id="contact" lang={t}></Section>
           <Footer />
-        </div>
+        </div> */}
       </PageClientLayout>
 
       <CursorPointer color="#ffffffaa" style="stroke" dotSize={48} />

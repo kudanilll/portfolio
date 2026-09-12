@@ -45,7 +45,7 @@ export const TextReveal: FC<TextRevealProps> = ({ children, className }) => {
             trigger: containerRef.current,
             pin: textContainerRef.current,
             start: "top top",
-            end: "bottom bottom",
+            end: "bottom 80%",
             scrub: 1,
           },
         }
@@ -63,16 +63,14 @@ export const TextReveal: FC<TextRevealProps> = ({ children, className }) => {
       >
         <span className="flex flex-wrap p-0 text-white/20 md:py-8">
           {words.map((word, i) => (
-            <span key={i} className="relative mx-1 lg:mx-1.5">
-              <span className="absolute opacity-20">{word}</span>
-              <span
-                ref={(el) => {
-                  wordRefs.current[i] = el;
-                }}
-                className="text-white inline-block opacity-20"
-              >
-                {word}
-              </span>
+            <span
+              key={i}
+              ref={(el) => {
+                wordRefs.current[i] = el;
+              }}
+              className="text-white inline-block opacity-20 mx-1 lg:mx-1.5"
+            >
+              {word}
             </span>
           ))}
         </span>
