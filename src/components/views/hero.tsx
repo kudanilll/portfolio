@@ -11,161 +11,81 @@ import { LinkedinLogoIcon } from "@phosphor-icons/react/dist/csr/LinkedinLogo";
 import { useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { cn } from "@/lib/utils";
 import NavigationBar from "@/components/partials/navbar";
-import Link from "next/link";
 import gsap from "gsap";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-export interface StaggeredMenuItem {
-  label: string;
-  ariaLabel: string;
-  link: string;
-}
+const socials = [
+  {
+    href: "https://www.instagram.com/achmaddaniel__",
+    label: "Instagram: @achmaddaniel__",
+    Icon: InstagramLogoIcon,
+  },
+  {
+    href: "https://github.com/kudanilll",
+    label: "GitHub: @kudanilll",
+    Icon: GithubLogoIcon,
+  },
+  {
+    href: "https://www.linkedin.com/in/achmaddaniel",
+    label: "LinkedIn: Achmad Daniel Syahputra",
+    Icon: LinkedinLogoIcon,
+  },
+];
 
-function LetsTalkButton({ lang }: { lang: any }) {
+const displayText = `${bebasNeue.className} block text-end text-[24vw] md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.025em] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100 will-change-transform`;
+
+function ResumeButton({ lang }: { lang: any }) {
+  const label = lang.home_section.button_text;
+
   return (
-    <Link
+    <a
       href={
         lang.lang === "en"
-          ? (process.env.NEXT_PUBLIC_CV_EN as string)
-          : (process.env.NEXT_PUBLIC_CV_ID as string)
+          ? process.env.NEXT_PUBLIC_CV_EN
+          : process.env.NEXT_PUBLIC_CV_ID
       }
       target="_blank"
       rel="noopener"
-      aria-label={`${lang.home_section.button_text} - Achmad Daniel Syahputra (PDF)`}
-      className="mx-auto md:mx-0 text-base md:text-xl w-36 md:w-56 h-12 md:h-14 bg-transparent border border-neutral-200 md:border-neutral-400 group flex items-center justify-center relative overflow-hidden active:scale-90 transition-all duration-300 ease-in-out"
-      data-hero-cta
+      aria-label={`${label} - Achmad Daniel Syahputra (PDF)`}
+      className="text-base md:text-xl w-36 md:w-56 h-12 md:h-14 shrink-0 border border-neutral-200 md:border-neutral-400 group flex items-center justify-center relative overflow-hidden uppercase active:scale-90 transition-all duration-300 ease-in-out"
     >
-      <div className="relative items-center h-6 md:h-7 overflow-hidden uppercase">
-        <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-7 text-neutral-300 hover:text-white">
-          <div className="flex flex-row items-center">
-            <span className="font-normal text-center origin-right">
-              {lang.home_section.button_text}
+      <span className="relative h-6 md:h-7 overflow-hidden">
+        <span className="flex flex-col text-neutral-300 hover:text-white transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-7">
+          {[0, 1].map((copy) => (
+            <span key={copy} className="flex items-center">
+              {label}
+              <ArrowUpRightIcon className="hidden md:block ml-3 size-6" />
             </span>
-            <div className="hidden md:block">
-              <ArrowUpRightIcon className="ml-3" size={24} />
-            </div>
-          </div>
-          <div className="flex flex-row items-center text-base md:text-xl">
-            <span className="font-normal text-center origin-left translate-y-0">
-              {lang.home_section.button_text}
-            </span>
-            <div className="hidden md:block">
-              <ArrowUpRightIcon className="ml-3" size={24} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </Link>
+          ))}
+        </span>
+      </span>
+    </a>
   );
 }
 
-function LeftBottomComponent({ lang }: { lang: any }) {
+function SocialLinks({ className }: { className?: string }) {
   return (
-    <div
-      id="left-bottom-component"
-      className="absolute flex flex-col -space-y-1 bottom-4 left-4 md:bottom-[4%] md:left-8 text-start"
-    >
-      <p className="text-neutral-400 text-lg md:text-[clamp(1rem,1.3vw,1.8rem)] font-semibold uppercase">
-        {lang.home_section.location}, Indonesia
-      </p>
-      <p className="text-neutral-600 text-base md:text-[clamp(1rem,1vw,1.8rem)] font-medium uppercase">
-        <span>{lang.contact_section.title_2}</span>
-      </p>
-    </div>
-  );
-}
-
-function RightBottomComponent() {
-  return (
-    <div className="md:absolute md:bottom-[4%] md:right-8">
-      <div className="flex items-center justify-center text-center gap-3">
-        <Link
-          href="https://www.instagram.com/achmaddaniel__"
+    <div className={cn("flex items-center gap-3", className)}>
+      {socials.map(({ href, label, Icon }) => (
+        <a
+          key={href}
+          href={href}
           target="_blank"
           rel="noopener noreferrer me"
-          aria-label="Instagram: @achmaddaniel__ (opens in a new tab)"
-          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
+          aria-label={`${label} (opens in a new tab)`}
+          className="size-12 md:size-16 shrink-0 border border-neutral-200 text-neutral-200 opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out group flex items-center justify-center relative overflow-hidden"
         >
-          <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
-            <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
-              <div className="flex flex-row items-center">
-                <div className="hidden md:block">
-                  <InstagramLogoIcon size={32} />
-                </div>
-                <div className="md:hidden">
-                  <InstagramLogoIcon size={24} />
-                </div>
-              </div>
-              <div className="flex flex-row items-center">
-                <div className="hidden md:block">
-                  <InstagramLogoIcon size={32} />
-                </div>
-                <div className="md:hidden">
-                  <InstagramLogoIcon size={24} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </Link>
-        <Link
-          href="https://github.com/kudanilll"
-          target="_blank"
-          rel="noopener noreferrer me"
-          aria-label="GitHub: @kudanilll (opens in a new tab)"
-          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
-        >
-          <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
-            <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
-              <div className="flex flex-row items-center">
-                <div className="hidden md:block">
-                  <GithubLogoIcon size={32} />
-                </div>
-                <div className="md:hidden">
-                  <GithubLogoIcon size={24} />
-                </div>
-              </div>
-              <div className="flex flex-row items-center">
-                <div className="hidden md:block">
-                  <GithubLogoIcon size={32} />
-                </div>
-                <div className="md:hidden">
-                  <GithubLogoIcon size={24} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </Link>
-        <Link
-          href="https://www.linkedin.com/in/achmaddaniel"
-          target="_blank"
-          rel="noopener noreferrer me"
-          aria-label="LinkedIn: Achmad Daniel Syahputra (opens in a new tab)"
-          className="cursor-pointer opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out w-12 h-12 md:w-16 md:h-16 bg-transparent font-regular text-xl text-neutral-200 px-3 py-2 border border-neutral-200 group flex items-center justify-center gap-2 relative overflow-hidden"
-        >
-          <div className="relative items-center h-6 md:h-8 overflow-hidden uppercase">
-            <div className="transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
-              <div className="flex flex-row items-center">
-                <div className="hidden md:block">
-                  <LinkedinLogoIcon size={32} />
-                </div>
-                <div className="md:hidden">
-                  <LinkedinLogoIcon size={24} />
-                </div>
-              </div>
-              <div className="flex flex-row items-center">
-                <div className="hidden md:block">
-                  <LinkedinLogoIcon size={32} />
-                </div>
-                <div className="md:hidden">
-                  <LinkedinLogoIcon size={24} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </Link>
-      </div>
+          <span className="relative h-6 md:h-8 overflow-hidden">
+            <span className="flex flex-col transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
+              <Icon className="size-6 md:size-8" />
+              <Icon className="size-6 md:size-8" />
+            </span>
+          </span>
+        </a>
+      ))}
     </div>
   );
 }
@@ -174,25 +94,31 @@ export default function HeroView({ lang }: { lang: any }) {
   const heroRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
+  const leftAreaRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const creativeRef = useRef<HTMLSpanElement>(null);
+  const developerRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(
     () => {
-      const isMobile = window.innerWidth < 768;
+      const bg = bgRef.current;
+      const wrapper = wrapperRef.current;
+      const creative = creativeRef.current;
+      const developer = developerRef.current;
+      if (!bg || !wrapper || !creative || !developer) return;
 
-      // 1. Pin Background & Text Layer for 250%
-      // This stays fixed while the footer and next section slide over it.
-      // pinSpacing: false ensures it doesn't affect document flow.
+      // 1. Background & text layer stays pinned for 250% while the footer
+      // and the next section slide over it (pinSpacing: false keeps it out of the flow).
       ScrollTrigger.create({
-        trigger: bgRef.current,
+        trigger: bg,
         start: "top top",
         end: "+=250%",
         pin: true,
         pinSpacing: false,
       });
 
-      // 2. Pin Footer Layer for 150% and drive animation
-      // This drives the document scroll height. Pinned for 150%.
-      // Once the pin ends (at 150%, exactly when text is centered), it scrolls up naturally!
+      // 2. Footer layer is pinned for 150% and scrubs the merge animation.
+      // When its pin ends the text is centered and the footer scrolls away.
       const disableFooterSpacerPointerEvents = () => {
         const spacer = footerRef.current?.parentElement;
         if (spacer?.classList.contains("pin-spacer")) {
@@ -201,10 +127,11 @@ export default function HeroView({ lang }: { lang: any }) {
       };
 
       const tl = gsap.timeline({
+        defaults: { duration: 1, ease: "power2.inOut", force3D: true },
         scrollTrigger: {
           trigger: footerRef.current,
           start: "top top",
-          end: "+=150%", // Animation finishes at 150%, then pin ends and covering starts!
+          end: "+=150%",
           pin: true,
           scrub: 1,
           invalidateOnRefresh: true,
@@ -212,95 +139,37 @@ export default function HeroView({ lang }: { lang: any }) {
         },
       });
 
-      // 1. Move the left area (Name + Button) out and fade
-      tl.to(
-        ".hero-left-area",
-        { xPercent: -30, opacity: 0, duration: 1, ease: "power2.inOut" },
-        0,
-      );
-
-      // Calculate perfect centering for "CREATIVE DEVELOPER"
-      const creativeEl = heroRef.current?.querySelector(
-        ".creative-text",
-      ) as HTMLElement;
-      const devEl = heroRef.current?.querySelector(
-        ".developer-text",
-      ) as HTMLElement;
-      const wrapperEl = heroRef.current?.querySelector(
-        ".creative-wrapper",
-      ) as HTMLElement;
-
-      if (!creativeEl || !devEl || !wrapperEl) return;
-
-      const getFinalLayout = () => {
-        const creativeW = creativeEl.offsetWidth;
-        const devW = devEl.offsetWidth;
-        const wrapperW = wrapperEl.offsetWidth;
-        const wrapperH = wrapperEl.offsetHeight;
-        const mergedGap = isMobile ? 12 : 24;
-        const mergedW = creativeW + mergedGap + devW;
-        const wrapperRect = wrapperEl.getBoundingClientRect();
-        const bgRect = bgRef.current?.getBoundingClientRect();
-        const availableWidth = (bgRect?.width ?? window.innerWidth) - 64;
+      // Final state: "CREATIVE ✦ DEVELOPER" on one line, centered in the hero
+      // and scaled to fit its width. offset* values ignore transforms and
+      // scroll, so a refresh mid-animation still measures the start layout.
+      const layout = () => {
+        const gap = parseFloat(getComputedStyle(creative).fontSize) * 0.1;
+        const mergedW = creative.offsetWidth + gap + developer.offsetWidth;
+        const wrapperW = wrapper.offsetWidth;
 
         return {
-          scale: isMobile ? 1.1 : Math.min(1.2, availableWidth / mergedW),
-          wrapperX:
-            (bgRect?.left ?? 0) +
-            (bgRect?.width ?? window.innerWidth) / 2 -
-            (wrapperRect.left + wrapperW / 2),
-          wrapperY:
-            (bgRect?.top ?? 0) +
-            (bgRect?.height ?? window.innerHeight) / 2 -
-            (wrapperRect.top + wrapperH / 2),
-          creativeX: creativeW - mergedW / 2 - wrapperW / 2,
+          x: bg.clientWidth / 2 - (wrapper.offsetLeft + wrapperW / 2),
+          y:
+            bg.clientHeight / 2 -
+            (wrapper.offsetTop + wrapper.offsetHeight / 2),
+          scale: Math.min(1.2, (bg.clientWidth - 64) / mergedW),
+          creativeX: creative.offsetWidth - mergedW / 2 - wrapperW / 2,
           developerX: mergedW / 2 - wrapperW / 2,
         };
       };
 
-      // Promote animated elements to GPU layers
-      gsap.set([".creative-wrapper", ".creative-text", ".developer-text"], {
-        willChange: "transform",
-        force3D: true,
-      });
-
-      // 2. Animate wrapper to viewport center
-      tl.to(
-        ".creative-wrapper",
-        {
-          x: () => getFinalLayout().wrapperX,
-          y: () => getFinalLayout().wrapperY,
-          scale: () => getFinalLayout().scale,
-          duration: 1,
-          ease: "power2.inOut",
-        },
-        0,
-      );
-
-      // 3. Merge into 1 line
-      tl.to(
-        ".creative-text",
-        {
-          x: () => getFinalLayout().creativeX,
-          yPercent: 50,
-          duration: 1,
-          ease: "power2.inOut",
-          force3D: true,
-        },
-        0,
-      );
-
-      tl.to(
-        ".developer-text",
-        {
-          x: () => getFinalLayout().developerX,
-          yPercent: -50,
-          duration: 1,
-          ease: "power2.inOut",
-          force3D: true,
-        },
-        0,
-      );
+      tl.to(leftAreaRef.current, { xPercent: -30, opacity: 0 }, 0)
+        .to(
+          wrapper,
+          {
+            x: () => layout().x,
+            y: () => layout().y,
+            scale: () => layout().scale,
+          },
+          0,
+        )
+        .to(creative, { x: () => layout().creativeX, yPercent: 50 }, 0)
+        .to(developer, { x: () => layout().developerX, yPercent: -50 }, 0);
     },
     { scope: heroRef },
   );
@@ -320,101 +189,75 @@ export default function HeroView({ lang }: { lang: any }) {
         {`Achmad Daniel Syahputra, ${lang.home_section.role}. ${lang.home_section.location}, Indonesia.`}
       </h1>
 
-      {/*
-        1. Background & Text Layer (GSAP Pinned for 250vh)
-        This layer is pinned with pinSpacing: false, so it stays fixed for the entire 250vh scroll distance,
-        allowing the footer and next section to scroll up over it!
-      */}
+      {/* 1. Background & text layer (pinned for 250%, see useGSAP above) */}
       <div
         ref={bgRef}
-        className="absolute top-0 w-full h-svh md:h-screen overflow-x-hidden flex flex-col pointer-events-auto z-0"
+        className="absolute top-0 w-full h-svh md:h-screen overflow-x-hidden flex flex-col z-0"
       >
         <NavigationBar />
         <div
-          id="hero-background"
-          className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-position-[50%_20%] md:bg-center z-0 opacity-45 md:opacity-30 pointer-events-none"
+          className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-position-[50%_20%] md:bg-center opacity-45 md:opacity-30 pointer-events-none"
           style={{ backgroundImage: "url('/assets/images/background.webp')" }}
         />
-        {/* Main Content */}
+
         <div className="flex-1 flex flex-col w-screen px-4 md:px-8 pt-[12vh] z-10">
-          {/* Title */}
-          <div className="hero-left-area w-full">
-            <span className="block text-start md:text-[clamp(4rem,5.5vw,14rem)] tracking-[-0.4rem] font-medium text-white leading-[0.85] uppercase">
-              <span className="flex flex-col md:flex-row md:items-center md:gap-8">
-                <DockText
-                  text={"Achmad"}
-                  down={false}
-                  className="text-neutral-300"
-                />
-                <DockText
-                  text={"Daniel"}
-                  down={false}
-                  className="text-neutral-300"
-                />
-              </span>
-              <div className="md:flex flex-row items-end gap-2">
-                <DockText
-                  text={"Syahputra"}
-                  down={true}
-                  className="text-neutral-300"
-                />
-                <span
-                  className={`${layGrotesk.className} md:ml-4 flex gap-3 md:gap-4 md:inline-block md:translate-y-[-0.6vw]`}
-                >
-                  <span className="mt-2 md:mt-0 tracking-normal">
-                    <LetsTalkButton lang={lang} />
-                  </span>
-                  <div
-                    id="social-media-mobile"
-                    className="mt-2 md:mt-0 md:hidden tracking-normal"
-                  >
-                    <RightBottomComponent />
-                  </div>
-                </span>
+          {/* Name + CTA */}
+          <div
+            ref={leftAreaRef}
+            className="w-full text-[16vw] md:text-[clamp(4rem,5.5vw,14rem)] tracking-[-0.06em] font-medium leading-[0.85] uppercase text-neutral-300"
+          >
+            <div className="flex flex-col md:flex-row md:items-center md:gap-6">
+              <DockText text="Achmad" />
+              <DockText text="Daniel" />
+            </div>
+            <div className="md:flex md:items-end md:gap-2 md:mt-2">
+              <DockText text="Syahputra" down />
+              <div
+                className={`${layGrotesk.className} mt-6 md:mt-0 md:ml-4 md:translate-y-[-0.6vw] flex flex-wrap items-center gap-3 text-base leading-normal tracking-normal`}
+              >
+                <ResumeButton lang={lang} />
+                <SocialLinks className="md:hidden" />
               </div>
-            </span>
+            </div>
           </div>
 
-          {/* CREATIVE DEVELOPER - Push to bottom */}
-          <div className="w-full">
-            <div className="creative-wrapper absolute bottom-[18vh] md:bottom-[16vh] right-4 md:right-8 flex flex-col items-end">
-              <span
-                className={`${bebasNeue.className} creative-text block text-end md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.1rem] md:tracking-[-0.4rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
-              >
-                <span className="flex flex-row items-center space-x-2 justify-end">
-                  <DockText text={"CREATIVE"} down={false} />
-                  <span className="text-lime-400">✦</span>
-                </span>
+          {/* CREATIVE ✦ DEVELOPER */}
+          <div
+            ref={wrapperRef}
+            data-testid="hero-title"
+            className="absolute bottom-[18vh] md:bottom-[16vh] right-4 md:right-8 flex flex-col items-end will-change-transform"
+          >
+            <span ref={creativeRef} className={displayText}>
+              <span className="flex flex-row items-center space-x-2 justify-end">
+                <DockText text="CREATIVE" />
+                <span className="text-lime-400">✦</span>
               </span>
-              <span
-                className={`${bebasNeue.className} developer-text block text-end md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.1rem] md:tracking-[-0.4rem] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100`}
-              >
-                <DockText text={"DEVELOPER"} down={true} />
-              </span>
-            </div>
+            </span>
+            <span ref={developerRef} className={displayText}>
+              <DockText text="DEVELOPER" down />
+            </span>
           </div>
         </div>
       </div>
 
-      {/* 
-        2. Footer Layer (GSAP Pinned for 150vh)
-        This drives the document scroll height. Pinned for 150%.
-        Once the pin ends (at 150%, exactly when text is centered), it scrolls up naturally!
-      */}
+      {/* 2. Footer layer (pinned for 150%, drives the scroll height) */}
       <div
         ref={footerRef}
         className="relative w-full h-svh md:h-screen flex flex-col justify-end pointer-events-none z-10"
       >
-        <div className="hero-social-area bg-[#0a0a0a] w-full pt-24 pb-[4vh] flex justify-between items-end pointer-events-auto relative">
-          {/* Subpixel gap fix: Overhang to cover GSAP pin-spacer rounding errors */}
-          <div className="absolute -bottom-0.5 left-0 w-full h-1 bg-[#0a0a0a]"></div>
+        <div className="bg-[#0a0a0a] w-full px-4 md:px-8 pt-8 pb-6 md:pb-[4vh] flex justify-between items-end gap-4 pointer-events-auto relative">
+          {/* Subpixel gap fix: overhang to cover GSAP pin-spacer rounding errors */}
+          <div className="absolute -bottom-0.5 left-0 w-full h-1 bg-[#0a0a0a]" />
 
-          <div className="relative z-10 w-full">
-            <LeftBottomComponent lang={lang} />
+          <div className="flex flex-col -space-y-1 uppercase">
+            <p className="text-neutral-400 text-lg md:text-[clamp(1rem,1.3vw,1.8rem)] font-semibold">
+              {lang.home_section.location}, Indonesia
+            </p>
+            <p className="text-neutral-600 text-base md:text-[clamp(1rem,1vw,1.8rem)] font-medium">
+              {lang.contact_section.title_2}
+            </p>
           </div>
-          <div id="social-media" className="hidden md:block relative z-10">
-            <RightBottomComponent />
-          </div>
+          <SocialLinks className="hidden md:flex" />
         </div>
       </div>
     </div>

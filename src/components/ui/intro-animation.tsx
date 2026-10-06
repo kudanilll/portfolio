@@ -179,6 +179,7 @@ export default function IntroAnimation() {
   return (
     <div
       ref={containerRef}
+      data-testid="intro-curtain"
       className={`fixed inset-0 z-9999 ${isActive ? "" : "hidden"}`}
       aria-hidden="true"
     >

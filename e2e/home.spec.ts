@@ -18,13 +18,10 @@ test("home page exposes core SEO tags", async ({ page }) => {
 test("Lenis scrolls the page once the intro finishes", async ({ page }) => {
   await page.goto("/en");
   await expect(page.locator("html.lenis")).toBeAttached();
+  await expect(page.getByTestId("intro-curtain")).toBeHidden();
+  await expect(page.locator("html.lenis-stopped")).toHaveCount(0);
 
-  // Lenis is stopped while the intro curtain plays, so keep wheeling until it lets go
-  await page.mouse.move(400, 400);
-  await expect
-    .poll(async () => {
-      await page.mouse.wheel(0, 400);
-      return page.evaluate(() => window.scrollY);
-    })
-    .toBeGreaterThan(0);
+  await page.mouse.move(200, 400);
+  await page.mouse.wheel(0, 400);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
 });

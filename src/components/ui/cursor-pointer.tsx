@@ -27,7 +27,8 @@ const CursorPointer: FC<CursorPointerProps> = ({
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    if (width <= 768) {
+    // Touch devices (phones and tablets of any width) have no cursor to follow
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       return;
     }
 
