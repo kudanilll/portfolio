@@ -32,8 +32,7 @@ export default async function RootLayout({
   return (
     <html
       lang={lang}
-      className="scroll-smooth no-scrollbar bg-[#0a0a0a] text-white"
-      style={{ scrollBehavior: "smooth" }}
+      className="no-scrollbar bg-[#0a0a0a] text-white"
     >
       <body className={`${layGrotesk.className} antialiased select-none`}>
         {children}

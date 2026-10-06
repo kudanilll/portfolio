@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { isMobileViewport } from "@/hooks/use-is-mobile";
 import { useRouter } from "next/navigation";
+import { useLenis } from "lenis/react";
 import gsap from "gsap";
 
 /**
@@ -19,6 +20,13 @@ export default function IntroAnimation() {
   const bottomBlocksRef = useRef<(HTMLDivElement | null)[]>([]);
   const [isActive, setIsActive] = useState(true);
   const router = useRouter();
+  const lenis = useLenis();
+
+  // Lenis scrolls programmatically, so body overflow alone can't lock it
+  useEffect(() => {
+    if (isActive) lenis?.stop();
+    else lenis?.start();
+  }, [lenis, isActive]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
