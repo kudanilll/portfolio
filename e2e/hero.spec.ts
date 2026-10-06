@@ -13,59 +13,110 @@ async function scrollToScreens(page: Page, screens: number) {
     .toBeLessThan(2);
 }
 
-/** Bounding box of "CREATIVE ✦" + "DEVELOPER", relative to the viewport. */
-function mergedTitle(page: Page) {
+/** Where "CREATIVE ✦" + "DEVELOPER" sit, rounded so small subpixel drift counts as centered. */
+function heroTitle(page: Page) {
   return page.getByTestId("hero-title").evaluate((el) => {
-    const rects = [...el.children].map((child) => child.getBoundingClientRect());
-    const left = Math.min(...rects.map((r) => r.left));
-    const right = Math.max(...rects.map((r) => r.right));
-    const top = Math.min(...rects.map((r) => r.top));
-    const bottom = Math.max(...rects.map((r) => r.bottom));
+    const style = getComputedStyle(el);
+    const [creative, developer] = [...el.children].map((child) =>
+      child.getBoundingClientRect(),
+    );
+    const left = Math.min(creative.left, developer.left);
+    const right = Math.max(creative.right, developer.right);
+    const top = Math.min(creative.top, developer.top);
+    const bottom = Math.max(creative.bottom, developer.bottom);
+    const offCenterX = Math.abs((left + right) / 2 - window.innerWidth / 2);
+    const offCenterY = Math.abs((top + bottom) / 2 - window.innerHeight / 2);
 
     return {
-      offCenterX: Math.round(Math.abs((left + right) / 2 - window.innerWidth / 2)),
-      offCenterY: Math.round(Math.abs((top + bottom) / 2 - window.innerHeight / 2)),
-      overflow: Math.round(Math.max(0, right - left - window.innerWidth)),
+      visible: style.visibility !== "hidden" && Number(style.opacity) > 0.99,
+      lines: Math.abs(creative.top - developer.top) < 2 ? 1 : 2,
+      centered: offCenterX <= 4 && offCenterY <= 8,
+      fits: right - left <= window.innerWidth,
     };
   });
 }
 
-const centeredAndFits = { offCenterX: 0, offCenterY: 0, overflow: 0 };
-const roughly = (box: Awaited<ReturnType<typeof mergedTitle>>) => ({
-  offCenterX: box.offCenterX <= 4 ? 0 : box.offCenterX,
-  offCenterY: box.offCenterY <= 8 ? 0 : box.offCenterY,
-  overflow: box.overflow,
-});
-
-test("hero title merges into one centered line that fits the screen", async ({
-  page,
-}) => {
+async function openHome(page: Page) {
   await page.goto("/en");
   // The intro resets scroll to the top on mount and locks Lenis until it finishes
   await expect(page.getByTestId("intro-curtain")).toBeHidden();
+}
 
-  // 1.5 screens = end of the footer pin, where the merge animation completes
-  await scrollToScreens(page, 1.5);
-  await expect.poll(async () => roughly(await mergedTitle(page))).toEqual(centeredAndFits);
+test.describe("desktop", () => {
+  test.skip(({ isMobile }) => isMobile, "desktop layout only");
+
+  test("title merges into one centered line that fits the screen", async ({
+    page,
+  }) => {
+    await openHome(page);
+    // 1.5 screens = end of the footer pin, where the hero animation completes
+    await scrollToScreens(page, 1.5);
+    await expect
+      .poll(() => heroTitle(page))
+      .toEqual({ visible: true, lines: 1, centered: true, fits: true });
+  });
+
+  test("title stays centered after a resize mid-animation", async ({ page }) => {
+    await openHome(page);
+    // Resizing triggers a ScrollTrigger refresh while the merge is half done
+    await scrollToScreens(page, 0.75);
+    await page.setViewportSize({ width: 1024, height: page.viewportSize()!.height });
+    await page.waitForTimeout(500);
+    await scrollToScreens(page, 1.5);
+    await expect
+      .poll(() => heroTitle(page))
+      .toEqual({ visible: true, lines: 1, centered: true, fits: true });
+  });
+
+  test("shrinking to phone width mid-animation switches to the mobile title", async ({
+    page,
+  }) => {
+    // Mobile emulation can't resize its layout viewport, so a desktop context
+    // stands in for a phone rotating across the md breakpoint
+    await openHome(page);
+    await scrollToScreens(page, 0.75);
+    await page.setViewportSize({ width: 390, height: page.viewportSize()!.height });
+    await page.waitForTimeout(500);
+    await scrollToScreens(page, 1.5);
+    await expect
+      .poll(() => heroTitle(page))
+      .toEqual({ visible: true, lines: 2, centered: true, fits: true });
+  });
 });
 
-test("hero title stays centered after a resize mid-animation", async ({
+test.describe("mobile", () => {
+  test.skip(({ isMobile }) => !isMobile, "mobile layout only");
+
+  test("title is hidden at first, then rises to the center as two lines", async ({
+    page,
+  }) => {
+    await openHome(page);
+    expect((await heroTitle(page)).visible).toBe(false);
+
+    await scrollToScreens(page, 1.5);
+    await expect
+      .poll(() => heroTitle(page))
+      .toEqual({ visible: true, lines: 2, centered: true, fits: true });
+  });
+});
+
+test("hero has no nested scroll containers (no stray scroll indicator)", async ({
   page,
-  isMobile,
 }) => {
-  // Mobile emulation keeps innerWidth fixed on resize, so no resize event fires there
-  test.skip(isMobile, "needs a desktop context to emulate a real resize");
-
-  await page.goto("/en");
-  await expect(page.getByTestId("intro-curtain")).toBeHidden();
-
-  // Resizing triggers a ScrollTrigger refresh while the merge is half done.
-  // Shrinking to phone width also crosses the md breakpoint (different font sizes).
-  await scrollToScreens(page, 0.75);
-  await page.setViewportSize({ width: 390, height: page.viewportSize()!.height });
-  await page.waitForTimeout(500);
-  await scrollToScreens(page, 1.5);
-  await expect.poll(async () => roughly(await mergedTitle(page))).toEqual(centeredAndFits);
+  await openHome(page);
+  const scrollers = await page.evaluate(() =>
+    [...document.querySelectorAll("#home *")]
+      .filter((el) => {
+        const { overflowX, overflowY } = getComputedStyle(el);
+        const scrollable = (o: string) => o === "auto" || o === "scroll";
+        return (
+          (scrollable(overflowY) && el.scrollHeight > el.clientHeight) ||
+          (scrollable(overflowX) && el.scrollWidth > el.clientWidth)
+        );
+      })
+      .map((el) => el.className),
+  );
+  expect(scrollers).toEqual([]);
 });
 
 test("hero has no horizontal overflow", async ({ page }) => {

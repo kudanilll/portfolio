@@ -50,14 +50,14 @@ function ResumeButton({ lang }: { lang: any }) {
       target="_blank"
       rel="noopener"
       aria-label={`${label} - Achmad Daniel Syahputra (PDF)`}
-      className="text-base md:text-xl w-36 md:w-56 h-12 md:h-14 shrink-0 border border-neutral-200 md:border-neutral-400 group flex items-center justify-center relative overflow-hidden uppercase active:scale-90 transition-all duration-300 ease-in-out"
+      className="text-base md:text-xl flex-1 md:flex-none md:w-56 h-12 md:h-14 border border-neutral-200 md:border-neutral-400 group flex items-center justify-center relative overflow-hidden uppercase active:scale-90 transition-all duration-300 ease-in-out"
     >
       <span className="relative h-6 md:h-7 overflow-hidden">
         <span className="flex flex-col text-neutral-300 hover:text-white transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-7">
           {[0, 1].map((copy) => (
             <span key={copy} className="flex items-center">
               {label}
-              <ArrowUpRightIcon className="hidden md:block ml-3 size-6" />
+              <ArrowUpRightIcon className="ml-3 size-5 md:size-6" />
             </span>
           ))}
         </span>
@@ -102,10 +102,11 @@ export default function HeroView({ lang }: { lang: any }) {
   useGSAP(
     () => {
       const bg = bgRef.current;
+      const leftArea = leftAreaRef.current;
       const wrapper = wrapperRef.current;
       const creative = creativeRef.current;
       const developer = developerRef.current;
-      if (!bg || !wrapper || !creative || !developer) return;
+      if (!bg || !leftArea || !wrapper || !creative || !developer) return;
 
       // 1. Background & text layer stays pinned for 250% while the footer
       // and the next section slide over it (pinSpacing: false keeps it out of the flow).
@@ -117,8 +118,8 @@ export default function HeroView({ lang }: { lang: any }) {
         pinSpacing: false,
       });
 
-      // 2. Footer layer is pinned for 150% and scrubs the merge animation.
-      // When its pin ends the text is centered and the footer scrolls away.
+      // 2. Footer layer is pinned for 150% and scrubs the hero timeline.
+      // When its pin ends the title is centered and the footer scrolls away.
       const disableFooterSpacerPointerEvents = () => {
         const spacer = footerRef.current?.parentElement;
         if (spacer?.classList.contains("pin-spacer")) {
@@ -126,50 +127,80 @@ export default function HeroView({ lang }: { lang: any }) {
         }
       };
 
-      const tl = gsap.timeline({
-        defaults: { duration: 1, ease: "power2.inOut", force3D: true },
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: "top top",
-          end: "+=150%",
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-          onRefresh: disableFooterSpacerPointerEvents,
-        },
+      // refreshPriority: matchMedia rebuilds this trigger after later sections
+      // exist (e.g. on phone rotation); its pin spacing must still be measured first.
+      const heroTimeline = () =>
+        gsap.timeline({
+          defaults: { duration: 1, ease: "power2.inOut", force3D: true },
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top top",
+            end: "+=150%",
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+            refreshPriority: 1,
+            onRefresh: disableFooterSpacerPointerEvents,
+          },
+        });
+
+      const media = gsap.matchMedia();
+
+      // Desktop: "CREATIVE ✦ DEVELOPER" merges into one line, centered in the
+      // hero and scaled to fit its width. offset* values ignore transforms and
+      // scroll, so a refresh mid-animation still measures the start layout.
+      media.add("(min-width: 768px)", () => {
+        const layout = () => {
+          const gap = parseFloat(getComputedStyle(creative).fontSize) * 0.1;
+          const mergedW = creative.offsetWidth + gap + developer.offsetWidth;
+          const wrapperW = wrapper.offsetWidth;
+
+          return {
+            x: bg.clientWidth / 2 - (wrapper.offsetLeft + wrapperW / 2),
+            y:
+              bg.clientHeight / 2 -
+              (wrapper.offsetTop + wrapper.offsetHeight / 2),
+            scale: Math.min(1.2, (bg.clientWidth - 64) / mergedW),
+            creativeX: creative.offsetWidth - mergedW / 2 - wrapperW / 2,
+            developerX: mergedW / 2 - wrapperW / 2,
+          };
+        };
+
+        heroTimeline()
+          .to(leftArea, { xPercent: -30, opacity: 0 }, 0)
+          .to(
+            wrapper,
+            {
+              x: () => layout().x,
+              y: () => layout().y,
+              scale: () => layout().scale,
+            },
+            0,
+          )
+          .to(creative, { x: () => layout().creativeX, yPercent: 50 }, 0)
+          .to(developer, { x: () => layout().developerX, yPercent: -50 }, 0);
       });
 
-      // Final state: "CREATIVE ✦ DEVELOPER" on one line, centered in the hero
-      // and scaled to fit its width. offset* values ignore transforms and
-      // scroll, so a refresh mid-animation still measures the start layout.
-      const layout = () => {
-        const gap = parseFloat(getComputedStyle(creative).fontSize) * 0.1;
-        const mergedW = creative.offsetWidth + gap + developer.offsetWidth;
-        const wrapperW = wrapper.offsetWidth;
+      // Mobile: the title starts hidden below the hero and rises with the
+      // scroll to the center, keeping its two staggered lines. CSS anchors it
+      // at left/top 50%; xPercent/yPercent center it on that point.
+      media.add("(max-width: 767.98px)", () => {
+        gsap.set(wrapper, { xPercent: -50, yPercent: -50 });
 
-        return {
-          x: bg.clientWidth / 2 - (wrapper.offsetLeft + wrapperW / 2),
-          y:
-            bg.clientHeight / 2 -
-            (wrapper.offsetTop + wrapper.offsetHeight / 2),
-          scale: Math.min(1.2, (bg.clientWidth - 64) / mergedW),
-          creativeX: creative.offsetWidth - mergedW / 2 - wrapperW / 2,
-          developerX: mergedW / 2 - wrapperW / 2,
-        };
-      };
+        heroTimeline()
+          .to(leftArea, { xPercent: -30, opacity: 0 }, 0)
+          .fromTo(
+            wrapper,
+            {
+              y: () => (bg.clientHeight + wrapper.offsetHeight) / 2,
+              autoAlpha: 0,
+            },
+            { y: 0, autoAlpha: 1 },
+            0,
+          );
+      });
 
-      tl.to(leftAreaRef.current, { xPercent: -30, opacity: 0 }, 0)
-        .to(
-          wrapper,
-          {
-            x: () => layout().x,
-            y: () => layout().y,
-            scale: () => layout().scale,
-          },
-          0,
-        )
-        .to(creative, { x: () => layout().creativeX, yPercent: 50 }, 0)
-        .to(developer, { x: () => layout().developerX, yPercent: -50 }, 0);
+      return () => media.revert();
     },
     { scope: heroRef },
   );
@@ -192,7 +223,7 @@ export default function HeroView({ lang }: { lang: any }) {
       {/* 1. Background & text layer (pinned for 250%, see useGSAP above) */}
       <div
         ref={bgRef}
-        className="absolute top-0 w-full h-svh md:h-screen overflow-x-hidden flex flex-col z-0"
+        className="absolute top-0 w-full h-svh md:h-screen overflow-hidden flex flex-col z-0"
       >
         <NavigationBar />
         <div
@@ -200,11 +231,12 @@ export default function HeroView({ lang }: { lang: any }) {
           style={{ backgroundImage: "url('/assets/images/background.webp')" }}
         />
 
-        <div className="flex-1 flex flex-col w-screen px-4 md:px-8 pt-[12vh] z-10">
-          {/* Name + CTA */}
+        {/* Mobile: name block is vertically centered in the visible background (88svh) */}
+        <div className="flex-1 flex flex-col justify-center md:justify-start w-screen px-4 md:px-8 pb-[12svh] md:pb-0 md:pt-[12vh] z-10">
+          {/* Name + CTA. Mobile size makes "SYAHPUTRA" (~5.25em) fill the padded width */}
           <div
             ref={leftAreaRef}
-            className="w-full text-[16vw] md:text-[clamp(4rem,5.5vw,14rem)] tracking-[-0.06em] font-medium leading-[0.85] uppercase text-neutral-300"
+            className="w-full text-[calc((100vw-2rem)/5.3)] md:text-[clamp(4rem,5.5vw,14rem)] tracking-[-0.06em] font-medium leading-[0.85] uppercase text-neutral-300"
           >
             <div className="flex flex-col md:flex-row md:items-center md:gap-6">
               <DockText text="Achmad" />
@@ -225,7 +257,7 @@ export default function HeroView({ lang }: { lang: any }) {
           <div
             ref={wrapperRef}
             data-testid="hero-title"
-            className="absolute bottom-[18vh] md:bottom-[16vh] right-4 md:right-8 flex flex-col items-end will-change-transform"
+            className="absolute max-md:left-1/2 max-md:top-1/2 max-md:w-max max-md:invisible md:bottom-[16vh] md:right-8 flex flex-col items-end will-change-transform"
           >
             <span ref={creativeRef} className={displayText}>
               <span className="flex flex-row items-center space-x-2 justify-end">
