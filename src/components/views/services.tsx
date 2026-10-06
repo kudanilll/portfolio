@@ -40,26 +40,19 @@ export default function ServicesView({ lang }: { lang: any }) {
   );
 
   return (
+    // One composition scaled to the viewport: the type is sized in vw, the
+    // indent in % and the line pitch in em, so nothing is fixed in px. The
+    // longest line ("FRONTEND DEVELOPER") is ~6.2em wide, so 13vw still fits a
+    // 320px phone; from md the size matches the approved 1920px layout and
+    // stops growing at 14rem.
     <section
       ref={sectionRef}
       id="services"
-      className="px-4 md:px-8 flex flex-col justify-center gap-48 w-full h-screen overflow-hidden"
+      className={`${bebasNeue.className} px-4 md:px-8 flex flex-col justify-center w-full h-screen overflow-hidden uppercase tracking-tight leading-[0.86] text-nowrap text-[13vw] md:text-[min(11.6vw,14rem)]`}
     >
-      <h2
-        className={`${bebasNeue.className} uppercase md:text-[clamp(4rem,14vw,14rem)] tracking-tight leading-0 text-nowrap`}
-      >
-        FRONTEND DEVELOPER
-      </h2>
-      <h2
-        className={`${bebasNeue.className} uppercase text-right md:text-[clamp(4rem,14vw,14rem)] tracking-tight leading-0 text-nowrap text-white/50`}
-      >
-        ANDROID DEVELOPER
-      </h2>
-      <h2
-        className={`${bebasNeue.className} uppercase text-lime-400 ml-48 md:text-[clamp(4rem,14vw,14rem)] tracking-tight leading-0 text-nowrap`}
-      >
-        CREATIVE DEVELOPER
-      </h2>
+      <h2>FRONTEND DEVELOPER</h2>
+      <h2 className="text-right text-white/50">ANDROID DEVELOPER</h2>
+      <h2 className="ml-[10%] text-lime-400">CREATIVE DEVELOPER</h2>
     </section>
   );
 }
