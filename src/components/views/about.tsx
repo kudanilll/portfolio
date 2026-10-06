@@ -10,7 +10,7 @@ export default function AboutView({ lang }: { lang: any }) {
     <section
       id="about"
       aria-labelledby="about-heading"
-      className="md:min-h-screen w-full px-4 md:px-8 relative pt-24 pb-0 md:pt-24 md:pb-24 overflow-hidden"
+      className="md:min-h-screen w-full px-4 md:px-8 relative pt-24 pb-0 md:pt-24 md:pb-32 overflow-hidden"
     >
       {/* The design shows no visible section title, but the section still
           needs one so the document outline is not a flat list of divs. */}
@@ -42,25 +42,24 @@ export default function AboutView({ lang }: { lang: any }) {
           </TextReveal>
 
           {/* Mobile Text */}
-          <p className="mt-10 md:hidden text-neutral-400 text-3xl px-4 tracking-tight font-normal">
+          <p className="mt-10 md:hidden text-neutral-400 text-4xl px-4 tracking-tight font-normal text-pretty">
             {lang.about_section.paragraph}
           </p>
         </div>
       </div>
       <div className="md:hidden flex flex-col w-full">
-        <div className="mt-10 w-50 self-end">
+        <div className="mt-12 w-50 self-end">
           <Dot />
         </div>
 
         {/* Mobile Image */}
-        <div className="flex justify-start">
+        <div className="mt-12 w-55 aspect-2/3 overflow-hidden">
           <Image
             src="/assets/images/achmad-daniel.webp"
             alt="Achmad Daniel Syahputra"
-            width={250}
-            height={250}
-            style={{ height: "auto" }}
-            className="grayscale mt-10 items-start"
+            width={220}
+            height={330}
+            className="grayscale size-full object-cover scale-125"
           />
         </div>
       </div>
