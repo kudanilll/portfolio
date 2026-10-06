@@ -36,9 +36,10 @@ bun dev
 Other scripts:
 
 ```bash
-bun run build   # production build
-bun start       # serve the production build
-bun run lint    # ESLint
+bun run build     # production build
+bun start         # serve the production build
+bun run lint      # ESLint
+bun run test:e2e  # Playwright tests (run `bunx playwright install chromium` once first)
 ```
 
 ### Environment Variables
