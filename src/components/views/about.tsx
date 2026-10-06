@@ -2,7 +2,7 @@
 
 import { TextReveal } from "@/components/typography/text-reveal";
 import Dot from "@/components/svg/dot";
-import Image from "next/image";
+import RevealImage from "@/components/ui/reveal-image";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function AboutView({ lang }: { lang: any }) {
@@ -19,13 +19,13 @@ export default function AboutView({ lang }: { lang: any }) {
       </h2>
       {/* Desktop Image */}
       <div className="hidden md:block w-[28vw] h-auto absolute top-3/4 left-24 -translate-y-1/2 aspect-3/4 overflow-hidden">
-        <Image
+        <RevealImage
           src="/assets/images/achmad-daniel.webp"
           alt="Achmad Daniel Syahputra"
           width={500}
           height={500}
           style={{ height: "auto" }}
-          className="grayscale scale-125"
+          className="scale-125"
         />
       </div>
 
@@ -42,7 +42,7 @@ export default function AboutView({ lang }: { lang: any }) {
           </TextReveal>
 
           {/* Mobile Text */}
-          <p className="mt-10 md:hidden text-neutral-400 text-4xl px-4 tracking-tight font-normal text-pretty">
+          <p className="mt-10 md:hidden text-4xl px-4 tracking-tight font-normal text-pretty">
             {lang.about_section.paragraph}
           </p>
         </div>
@@ -53,13 +53,13 @@ export default function AboutView({ lang }: { lang: any }) {
         </div>
 
         {/* Mobile Image */}
-        <div className="mt-12 w-55 aspect-2/3 overflow-hidden">
-          <Image
+        <div className="relative mt-12 w-55 aspect-2/3 overflow-hidden">
+          <RevealImage
             src="/assets/images/achmad-daniel.webp"
             alt="Achmad Daniel Syahputra"
             width={220}
             height={330}
-            className="grayscale size-full object-cover scale-125"
+            className="size-full object-cover scale-125"
           />
         </div>
       </div>
