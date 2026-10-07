@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { expertise } from "@/data/expertise";
+import { sparklePath } from "@/components/svg/sparkle";
 import gsap from "gsap";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
@@ -142,7 +143,7 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
         >
           <path
             ref={starPathRef}
-            d="M50 2C54 36 64 46 98 50C64 54 54 64 50 98C46 64 36 54 2 50C36 46 46 36 50 2Z"
+            d={sparklePath}
             fill="currentColor"
             stroke="currentColor"
             strokeWidth="3"

@@ -52,7 +52,7 @@ test("with reduced motion it is plain wrapped text", async ({ page }) => {
 
   await expect(text(page)).toContainText(quote);
   await expect(text(page)).toHaveCSS("white-space", "normal");
-  // Not split (SplitText marks its pieces aria-hidden) and not pinned
-  await expect(text(page).locator("[aria-hidden]")).toHaveCount(0);
+  // Not split (SplitText marks its span pieces aria-hidden) and not pinned
+  await expect(text(page).locator("span[aria-hidden]")).toHaveCount(0);
   await expect(page.locator("section:has([data-quote]) .pin-spacer")).toHaveCount(0);
 });
