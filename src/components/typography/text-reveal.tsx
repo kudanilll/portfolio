@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  ComponentPropsWithoutRef,
-  FC,
-  useRef,
-  useEffect,
-} from "react";
+import { ComponentPropsWithoutRef, FC, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
@@ -48,7 +43,7 @@ export const TextReveal: FC<TextRevealProps> = ({ children, className }) => {
             end: "bottom 80%",
             scrub: 1,
           },
-        }
+        },
       );
     }, containerRef);
 
@@ -59,7 +54,7 @@ export const TextReveal: FC<TextRevealProps> = ({ children, className }) => {
     <div ref={containerRef} className={cn("relative h-[200vh]", className)}>
       <div
         ref={textContainerRef}
-        className="flex h-screen items-center justify-center bg-transparent py-[5rem]"
+        className="flex h-screen items-center justify-center bg-transparent py-20"
       >
         <span className="flex flex-wrap p-0 text-white/20 md:py-8">
           {words.map((word, i) => (
