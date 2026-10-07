@@ -14,6 +14,9 @@
     "title": "About me",
     "paragraph": "i'm a creative developer from bekasi, building websites and mobile apps, with awesome animation, smooth motion and pages that still load fast."
   },
+  "expertise_section": {
+    "title": "Expertise"
+  },
   "works_section": {
     "title": "Selected works",
     "desc": "I build beautiful projects with the latest technologies and frameworks. I am a passionate developer and designer that loves to build amazing projects.",
