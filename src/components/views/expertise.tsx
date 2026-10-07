@@ -84,7 +84,11 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
           },
         });
         lines.forEach((line, index) =>
-          reveal.to(line, { yPercent: 0, duration: 1, ease: "power4.out" }, index * 0.1),
+          reveal.to(
+            line,
+            { yPercent: 0, duration: 1, ease: "power4.out" },
+            index * 0.1,
+          ),
         );
       });
 
@@ -124,7 +128,7 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
       className="flex min-h-screen flex-col px-4 pt-12 pb-24 md:px-8 md:pt-[8vh] md:pb-32"
     >
       {/* Same title treatment and spot as "Selected works" */}
-      <h2 className="flex items-center gap-[0.2em] text-[12vw] tracking-tight md:text-[6vw]">
+      <h2 className="flex items-center gap-[0.2em] text-[14vw] tracking-tight md:text-[6vw]">
         {lang.expertise_section.title}
         {/* Same four-point star as the hero's lime ✦ */}
         <svg
@@ -151,13 +155,13 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
           only ever shows between two items on the same line. */}
       <ul
         ref={listRef}
-        className="my-auto ml-auto flex flex-wrap justify-end gap-x-[0.8em] overflow-x-clip pt-12 text-right text-[10vw] leading-[1.1] tracking-tight text-white/20 md:max-w-[80vw] md:pt-16 md:text-[4.5vw]"
+        className="my-auto ml-auto flex flex-wrap justify-end gap-x-[0.8em] overflow-x-clip pt-12 text-right text-[11vw] leading-[1.01] tracking-tight text-white/20 md:max-w-[80vw] md:pt-16 md:text-[6vw]"
       >
         {expertise.map((name) => (
           // overflow-y-clip makes the <li> the mask for the line reveal (only
           // vertically, so the "/" outside it still shows); the padding and
           // matching negative margin keep descenders (g, j, p) inside it
-          <li key={name} className="-my-[0.1em] overflow-y-clip py-[0.1em]">
+          <li key={name} className="my-[-0.1em] overflow-y-clip py-[0.1em]">
             <span className="relative inline-block">
               <span
                 data-tech
