@@ -47,6 +47,7 @@ export default async function Page(props: {
         <Section id="services" lang={t}></Section>
         <Section id="works" lang={t}></Section>
         <Section id="expertise" lang={t}></Section>
+        <Section id="quote" lang={t}></Section>
 
         {/* <div className="md:translate-y-0 translate-y-[5svh] transform-gpu will-change-transform z-10">
           <Marquee>

@@ -31,6 +31,9 @@
     "web": "Website & web app yang konversi dan kencang: arsitektur rapi, UI responsif, SEO, integrasi API/CMS, dan best practice keamanan. Dari landing page hingga dashboard, siap scale.",
     "iot": "Solusi IoT end-to-end: dari sensor ke cloud, data real-time, automasi, hingga dashboard pemantauan. Hasilnya: operasi lebih efisien dan keputusan berbasis data."
   },
+  "quote_section": {
+    "quote": "the possibilities are endless, the only limit is my imagination"
+  },
   "contact_section": {
     "title_1": "Hubungi Saya",
     "title_2": "Mari kita bekerja sama",

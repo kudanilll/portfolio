@@ -6,9 +6,10 @@ import AboutView from "@/components/views/about";
 import ServicesView from "@/components/views/services";
 import ExpertiseView from "@/components/views/expertise";
 import ContactView from "@/components/views/contact";
+import QuoteView from "@/components/views/quote";
 
 type Props = {
-  id: "hero" | "works" | "about" | "services" | "expertise" | "contact";
+  id: "hero" | "works" | "about" | "services" | "expertise" | "quote" | "contact";
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   lang: any;
 };
@@ -19,14 +20,19 @@ const Views = {
   works: WorksView,
   services: ServicesView,
   expertise: ExpertiseView,
+  quote: QuoteView,
   contact: ContactView,
 };
+
+// Sections that pin their content need a block parent: GSAP turns pin
+// spacing off by default when the pinned element sits in a flex container.
+const blockSections: Props["id"][] = ["works", "expertise", "quote"];
 
 export default function Section(props: Props) {
   const View = Views[props.id];
   return (
     <section
-      className={`${props.id === "works" || props.id === "expertise" ? "block" : "flex"} w-screen ${props.id === "hero" ? "" : "min-h-screen relative z-10 bg-[#0a0a0a]"}`}
+      className={`${blockSections.includes(props.id) ? "block" : "flex"} w-screen ${props.id === "hero" ? "" : "min-h-screen relative z-10 bg-[#0a0a0a]"}`}
     >
       <View lang={props.lang} />
     </section>
