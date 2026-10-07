@@ -1,5 +1,23 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { expertise } from "../src/data/expertise";
+
+/** How many entries still sit shifted down inside their line mask. */
+const shiftedEntries = (page: Page) =>
+  page
+    .locator("ul:has([data-tech]) li > span")
+    .evaluateAll(
+      (els) =>
+        els.filter((el) => !["none", "matrix(1, 0, 0, 1, 0, 0)"].includes(getComputedStyle(el).transform))
+          .length,
+    );
+
+/** Scroll the list into view and wait for the line reveal to finish. */
+async function revealList(page: Page) {
+  await page.locator("ul:has([data-tech])").evaluate((ul) => {
+    window.scrollTo(0, ul.getBoundingClientRect().top + scrollY - innerHeight / 3);
+  });
+  await expect.poll(() => shiftedEntries(page)).toBe(0);
+}
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/en");
@@ -8,6 +26,12 @@ test.beforeEach(async ({ page }) => {
 
 test("lists every expertise entry from the data file, in order", async ({ page }) => {
   await expect(page.locator("[data-tech]")).toHaveText(expertise);
+});
+
+test("entries rise out of their line masks once the list is in view", async ({ page }) => {
+  // Before the list is reached, every entry waits below its mask
+  expect(await shiftedEntries(page)).toBe(expertise.length);
+  await revealList(page);
 });
 
 test('a "/" shows only between entries on the same line', async ({ page }) => {
@@ -19,7 +43,7 @@ test('a "/" shows only between entries on the same line', async ({ page }) => {
       const sameLine =
         !!next && Math.round(next.getBoundingClientRect().top) === Math.round(li.getBoundingClientRect().top);
       // Visible = not pushed past the list's clipped right edge
-      const visible = li.lastElementChild!.getBoundingClientRect().left < right - 1;
+      const visible = li.querySelector("[aria-hidden]")!.getBoundingClientRect().left < right - 1;
       return visible === sameLine ? [] : [li.textContent];
     });
   });
@@ -42,6 +66,7 @@ test("hovering an entry turns only that entry lime (desktop)", async ({
   isMobile,
 }) => {
   test.skip(isMobile, "touch screens have no hover");
+  await revealList(page);
   const items = page.locator("[data-tech]");
   const color = (index: number) =>
     items.nth(index).evaluate((el) => getComputedStyle(el).color);
@@ -57,9 +82,10 @@ test("the line crossing the middle of the screen lights up (mobile)", async ({
   isMobile,
 }) => {
   test.skip(!isMobile, "hover screens use hover instead");
+  await revealList(page);
   const item = page.locator("[data-tech]").nth(6);
   await item.evaluate((el) => {
-    const rect = el.parentElement!.getBoundingClientRect();
+    const rect = el.closest("li")!.getBoundingClientRect();
     window.scrollTo(0, rect.top + scrollY + rect.height / 2 - innerHeight / 2);
   });
 

@@ -31,6 +31,12 @@ test("title fills white with the pinned horizontal scroll (desktop)", async ({
 
   await page.evaluate((y) => window.scrollTo(0, y), top + distance);
   await expect.poll(() => fill(page)).toBe("100%");
+
+  // One extra screen of scroll holds the finished row in place (still pinned)
+  const titleTop = async () => Math.round((await title(page).boundingBox())!.y);
+  const pinnedTop = await titleTop();
+  await page.evaluate((y) => window.scrollTo(0, y + innerHeight * 0.9), top + distance);
+  await expect.poll(titleTop).toBe(pinnedTop);
 });
 
 test("works stack vertically and reveal lime first (mobile)", async ({

@@ -36,13 +36,23 @@ export default function WorksView({ lang }: WorksViewProps) {
       media.add("(min-width: 768px)", () => {
         const distance = () =>
           Math.max(0, track.scrollWidth - window.innerWidth);
+
+        // The pin outlasts the horizontal scroll by one screen, so the last
+        // card holds in place for a beat before the next section comes up.
+        ScrollTrigger.create({
+          trigger: root,
+          start: "top top",
+          end: () => `+=${distance() + window.innerHeight}`,
+          pin: true,
+          invalidateOnRefresh: true,
+        });
+
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: root,
             start: "top top",
             end: () => `+=${distance()}`,
-            pin: true,
             scrub: 1,
             invalidateOnRefresh: true,
           },

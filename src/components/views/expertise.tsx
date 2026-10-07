@@ -64,6 +64,30 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
         });
       });
 
+      // Line reveal (masked lines rising in, one after another, once): every
+      // <li> is a mask and its content slides up from below. Entries on the
+      // same visual line rise together, lines are staggered top to bottom.
+      media.add("(prefers-reduced-motion: no-preference)", () => {
+        const rows = new Map<number, HTMLElement[]>();
+        gsap.utils.toArray<HTMLElement>("li", listRef.current).forEach((li) => {
+          const row = rows.get(li.offsetTop) ?? [];
+          rows.set(li.offsetTop, [...row, li.firstElementChild as HTMLElement]);
+        });
+        const lines = [...rows.values()];
+
+        gsap.set(lines.flat(), { yPercent: 100 });
+        const reveal = gsap.timeline({
+          scrollTrigger: {
+            trigger: listRef.current,
+            start: "top 75%",
+            once: true,
+          },
+        });
+        lines.forEach((line, index) =>
+          reveal.to(line, { yPercent: 0, duration: 1, ease: "power4.out" }, index * 0.1),
+        );
+      });
+
       // Touch screens have no hover, so the item crossing the middle of the
       // screen lights up lime instead (data-active), following the scroll.
       media.add("(hover: none)", () => {
@@ -74,9 +98,10 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
 
         items.forEach((item) => {
           ScrollTrigger.create({
-            // The <li> is exactly one line tall; the inline span's box is
-            // taller and overlaps the next line, lighting up two at once
-            trigger: item.parentElement,
+            // The <li> is exactly one line tall (the inline span's box is
+            // taller and overlaps the next line) and, unlike the content
+            // inside it, never moves during the line reveal
+            trigger: item.closest("li"),
             start: "top center",
             end: "bottom center",
             onToggle: (self) =>
@@ -129,18 +154,23 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
         className="my-auto ml-auto flex flex-wrap justify-end gap-x-[0.8em] overflow-x-clip pt-12 text-right text-[10vw] leading-[1.1] tracking-tight text-white/20 md:max-w-[80vw] md:pt-16 md:text-[4.5vw]"
       >
         {expertise.map((name) => (
-          <li key={name} className="relative">
-            <span
-              data-tech
-              className="transition-colors duration-300 hover:text-lime-400 data-active:text-lime-400"
-            >
-              {name}
-            </span>
-            <span
-              aria-hidden="true"
-              className="absolute top-0 left-full w-[0.8em] text-center"
-            >
-              /
+          // overflow-y-clip makes the <li> the mask for the line reveal (only
+          // vertically, so the "/" outside it still shows); the padding and
+          // matching negative margin keep descenders (g, j, p) inside it
+          <li key={name} className="-my-[0.1em] overflow-y-clip py-[0.1em]">
+            <span className="relative inline-block">
+              <span
+                data-tech
+                className="transition-colors duration-300 hover:text-lime-400 data-active:text-lime-400"
+              >
+                {name}
+              </span>
+              <span
+                aria-hidden="true"
+                className="absolute top-0 left-full w-[0.8em] text-center"
+              >
+                /
+              </span>
             </span>
           </li>
         ))}
