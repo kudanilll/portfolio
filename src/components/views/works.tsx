@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { works } from "@/data/works";
 import { useGSAP } from "@gsap/react";
+import { LinkButton } from "@/components/ui/link-button";
 import WorkImage from "@/components/ui/work-image";
 import gsap from "gsap";
 
@@ -18,20 +19,28 @@ type WorksViewProps = {
 
 export default function WorksView({ lang }: WorksViewProps) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const locale = lang.lang === "id" ? "id" : "en";
 
   useGSAP(
     () => {
       const root = rootRef.current;
+      const title = titleRef.current;
+      const scroller = scrollerRef.current;
       const track = trackRef.current;
-      if (!root || !track) return;
+      if (!root || !title || !scroller || !track) return;
 
+      // The title fills white from left to right (--fill) with the progress
+      // through the works: the pinned horizontal scroll on desktop, the
+      // native horizontal swipe on mobile.
       const media = gsap.matchMedia();
       media.add("(min-width: 768px)", () => {
         const distance = () =>
           Math.max(0, track.scrollWidth - window.innerWidth);
         const timeline = gsap.timeline({
+          defaults: { ease: "none" },
           scrollTrigger: {
             trigger: root,
             start: "top top",
@@ -42,7 +51,23 @@ export default function WorksView({ lang }: WorksViewProps) {
           },
         });
 
-        timeline.to(track, { x: () => -distance(), ease: "none" });
+        timeline
+          .to(track, { x: () => -distance() })
+          .to(title, { "--fill": "100%" }, 0);
+      });
+
+      media.add("(max-width: 767.98px)", () => {
+        gsap.to(title, {
+          "--fill": "100%",
+          ease: "none",
+          scrollTrigger: {
+            scroller,
+            horizontal: true,
+            start: 0,
+            end: "max",
+            scrub: true,
+          },
+        });
       });
 
       return () => media.revert();
@@ -55,11 +80,17 @@ export default function WorksView({ lang }: WorksViewProps) {
       ref={rootRef}
       className="relative h-dvh w-full overflow-hidden bg-[#0a0a0a] text-white"
     >
-      <h2 className="pointer-events-none absolute left-8 top-[8vh] z-0 max-w-[90vw] md:text-[6vw] tracking-tight text-white/20">
+      <h2
+        ref={titleRef}
+        className="pointer-events-none absolute left-8 top-[8vh] z-0 max-w-[90vw] md:text-[6vw] tracking-tight [--fill:0%] bg-[linear-gradient(90deg,#fff_var(--fill),rgb(255_255_255/0.2)_var(--fill))] bg-clip-text text-transparent"
+      >
         {lang.works_section.title}
       </h2>
 
-      <div className="h-full overflow-x-auto overflow-y-hidden no-scrollbar md:overflow-hidden">
+      <div
+        ref={scrollerRef}
+        className="h-full overflow-x-auto overflow-y-hidden no-scrollbar md:overflow-hidden"
+      >
         <div
           ref={trackRef}
           className="flex h-full w-max snap-x snap-mandatory items-center gap-[15vw] px-[14vw] md:gap-[20vw] md:px-[20vw]"
@@ -88,17 +119,10 @@ export default function WorksView({ lang }: WorksViewProps) {
                   <h3 className="ml-[-8%] text-[16vw] leading-none tracking-tight md:ml-[-35%] md:text-[6vw]">
                     {work.title}
                   </h3>
-                  <div className="mt-4 ml-[7%] flex items-center gap-3 text-base tracking-wide md:ml-[-10%]">
-                    <span className="border-b border-current pb-1">
-                      {work.category}
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className="transition-transform duration-300 group-hover:translate-x-1"
-                    >
-                      ↗
-                    </span>
-                  </div>
+                  {/* No onClick: renders a label driven by the card link's hover */}
+                  <LinkButton className="mt-2 ml-[7%] text-xl md:ml-[-10%] opacity-75 group-hover:opacity-100">
+                    {work.category}
+                  </LinkButton>
                 </div>
               </a>
             </article>
