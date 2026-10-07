@@ -35,7 +35,8 @@ const socials = [
   },
 ];
 
-const displayText = `${bebasNeue.className} block text-end text-[24vw] md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.025em] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase opacity-70 md:opacity-100 will-change-transform`;
+// Mobile size makes the wider line, "CREATIVE ✦" (~3.53em), fill the padded width
+const displayText = `${bebasNeue.className} block text-end text-[calc((100vw-2rem)/3.55)] md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.025em] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase will-change-transform`;
 
 function ResumeButton({ lang }: { lang: any }) {
   const label = lang.home_section.button_text;
@@ -183,9 +184,11 @@ export default function HeroView({ lang }: { lang: any }) {
 
       // Mobile: the title starts hidden below the hero and rises with the
       // scroll to the center, keeping its two staggered lines. CSS anchors it
-      // at left/top 50%; xPercent/yPercent center it on that point.
+      // at left/top 50%; xPercent/yPercent center it on that point. x: 0
+      // drops any px translate GSAP parses from a leftover transform when
+      // this re-runs (StrictMode, breakpoint change), which doubled the shift.
       media.add("(max-width: 767.98px)", () => {
-        gsap.set(wrapper, { xPercent: -50, yPercent: -50 });
+        gsap.set(wrapper, { x: 0, xPercent: -50, yPercent: -50 });
 
         heroTimeline()
           .to(leftArea, { xPercent: -30, opacity: 0 }, 0)
