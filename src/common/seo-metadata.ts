@@ -1,60 +1,73 @@
 import type { Metadata } from "next";
+import { locales, type AppLocale } from "@/common/i18n";
+import { expertise } from "@/data/expertise";
 import { works } from "@/data/works";
 
-export const locales = ["en", "id"] as const;
-
-/** Must stay in sync with `defaultLocale` in src/proxy.ts. */
-export const defaultLocale = "en" as const;
-
-export type AppLocale = (typeof locales)[number];
-
 const siteUrl = "https://achmaddaniel.nielcode.com";
+/** Every language is served at this one URL (see src/proxy.ts). */
+const pageUrl = `${siteUrl}/`;
 const siteName = "Achmad Daniel Syahputra";
 const personName = "Achmad Daniel Syahputra";
-const defaultOgImage = `${siteUrl}/assets/images/og.webp`;
 const profileImage = `${siteUrl}/assets/images/achmad-daniel.webp`;
+const ogImage = "/assets/images/og-image.png";
+const ogImageSmall = "/assets/images/og-image-800-600.png";
+
+// Set when the page is built, so it moves with every deploy
+const lastModified = new Date().toISOString();
+
+const ids = {
+  person: `${siteUrl}/#person`,
+  website: `${siteUrl}/#website`,
+  webpage: `${siteUrl}/#webpage`,
+  works: `${siteUrl}/#works`,
+  organization: "https://nielcode.com/#organization",
+};
 
 const localizedSeo = {
   en: {
     locale: "en_US",
-    // Lead with the full name: that is the query the old domain,
-    // LinkedIn and GitHub currently win. Keep it under ~60 chars.
-    title: "Achmad Daniel Syahputra | Software Engineer, Bekasi",
+    // Name first: it is the query this page wins. Keep it under ~60 chars.
+    title: "Achmad Daniel Syahputra | Creative Developer, Bekasi",
     description:
-      "Portfolio of Achmad Daniel Syahputra, a software engineer in Bekasi, Indonesia building fast websites, Android apps and scalable backends with Next.js, Go and Flutter.",
+      "Achmad Daniel Syahputra is a creative developer in Bekasi, Indonesia, building fast websites, Android apps and backends with Next.js, GSAP, Flutter and Go.",
     siteDescription:
-      "Explore selected work, services, and technical expertise in web development, mobile engineering, and IoT-focused solutions.",
+      "Selected web and mobile projects by Achmad Daniel Syahputra, a creative developer in Bekasi, and the stack he builds them with.",
+    worksName: "Selected works",
+    ogImageAlt:
+      "Achmad Daniel Syahputra in white type on black, with a lime asterisk and lime shapes",
     keywords: [
-      "Achmad Daniel",
       "Achmad Daniel Syahputra",
-      "programmer",
-      "software developer",
-      "web developer Indonesia",
-      "Flutter developer",
+      "Achmad Daniel",
+      "creative developer",
+      "creative developer Indonesia",
+      "frontend developer Bekasi",
       "Next.js developer",
-      "portfolio website",
-      "software engineer portfolio",
-      "IoT developer",
+      "GSAP developer",
+      "Android developer",
+      "Flutter developer",
+      "software engineer Indonesia",
     ],
   },
   id: {
     locale: "id_ID",
-    title: "Achmad Daniel Syahputra | Software Engineer Bekasi",
+    title: "Achmad Daniel Syahputra | Creative Developer Bekasi",
     description:
-      "Portofolio Achmad Daniel Syahputra, software engineer asal Bekasi, Indonesia yang membangun website cepat, aplikasi Android, dan backend scalable dengan Next.js, Go, dan Flutter.",
+      "Achmad Daniel Syahputra, creative developer asal Bekasi yang membangun website cepat, aplikasi Android, dan backend dengan Next.js, GSAP, Flutter, dan Go.",
     siteDescription:
-      "Jelajahi proyek pilihan, layanan, dan keahlian teknis di bidang pengembangan web, pengembangan aplikasi mobile, dan solusi berbasis IoT.",
+      "Proyek web dan mobile pilihan dari Achmad Daniel Syahputra, creative developer di Bekasi, beserta teknologi yang ia pakai.",
+    worksName: "Pekerjaan pilihan",
+    ogImageAlt:
+      "Tulisan Achmad Daniel Syahputra berwarna putih di atas hitam, dengan tanda bintang dan bentuk berwarna lime",
     keywords: [
-      "Achmad Daniel",
       "Achmad Daniel Syahputra",
-      "programmer",
-      "software developer",
-      "web developer Indonesia",
+      "Achmad Daniel",
+      "creative developer",
       "jasa pembuatan website",
-      "developer Flutter",
+      "web developer Bekasi",
       "developer Next.js",
-      "portfolio programmer",
-      "developer IoT",
+      "developer Android",
+      "developer Flutter",
+      "software engineer Indonesia",
     ],
   },
 } satisfies Record<
@@ -64,69 +77,38 @@ const localizedSeo = {
     title: string;
     description: string;
     siteDescription: string;
+    worksName: string;
+    ogImageAlt: string;
     keywords: string[];
   }
 >;
 
-const socialProfiles = [
+export const socialProfiles = [
   "https://github.com/kudanilll",
   "https://www.linkedin.com/in/achmaddaniel",
   "https://www.instagram.com/achmaddaniel__",
   "https://x.com/achmaddaniel24",
 ];
 
-function normalizePath(path = "") {
-  if (!path || path === "/") return "";
-  return path.startsWith("/") ? path : `/${path}`;
-}
-
 export function getSiteUrl() {
   return siteUrl;
 }
 
-export function getLocalizedUrl(lang: AppLocale, path = "") {
-  return `${siteUrl}/${lang}${normalizePath(path)}`;
-}
-
-export function getLanguageAlternates(path = "") {
-  return {
-    // Broad language targets first: "en"/"id" match any region,
-    // so an Indonesian user in Singapore still gets the /id page.
-    en: getLocalizedUrl("en", path),
-    id: getLocalizedUrl("id", path),
-    // x-default MUST resolve with HTTP 200. Pointing it at the bare
-    // siteUrl was the bug: "/" 301-redirects to "/en", so Google kept
-    // crawling a URL it could never index ("Crawled - currently not
-    // indexed" in Search Console). defaultLocale in proxy.ts is "en".
-    "x-default": getLocalizedUrl(defaultLocale, path),
-  };
-}
-
-export function buildSeoMetadata({
-  lang,
-  path = "",
-  title,
-  description,
-}: {
-  lang: AppLocale;
-  path?: string;
-  title?: string;
-  description?: string;
-}): Metadata {
+export function buildSeoMetadata({ lang }: { lang: AppLocale }): Metadata {
   const seo = localizedSeo[lang];
-  const canonicalUrl = getLocalizedUrl(lang, path);
-  const resolvedTitle = title ?? seo.title;
-  const resolvedDescription = description ?? seo.description;
+  const otherLocales = locales
+    .filter((locale) => locale !== lang)
+    .map((locale) => localizedSeo[locale].locale);
 
   return {
     metadataBase: new URL(siteUrl),
-    title: resolvedTitle,
-    description: resolvedDescription,
+    title: seo.title,
+    description: seo.description,
     applicationName: siteName,
     referrer: "origin-when-cross-origin",
     category: "technology",
     keywords: seo.keywords,
-    authors: [{ name: personName, url: siteUrl }],
+    authors: [{ name: personName, url: pageUrl }],
     creator: personName,
     publisher: personName,
     formatDetection: {
@@ -136,34 +118,32 @@ export function buildSeoMetadata({
     },
     icons: {
       icon: "/favicon.ico",
-      apple: "/favicon.ico",
+      apple: "/assets/images/icon-512.png",
     },
-    alternates: {
-      canonical: canonicalUrl,
-      languages: getLanguageAlternates(path),
-    },
+    // One URL for every language, so no hreflang alternates: the canonical
+    // is the root, and search engines index the default language there.
+    alternates: { canonical: "/" },
     openGraph: {
-      type: "website",
+      type: "profile",
+      firstName: "Achmad Daniel",
+      lastName: "Syahputra",
       locale: seo.locale,
-      url: canonicalUrl,
+      alternateLocale: otherLocales,
+      url: "/",
       siteName,
-      title: resolvedTitle,
-      description: resolvedDescription,
+      title: seo.title,
+      description: seo.description,
       images: [
-        {
-          url: defaultOgImage,
-          width: 1200,
-          height: 630,
-          alt: `${resolvedTitle} Open Graph Image`,
-        },
+        { url: ogImage, width: 1200, height: 630, alt: seo.ogImageAlt, type: "image/png" },
+        { url: ogImageSmall, width: 800, height: 600, alt: seo.ogImageAlt, type: "image/png" },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: resolvedTitle,
-      description: resolvedDescription,
+      title: seo.title,
+      description: seo.description,
       creator: "@achmaddaniel24",
-      images: [defaultOgImage],
+      images: [{ url: ogImage, alt: seo.ogImageAlt }],
     },
     robots: {
       index: true,
@@ -184,126 +164,116 @@ export function buildSeoMetadata({
   };
 }
 
+/** JSON-LD for the home page, as one @graph so the entities can reference each other. */
 export function getHomeStructuredData(lang: AppLocale) {
   const seo = localizedSeo[lang];
-  const pageUrl = getLocalizedUrl(lang);
 
-  return [
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "@id": `${siteUrl}#person`,
-      name: personName,
-      givenName: "Achmad Daniel",
-      familyName: "Syahputra",
-      alternateName: ["Achmad Daniel", "kudanilll", "Nielcode"],
-      url: getLocalizedUrl(lang),
-      mainEntityOfPage: { "@id": `${getLocalizedUrl(lang)}#webpage` },
-      image: {
-        "@type": "ImageObject",
-        url: profileImage,
-        caption: personName,
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": ids.person,
+        name: personName,
+        givenName: "Achmad Daniel",
+        familyName: "Syahputra",
+        alternateName: ["Achmad Daniel", "kudanilll"],
+        url: pageUrl,
+        mainEntityOfPage: { "@id": ids.webpage },
+        image: {
+          "@type": "ImageObject",
+          url: profileImage,
+          caption: personName,
+        },
+        jobTitle: "Creative Developer",
+        description: seo.description,
+        email: "mailto:hello.achmaddaniel@gmail.com",
+        sameAs: socialProfiles,
+        // Local signals: this is what lets "web developer Bekasi" style
+        // queries connect the entity to a place.
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Bekasi",
+          addressRegion: "Jawa Barat",
+          addressCountry: "ID",
+        },
+        nationality: { "@type": "Country", name: "Indonesia" },
+        knowsLanguage: [
+          { "@type": "Language", name: "Indonesian", alternateName: "id" },
+          { "@type": "Language", name: "English", alternateName: "en" },
+        ],
+        // Same list as the expertise section, so the two never drift apart
+        knowsAbout: [
+          "Creative Development",
+          "Frontend Development",
+          "Android Development",
+          ...expertise,
+        ],
+        worksFor: { "@id": ids.organization },
       },
-      jobTitle: "Software Engineer",
-      description: seo.description,
-      email: "mailto:hello.achmaddaniel@gmail.com",
-      sameAs: socialProfiles,
-      // Local signals: this is what lets "web developer Bekasi" style
-      // queries connect the entity to a place.
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Bekasi",
-        addressRegion: "Jawa Barat",
-        addressCountry: "ID",
-      },
-      nationality: { "@type": "Country", name: "Indonesia" },
-      knowsLanguage: [
-        { "@type": "Language", name: "Indonesian", alternateName: "id" },
-        { "@type": "Language", name: "English", alternateName: "en" },
-      ],
-      knowsAbout: [
-        "Web Development",
-        "Mobile App Development",
-        "Next.js",
-        "React",
-        "Flutter",
-        "Kotlin",
-        "TypeScript",
-        "Go",
-        "PostgreSQL",
-        "Docker",
-        "Internet of Things",
-      ],
-      worksFor: {
+      {
         "@type": "Organization",
-        "@id": "https://nielcode.com#organization",
+        "@id": ids.organization,
         name: "Nielcode",
         url: "https://nielcode.com",
+        founder: { "@id": ids.person },
+        areaServed: { "@type": "Country", name: "Indonesia" },
       },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "@id": "https://nielcode.com#organization",
-      name: "Nielcode",
-      url: "https://nielcode.com",
-      founder: { "@id": `${siteUrl}#person` },
-      areaServed: { "@type": "Country", name: "Indonesia" },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "@id": `${siteUrl}#website`,
-      url: siteUrl,
-      name: siteName,
-      description: seo.siteDescription,
-      inLanguage: lang,
-      publisher: {
-        "@id": `${siteUrl}#person`,
+      {
+        "@type": "WebSite",
+        "@id": ids.website,
+        url: pageUrl,
+        name: siteName,
+        description: seo.siteDescription,
+        inLanguage: [...locales],
+        publisher: { "@id": ids.person },
       },
-    },
-    {
-      "@context": "https://schema.org",
-      // ProfilePage is the correct type for a page that IS a person's
-      // profile. WebPage is generic and tells Google nothing extra.
-      "@type": "ProfilePage",
-      "@id": `${pageUrl}#webpage`,
-      url: pageUrl,
-      name: seo.title,
-      description: seo.description,
-      inLanguage: lang,
-      isPartOf: { "@id": `${siteUrl}#website` },
-      about: { "@id": `${siteUrl}#person` },
-      mainEntity: { "@id": `${siteUrl}#person` },
-      primaryImageOfPage: {
-        "@type": "ImageObject",
-        url: defaultOgImage,
-      },
-      hasPart: { "@id": `${pageUrl}#works` },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "@id": `${pageUrl}#works`,
-      name: lang === "id" ? "Proyek Pilihan" : "Selected Works",
-      numberOfItems: works.length,
-      itemListOrder: "https://schema.org/ItemListOrderAscending",
-      itemListElement: works.map((work, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        item: {
-          "@type": "CreativeWork",
-          "@id": `${pageUrl}#work-${work.title.toLowerCase()}`,
-          name: work.title,
-          description: work.description[lang],
-          url: work.href,
-          image: `${siteUrl}${work.image}`,
-          genre: work.category,
-          inLanguage: lang,
-          author: { "@id": `${siteUrl}#person` },
-          creator: { "@id": `${siteUrl}#person` },
+      {
+        // ProfilePage is the correct type for a page that IS a person's
+        // profile. WebPage is generic and tells Google nothing extra.
+        "@type": "ProfilePage",
+        "@id": ids.webpage,
+        url: pageUrl,
+        name: seo.title,
+        description: seo.description,
+        inLanguage: lang,
+        dateModified: lastModified,
+        isPartOf: { "@id": ids.website },
+        about: { "@id": ids.person },
+        mainEntity: { "@id": ids.person },
+        primaryImageOfPage: {
+          "@type": "ImageObject",
+          url: `${siteUrl}${ogImage}`,
+          width: 1200,
+          height: 630,
         },
-      })),
-    },
-  ];
+        hasPart: { "@id": ids.works },
+      },
+      {
+        "@type": "ItemList",
+        "@id": ids.works,
+        name: seo.worksName,
+        numberOfItems: works.length,
+        itemListOrder: "https://schema.org/ItemListOrderAscending",
+        itemListElement: works.map((work, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          item: {
+            "@type": "CreativeWork",
+            "@id": `${siteUrl}/#work-${work.title.toLowerCase()}`,
+            name: work.title,
+            description: work.description[lang],
+            url: work.href,
+            image: `${siteUrl}${work.image}`,
+            genre: work.category,
+            inLanguage: lang,
+            author: { "@id": ids.person },
+            creator: { "@id": ids.person },
+          },
+        })),
+      },
+    ],
+  };
 }
+
+export { lastModified };

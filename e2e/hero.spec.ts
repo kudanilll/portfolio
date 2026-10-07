@@ -37,7 +37,7 @@ function heroTitle(page: Page) {
 }
 
 async function openHome(page: Page) {
-  await page.goto("/en");
+  await page.goto("/");
   // The intro resets scroll to the top on mount and locks Lenis until it finishes
   await expect(page.getByTestId("intro-curtain")).toBeHidden();
 }
@@ -120,7 +120,7 @@ test("hero has no nested scroll containers (no stray scroll indicator)", async (
 });
 
 test("hero has no horizontal overflow", async ({ page }) => {
-  await page.goto("/en");
+  await page.goto("/");
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - window.innerWidth,
   );

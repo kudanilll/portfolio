@@ -228,7 +228,7 @@ export default function HeroView({ lang }: { lang: any }) {
         ref={bgRef}
         className="absolute top-0 w-full h-svh md:h-screen overflow-hidden flex flex-col z-0"
       >
-        <NavigationBar />
+        <NavigationBar lang={lang.lang} />
         <div
           className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-position-[50%_20%] md:bg-center opacity-45 md:opacity-30 pointer-events-none"
           style={{ backgroundImage: "url('/assets/images/background.webp')" }}

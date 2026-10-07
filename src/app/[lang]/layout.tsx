@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { layGrotesk } from "@/common/font";
 import { Analytics } from "@vercel/analytics/next";
-import { buildSeoMetadata, type AppLocale } from "@/common/seo-metadata";
+import type { AppLocale } from "@/common/i18n";
+import { buildSeoMetadata } from "@/common/seo-metadata";
 import "@/app/globals.css";
 
 export async function generateStaticParams() {

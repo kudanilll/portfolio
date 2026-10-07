@@ -2,9 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import { isMobileViewport } from "@/hooks/use-is-mobile";
-import { useRouter } from "next/navigation";
+import { localeCookie, localeCookieMaxAge, type AppLocale } from "@/common/i18n";
 import { useLenis } from "lenis/react";
 import gsap from "gsap";
+
+type LocaleSwitchEvent = CustomEvent<{ locale: AppLocale }>;
+
+/** Every language shares one URL: remember the choice, then reload. */
+function switchLocale(locale: AppLocale) {
+  document.cookie = `${localeCookie}=${locale}; path=/; max-age=${localeCookieMaxAge}; samesite=lax`;
+  window.location.reload();
+}
 
 /**
  * Intro curtain animation:
@@ -19,7 +27,6 @@ export default function IntroAnimation() {
   const topBlocksRef = useRef<(HTMLDivElement | null)[]>([]);
   const bottomBlocksRef = useRef<(HTMLDivElement | null)[]>([]);
   const [isActive, setIsActive] = useState(true);
-  const router = useRouter();
   const lenis = useLenis();
 
   // Lenis scrolls programmatically, so body overflow alone can't lock it
@@ -33,7 +40,15 @@ export default function IntroAnimation() {
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const raf = requestAnimationFrame(() => setIsActive(false));
-      return () => cancelAnimationFrame(raf);
+      // No curtain to close: switch the language straight away
+      const switchNow = (e: Event) =>
+        switchLocale((e as LocaleSwitchEvent).detail.locale);
+      window.addEventListener("page-transition", switchNow);
+
+      return () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("page-transition", switchNow);
+      };
     }
 
     document.body.style.overflow = "hidden";
@@ -107,9 +122,9 @@ export default function IntroAnimation() {
       }
     }, containerRef);
 
+    // Close the curtain, then switch the language behind it
     const handlePageTransition = (e: Event) => {
-      const customEvent = e as CustomEvent<{ href: string }>;
-      const href = customEvent.detail.href;
+      const { locale } = (e as LocaleSwitchEvent).detail;
 
       sessionStorage.setItem("skipIntroDelay", "true");
       setIsActive(true);
@@ -118,9 +133,7 @@ export default function IntroAnimation() {
       setTimeout(() => {
         gsap.context(() => {
           const outTl = gsap.timeline({
-            onComplete: () => {
-              router.push(href);
-            },
+            onComplete: () => switchLocale(locale),
           });
 
           const isMobile = isMobileViewport();
@@ -174,7 +187,7 @@ export default function IntroAnimation() {
       window.removeEventListener("page-transition", handlePageTransition);
       ctx.revert();
     };
-  }, [router]);
+  }, []);
 
   return (
     <div

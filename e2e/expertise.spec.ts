@@ -20,7 +20,7 @@ async function revealList(page: Page) {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/en");
+  await page.goto("/");
   await expect(page.getByTestId("intro-curtain")).toBeHidden();
 });
 

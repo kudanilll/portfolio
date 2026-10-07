@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 for (const width of [320, 390, 768, 1280, 1440, 1920]) {
   test(`services lines fit at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto("/en");
+    await page.goto("/");
     await expect(page.getByTestId("intro-curtain")).toBeHidden();
 
     // Measure the settled layout: before the reveal, the characters sit
@@ -28,7 +28,7 @@ for (const width of [320, 390, 768, 1280, 1440, 1920]) {
 // line scrolls into view, including after the ScrollTrigger refresh on load,
 // and every character must be fully shown once the section has been passed.
 test("services characters reveal on scroll", async ({ page }) => {
-  await page.goto("/en");
+  await page.goto("/");
   await expect(page.getByTestId("intro-curtain")).toBeHidden();
 
   // Transforms (the slide and skew) are ignored on inline boxes

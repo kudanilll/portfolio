@@ -5,7 +5,7 @@ const fill = (page: Page) =>
   title(page).evaluate((el) => getComputedStyle(el).getPropertyValue("--fill"));
 
 async function openHome(page: Page) {
-  await page.goto("/en");
+  await page.goto("/");
   await expect(page.getByTestId("intro-curtain")).toBeHidden();
 }
 

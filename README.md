@@ -1,6 +1,6 @@
 # Hi 👋 Welcome to My Digital Playground
 
-![Portfolio Preview](public/assets/images/og.webp)
+![Portfolio Preview](public/assets/images/og-image.png)
 
 ## About This Portfolio
 
@@ -15,7 +15,7 @@ Live at [achmaddaniel.nielcode.com](https://achmaddaniel.nielcode.com), availabl
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
 - **Animations**: GSAP (ScrollTrigger), Lenis smooth scroll, and OGL for WebGL effects
-- **i18n**: `/en` and `/id` routes with locale detection in `src/proxy.ts`
+- **i18n**: English and Indonesian on one URL (`/`). `src/proxy.ts` picks the language from a cookie or the browser and rewrites to the prerendered page; the EN/ID switch sets the cookie. Search engines get English.
 - **Deploy**: Vercel
 
 ## Getting Started

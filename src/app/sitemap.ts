@@ -1,21 +1,21 @@
 import type { MetadataRoute } from "next";
-import {
-  getLanguageAlternates,
-  getLocalizedUrl,
-  locales,
-} from "@/common/seo-metadata";
+import { getSiteUrl, lastModified } from "@/common/seo-metadata";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
+  const siteUrl = getSiteUrl();
 
-  // Only self-canonical, HTTP 200 URLs belong here. The bare "/" is
-  // deliberately absent: it 301-redirects to the negotiated locale, so
-  // listing it just feeds Google a URL it can never index.
-  return locales.map((lang) => ({
-    url: getLocalizedUrl(lang),
-    lastModified,
-    alternates: {
-      languages: getLanguageAlternates(),
+  // Every language is served at "/" (see src/proxy.ts), so the site is a
+  // single URL. The old /en and /id URLs 301 to it and stay out of here.
+  return [
+    {
+      url: `${siteUrl}/`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 1,
+      images: [
+        `${siteUrl}/assets/images/og-image.png`,
+        `${siteUrl}/assets/images/achmad-daniel.webp`,
+      ],
     },
-  }));
+  ];
 }

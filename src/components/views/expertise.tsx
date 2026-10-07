@@ -101,13 +101,16 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
         );
 
         items.forEach((item) => {
+          const li = item.closest("li")!;
+          // The <li> line box never moves during the line reveal (its content
+          // does). Its 0.1em mask padding overlaps the neighbouring lines, so
+          // trim it off, or two lines would light up at once.
+          const pad = () => parseFloat(getComputedStyle(li).paddingTop);
+
           ScrollTrigger.create({
-            // The <li> is exactly one line tall (the inline span's box is
-            // taller and overlaps the next line) and, unlike the content
-            // inside it, never moves during the line reveal
-            trigger: item.closest("li"),
-            start: "top center",
-            end: "bottom center",
+            trigger: li,
+            start: () => `top+=${pad()} center`,
+            end: () => `bottom-=${pad()} center`,
             onToggle: (self) =>
               item.toggleAttribute("data-active", self.isActive),
           });

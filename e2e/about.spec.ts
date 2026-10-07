@@ -6,7 +6,7 @@ import { expect, test } from "@playwright/test";
 test("about photo reveals through its WebGL canvas", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/en");
+  await page.goto("/");
   await expect(page.getByTestId("intro-curtain")).toBeHidden();
 
   const photo = page.locator("#about img:visible");
@@ -20,7 +20,7 @@ test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 
   test("about photo stays a plain image", async ({ page }) => {
-    await page.goto("/en");
+    await page.goto("/");
     await expect(page.getByTestId("intro-curtain")).toBeHidden();
     const photo = page.locator("#about img:visible");
     await photo.scrollIntoViewIfNeeded();

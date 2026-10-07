@@ -1,10 +1,14 @@
 import { match } from "@formatjs/intl-localematcher";
 import { NextRequest, NextResponse } from "next/server";
 import Negotiator from "negotiator";
-
-const locales = ["en", "id"] as const;
-const defaultLocale = "en";
-const cookieName = "i18nlang";
+import {
+  defaultLocale,
+  isLocale,
+  localeCookie,
+  localeCookieMaxAge,
+  locales,
+  type AppLocale,
+} from "@/common/i18n";
 
 // Normalize legacy tag: 'in' (Old Indonesian) -> 'id'
 function normalizeLangTag(tag: string) {
@@ -12,72 +16,66 @@ function normalizeLangTag(tag: string) {
   return tag.replace(/^in(-|$)/i, "id$1");
 }
 
-function getLocale(request: NextRequest): (typeof locales)[number] {
-  const cookieVal = request.cookies.get(cookieName)?.value;
-  if (cookieVal && (locales as readonly string[]).includes(cookieVal)) {
-    return cookieVal as (typeof locales)[number];
+function getLocale(request: NextRequest): AppLocale {
+  const cookie = request.cookies.get(localeCookie)?.value;
+  if (isLocale(cookie)) return cookie;
+
+  const acceptLanguage = request.headers.get("accept-language");
+  if (!acceptLanguage) return defaultLocale;
+
+  const languages = new Negotiator({
+    headers: { "accept-language": acceptLanguage },
+  })
+    .languages()
+    .map(normalizeLangTag);
+
+  try {
+    return match(languages, [...locales], defaultLocale) as AppLocale;
+  } catch {
+    // match() throws on tags that are not valid locales, e.g. the
+    // "Accept-Language: *" some bots and HTTP clients send
+    return defaultLocale;
   }
-
-  const acceptLang = request.headers.get("accept-language") ?? "";
-  if (!acceptLang) return defaultLocale;
-
-  const headers = { "accept-language": acceptLang };
-  const raw = new Negotiator({ headers }).languages();
-  const languages = raw.map(normalizeLangTag);
-
-  return match(
-    languages,
-    locales as unknown as string[],
-    defaultLocale,
-  ) as (typeof locales)[number];
 }
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isPublicFile =
-    [
-      "/sitemap.xml",
-      "/robots.txt",
-      "/favicon.ico",
-      "/assets",
-    ].some((path) => pathname === path || pathname.startsWith(path)) ||
-    /^\/google[a-z0-9]+\.html$/i.test(pathname) ||
-    pathname.includes(".");
-
-  if (isPublicFile) {
-    return NextResponse.next();
-  }
-
-  const hasLocalePrefix = locales.some(
-    (loc) => pathname === `/${loc}` || pathname.startsWith(`/${loc}/`),
+  // Old /en and /id URLs (bookmarks, backlinks, the previous sitemap) move
+  // permanently to the same path without the prefix, keeping their language.
+  const prefix = locales.find(
+    (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
+  if (prefix) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.slice(prefix.length + 1) || "/";
 
-  if (hasLocalePrefix) {
-    return NextResponse.next();
+    const res = NextResponse.redirect(url, 301);
+    res.cookies.set({
+      name: localeCookie,
+      value: prefix,
+      path: "/",
+      maxAge: localeCookieMaxAge,
+      sameSite: "lax",
+    });
+    return res;
   }
 
-  const locale = getLocale(request);
+  // Every language lives at the same URL: serve the prerendered /{locale}
+  // page without changing the address bar.
+  // Caching caveat: "/" goes out with a long s-maxage and Next overrides any
+  // Vary header we set. Vercel is fine (its cache stores the /en and /id
+  // rewrite targets separately), but a CDN or reverse proxy that caches HTML
+  // by URL alone would serve one language to everyone; bypass it for HTML.
   const url = request.nextUrl.clone();
-  url.pathname = `/${locale}${pathname}`;
+  url.pathname = `/${getLocale(request)}${pathname}`;
 
-  const res = NextResponse.redirect(url, 301);
-
-  res.cookies.set({
-    name: cookieName,
-    value: locale,
-    path: "/",
-    maxAge: 60 * 60 * 24 * 180,
-    sameSite: "lax",
-  });
-
-  return res;
+  return NextResponse.rewrite(url);
 }
 
-// Backward compatibility
-export const middleware = proxy;
-
 export const config = {
+  // Skips Next internals and every file with an extension (assets, robots.txt,
+  // sitemap.xml, llms.txt, Search Console verification files)
   matcher: [
     "/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|.*\\..*).*)",
   ],

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import {
-  buildSeoMetadata,
-  getHomeStructuredData,
-  type AppLocale,
-} from "@/common/seo-metadata";
+import type { AppLocale } from "@/common/i18n";
+import { buildSeoMetadata, getHomeStructuredData } from "@/common/seo-metadata";
 // import Marquee from "react-fast-marquee";
 // import Footer from "@/components/partials/footer";
 import PageClientLayout from "@/components/partials/page-client-layout";
@@ -29,17 +26,18 @@ export default async function Page(props: {
   const params = await props.params;
   const lang = params.lang as AppLocale;
   const t = await getDictionary(lang);
-  const structuredData = getHomeStructuredData(lang);
+  // "<" is escaped so no string in the data can close the <script> early
+  const structuredData = JSON.stringify(getHomeStructuredData(lang)).replace(
+    /</g,
+    "\\u003c",
+  );
 
   return (
     <div>
-      {structuredData.map((schema, index) => (
-        <script
-          key={`${lang}-schema-${index}`}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: structuredData }}
+      />
 
       <IntroAnimation key={lang} />
 
