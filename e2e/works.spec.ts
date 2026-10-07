@@ -18,7 +18,7 @@ test("title fills white with the pinned horizontal scroll (desktop)", async ({
 
   // The pin lasts as long as the track overflows the viewport
   const { top, distance } = await title(page).evaluate((el) => {
-    const section = el.parentElement!;
+    const section = el.closest("section")!;
     const track = section.querySelector("article")!.parentElement!;
     return {
       top: section.getBoundingClientRect().top + scrollY,
@@ -33,18 +33,36 @@ test("title fills white with the pinned horizontal scroll (desktop)", async ({
   await expect.poll(() => fill(page)).toBe("100%");
 });
 
-test("title fills white with the horizontal swipe (mobile)", async ({
+test("works stack vertically and reveal lime first (mobile)", async ({
   page,
   isMobile,
 }) => {
-  test.skip(!isMobile, "mobile swipes the track natively");
+  test.skip(!isMobile, "mobile lists the works vertically");
   await openHome(page);
-  await title(page).scrollIntoViewIfNeeded();
-  await expect.poll(() => fill(page)).toBe("0%");
 
-  await title(page).evaluate((el) => {
-    const scroller = el.nextElementSibling!;
-    scroller.scrollLeft = scroller.scrollWidth;
+  // Plain white title (no scroll fill on mobile)
+  expect(await fill(page)).toBe("100%");
+
+  // Cards follow each other down the page, nothing scrolls sideways
+  const cardTops = await page
+    .locator("article")
+    .evaluateAll((cards) => cards.map((card) => card.getBoundingClientRect().top));
+  expect(cardTops).toEqual([...cardTops].sort((a, b) => a - b));
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
+
+  // Mid-reveal, the lime panel is ahead of the image (less of it is clipped)
+  const card = page.locator("article").first();
+  await card.evaluate((el) => {
+    window.scrollTo(0, el.getBoundingClientRect().top + scrollY - innerHeight * 0.65);
   });
-  await expect.poll(() => fill(page)).toBe("100%");
+  await expect
+    .poll(() =>
+      card.evaluate((el) => {
+        const panel = el.querySelector("[data-reveal-panel]")!;
+        const inset = (node: Element) =>
+          parseFloat(getComputedStyle(node).clipPath.replace("inset(", "")) || 0;
+        return inset(panel) < inset(panel.nextElementSibling!);
+      }),
+    )
+    .toBe(true);
 });
