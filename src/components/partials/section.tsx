@@ -5,11 +5,10 @@ import WorksView from "@/components/views/works";
 import AboutView from "@/components/views/about";
 import ServicesView from "@/components/views/services";
 import ExpertiseView from "@/components/views/expertise";
-import ContactView from "@/components/views/contact";
 import QuoteView from "@/components/views/quote";
 
 type Props = {
-  id: "hero" | "works" | "about" | "services" | "expertise" | "quote" | "contact";
+  id: "hero" | "works" | "about" | "services" | "expertise" | "quote";
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   lang: any;
 };
@@ -21,7 +20,6 @@ const Views = {
   services: ServicesView,
   expertise: ExpertiseView,
   quote: QuoteView,
-  contact: ContactView,
 };
 
 // Sections that pin their content need a block parent: GSAP turns pin

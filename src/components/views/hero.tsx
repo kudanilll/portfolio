@@ -12,28 +12,25 @@ import { useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
+import { socials } from "@/data/socials";
 import NavigationBar from "@/components/partials/navbar";
 import gsap from "gsap";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const socials = [
-  {
-    href: "https://www.instagram.com/achmaddaniel__",
-    label: "Instagram: @achmaddaniel__",
-    Icon: InstagramLogoIcon,
-  },
-  {
-    href: "https://github.com/kudanilll",
-    label: "GitHub: @kudanilll",
-    Icon: GithubLogoIcon,
-  },
-  {
-    href: "https://www.linkedin.com/in/achmaddaniel",
-    label: "LinkedIn: Achmad Daniel Syahputra",
-    Icon: LinkedinLogoIcon,
-  },
-];
+// The hero shows the profiles that have an icon here
+const socialIcons: Record<string, typeof InstagramLogoIcon> = {
+  Instagram: InstagramLogoIcon,
+  GitHub: GithubLogoIcon,
+  LinkedIn: LinkedinLogoIcon,
+};
+const heroSocials = socials
+  .filter(({ name }) => name in socialIcons)
+  .map(({ name, handle, href }) => ({
+    href,
+    label: `${name}: ${handle}`,
+    Icon: socialIcons[name],
+  }));
 
 // Mobile size makes the wider line, "CREATIVE ✦" (~3.53em), fill the padded width
 const displayText = `${bebasNeue.className} block text-end text-[calc((100vw-2rem)/3.55)] md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.025em] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase will-change-transform`;
@@ -70,7 +67,7 @@ function ResumeButton({ lang }: { lang: any }) {
 function SocialLinks({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      {socials.map(({ href, label, Icon }) => (
+      {heroSocials.map(({ href, label, Icon }) => (
         <a
           key={href}
           href={href}
@@ -289,7 +286,7 @@ export default function HeroView({ lang }: { lang: any }) {
               {lang.home_section.location}, Indonesia
             </p>
             <p className="text-neutral-600 text-base md:text-[clamp(1rem,1vw,1.8rem)] font-medium">
-              {lang.contact_section.title_2}
+              {lang.contact_section.title}
             </p>
           </div>
           <SocialLinks className="hidden md:flex" />

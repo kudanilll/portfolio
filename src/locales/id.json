@@ -34,10 +34,14 @@
   "quote_section": {
     "quote": "the possibilities are endless, the only limit is my imagination"
   },
+  "cta_section": {
+    "first": ["Desain Anda", "tidak akan jadi", "AI slop"],
+    "second": ["Tetap enak", "dilihat, tetap", "nyaman dipakai"]
+  },
   "contact_section": {
-    "title_1": "Hubungi Saya",
-    "title_2": "Mari kita bekerja sama",
-    "button": "Kontak",
-    "message": "Saya tertarik bekerja sama dengan Anda."
+    "eyebrow": "Punya ide proyek?",
+    "title": "Mari bekerja sama",
+    "body": "Ceritakan proyek Anda, atau sekadar menyapa.",
+    "subject": "Mari bekerja sama"
   }
 }

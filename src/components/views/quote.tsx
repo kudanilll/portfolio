@@ -5,13 +5,22 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { sparklePath } from "@/components/svg/sparkle";
+import { CtaText } from "@/components/views/cta";
 import gsap from "gsap";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 type QuoteViewProps = {
-  lang: { quote_section: { quote: string } };
+  lang: {
+    quote_section: { quote: string };
+    cta_section: { first: string[]; second: string[] };
+  };
 };
+
+/** Scroll distance (px) of the text slide, the star growing, the CTA swap. */
+const SLIDE = 5000;
+const GROW = 1500;
+const SWAP = 1500;
 
 export default function QuoteView({ lang }: QuoteViewProps) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -39,9 +48,21 @@ export default function QuoteView({ lang }: QuoteViewProps) {
           ignore: "[data-star]",
         });
         const star = text.querySelector<HTMLElement>("[data-star]")!;
+        // The path, not the <svg>: GSAP gives an HTML-level <svg> a 3D
+        // transform, which puts it on its own GPU layer, and the browser then
+        // stretches its small bitmap (blurry). An SVG child is always redrawn.
+        const starShape = star.querySelector("path")!;
 
-        // The slide stops with the closing star in the middle of the screen.
-        // offsetLeft ignores transforms, so a refresh mid-scroll still works.
+        // One pin covers both phases; each phase scrubs its own range
+        const pin = ScrollTrigger.create({
+          trigger: root,
+          pin: true,
+          start: "top top",
+          end: `+=${SLIDE + GROW + SWAP}`,
+        });
+
+        // Phase 1: the slide stops with the closing star in the middle of the
+        // screen. offsetLeft ignores transforms, so a refresh mid-scroll works.
         const starCenter = () => star.offsetLeft + star.offsetWidth / 2;
 
         const scrollTween = gsap.to(text, {
@@ -49,12 +70,86 @@ export default function QuoteView({ lang }: QuoteViewProps) {
           ease: "none",
           scrollTrigger: {
             trigger: root,
-            pin: true,
-            end: "+=5000px",
+            start: "top top",
+            end: `+=${SLIDE}`,
             scrub: true,
             invalidateOnRefresh: true,
           },
         });
+
+        // Phase 2: the star grows, turning a little, until the screen is all
+        // lime, the backdrop for the CTA.
+        // The star's waist is ~0.18 of its size from the centre, so that
+        // circle must reach the section's corners: diagonal / (0.36 × size),
+        // with a little margin. The section, not the window: it is lvh tall,
+        // taller than the window while a phone shows its address bar.
+        gsap.to(starShape, {
+          scale: () =>
+            Math.hypot(root.offsetWidth, root.offsetHeight) /
+            (star.offsetWidth * 0.34),
+          rotation: 45,
+          transformOrigin: "50% 50%",
+          ease: "power2.in",
+          scrollTrigger: {
+            trigger: root,
+            start: () => pin.start + SLIDE,
+            end: () => pin.start + SLIDE + GROW,
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // Phase 3, the CTA: the moment the screen is all lime, the first
+        // text rises in on its own clock (the expertise list's reveal), with
+        // no scrolling needed. Scrolling on rolls each row over to the second
+        // text; a row's old and new line move up together, like one strip.
+        const [first, second] = [...root.querySelectorAll("[data-cta-text]")];
+        const lines = first.querySelectorAll("[data-cta-line]");
+        const reveal = gsap.from(lines, {
+          yPercent: 100,
+          duration: 1,
+          ease: "power4.out",
+          stagger: 0.1,
+          paused: true,
+        });
+        const ctaStart = () => pin.start + SLIDE + GROW;
+
+        // Scrolling back into the grow drops the text out fast. Reversing
+        // the reveal would hold it in place for half a second (power4.out is
+        // flat at the end) over a star that is already shrinking.
+        let hide: gsap.core.Tween | undefined;
+        ScrollTrigger.create({
+          trigger: root,
+          start: ctaStart,
+          end: () => pin.end,
+          onEnter: () => {
+            hide?.kill();
+            reveal.restart();
+          },
+          onLeaveBack: () => {
+            reveal.pause();
+            hide = gsap.to(lines, {
+              yPercent: 100,
+              duration: 0.25,
+              ease: "power2.in",
+            });
+          },
+        });
+
+        const roll = { duration: 0.5, stagger: 0.12, ease: "power2.inOut" };
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: root,
+              start: ctaStart,
+              end: () => pin.end,
+              scrub: true,
+            },
+          })
+          .to(first.querySelectorAll("[data-cta-roll]"), { yPercent: -100, ...roll }, 0.3)
+          .from(second.querySelectorAll("[data-cta-roll]"), { yPercent: 100, ...roll }, 0.3)
+          // Hold the second text for a moment before the pin lets go
+          .to({}, { duration: 0.3 });
 
         [...chars, star].forEach((char) => {
           gsap.from(char, {
@@ -81,13 +176,12 @@ export default function QuoteView({ lang }: QuoteViewProps) {
   return (
     // With motion the text is one long line that starts just off screen
     // (pl-[100vw]); with reduced motion it simply wraps and stays put.
-    // min-h-lvh, not svh: this is the last section, so the page ends with it.
-    // When a phone hides its address bar the screen grows, and with an
-    // svh-tall section the page would end ~56px before the pin does, leaving
-    // the slide unfinished (the ✦ short of the centre).
+    // min-h-lvh, not svh: the pinned box must fill the screen even when a
+    // phone hides its address bar (the screen grows ~56px), or the grown star
+    // would leave a dark strip at the bottom.
     <div
       ref={rootRef}
-      className="relative flex min-h-lvh w-full items-center overflow-hidden"
+      className="relative flex min-h-lvh w-full items-center overflow-hidden motion-reduce:flex-col motion-reduce:gap-32 motion-reduce:pt-32"
     >
       <p
         ref={textRef}
@@ -107,12 +201,13 @@ export default function QuoteView({ lang }: QuoteViewProps) {
           <svg
             viewBox="0 0 100 100"
             aria-hidden="true"
-            className="block size-[0.8em]"
+            className="block size-[0.8em] overflow-visible"
           >
             <path d={sparklePath} fill="currentColor" />
           </svg>
         </span>
       </p>
+      <CtaText lang={lang} />
     </div>
   );
 }

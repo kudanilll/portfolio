@@ -34,10 +34,14 @@
   "quote_section": {
     "quote": "the possibilities are endless, the only limit is my imagination"
   },
+  "cta_section": {
+    "first": ["Your design", "won't end up", "as AI slop"],
+    "second": ["Easy on", "the eyes,", "easy to use"]
+  },
   "contact_section": {
-    "title_1": "Contact Me",
-    "title_2": "Let's Work Together",
-    "button": "Contact",
-    "message": "I am interested in working with you."
+    "eyebrow": "Got a project in mind?",
+    "title": "Let's work together",
+    "body": "Tell me what you're building, or just say hi.",
+    "subject": "Let's work together"
   }
 }

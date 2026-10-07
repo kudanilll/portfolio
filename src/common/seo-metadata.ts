@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { locales, type AppLocale } from "@/common/i18n";
 import { expertise } from "@/data/expertise";
+import { email, socials } from "@/data/socials";
 import { works } from "@/data/works";
 
 const siteUrl = "https://achmaddaniel.nielcode.com";
@@ -83,12 +84,7 @@ const localizedSeo = {
   }
 >;
 
-export const socialProfiles = [
-  "https://github.com/kudanilll",
-  "https://www.linkedin.com/in/achmaddaniel",
-  "https://www.instagram.com/achmaddaniel__",
-  "https://x.com/achmaddaniel24",
-];
+export const socialProfiles = socials.map((social) => social.href);
 
 export function getSiteUrl() {
   return siteUrl;
@@ -142,7 +138,6 @@ export function buildSeoMetadata({ lang }: { lang: AppLocale }): Metadata {
       card: "summary_large_image",
       title: seo.title,
       description: seo.description,
-      creator: "@achmaddaniel24",
       images: [{ url: ogImage, alt: seo.ogImageAlt }],
     },
     robots: {
@@ -187,7 +182,7 @@ export function getHomeStructuredData(lang: AppLocale) {
         },
         jobTitle: "Creative Developer",
         description: seo.description,
-        email: "mailto:hello.achmaddaniel@gmail.com",
+        email: `mailto:${email}`,
         sameAs: socialProfiles,
         // Local signals: this is what lets "web developer Bekasi" style
         // queries connect the entity to a place.

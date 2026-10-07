@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { AppLocale } from "@/common/i18n";
 import { buildSeoMetadata, getHomeStructuredData } from "@/common/seo-metadata";
 // import Marquee from "react-fast-marquee";
-// import Footer from "@/components/partials/footer";
+import Footer from "@/components/partials/footer";
 import PageClientLayout from "@/components/partials/page-client-layout";
 import Section from "@/components/partials/section";
 import CursorPointer from "@/components/ui/cursor-pointer";
@@ -48,6 +48,7 @@ export default async function Page(props: {
         <Section id="works" lang={t}></Section>
         <Section id="expertise" lang={t}></Section>
         <Section id="quote" lang={t}></Section>
+        <Footer lang={t} />
 
         {/* <div className="md:translate-y-0 translate-y-[5svh] transform-gpu will-change-transform z-10">
           <Marquee>
@@ -75,8 +76,6 @@ export default async function Page(props: {
               backgroundImage: "url('/assets/images/background.webp')",
             }}
           ></div>
-          <Section id="contact" lang={t}></Section>
-          <Footer />
         </div> */}
       </PageClientLayout>
 
