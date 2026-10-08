@@ -13,7 +13,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
 import { socials } from "@/data/socials";
+import { sparklePath } from "@/components/svg/sparkle";
 import NavigationBar from "@/components/partials/navbar";
+import HeroBackground from "@/components/ui/hero-background";
 import gsap from "gsap";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -96,6 +98,7 @@ export default function HeroView({ lang }: { lang: any }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const creativeRef = useRef<HTMLSpanElement>(null);
   const developerRef = useRef<HTMLSpanElement>(null);
+  const starRef = useRef<SVGSVGElement>(null);
 
   useGSAP(
     () => {
@@ -104,7 +107,9 @@ export default function HeroView({ lang }: { lang: any }) {
       const wrapper = wrapperRef.current;
       const creative = creativeRef.current;
       const developer = developerRef.current;
-      if (!bg || !leftArea || !wrapper || !creative || !developer) return;
+      const star = starRef.current;
+      if (!bg || !leftArea || !wrapper || !creative || !developer || !star)
+        return;
 
       // 1. Background & text layer stays pinned for 250% while the footer
       // and the next section slide over it (pinSpacing: false keeps it out of the flow).
@@ -176,7 +181,8 @@ export default function HeroView({ lang }: { lang: any }) {
             0,
           )
           .to(creative, { x: () => layout().creativeX, yPercent: 50 }, 0)
-          .to(developer, { x: () => layout().developerX, yPercent: -50 }, 0);
+          .to(developer, { x: () => layout().developerX, yPercent: -50 }, 0)
+          .to(star, { rotation: 180, transformOrigin: "50% 50%" }, 0);
       });
 
       // Mobile: the title starts hidden below the hero and rises with the
@@ -197,7 +203,8 @@ export default function HeroView({ lang }: { lang: any }) {
             },
             { y: 0, autoAlpha: 1 },
             0,
-          );
+          )
+          .to(star, { rotation: 180, transformOrigin: "50% 50%" }, 0);
       });
 
       return () => media.revert();
@@ -226,10 +233,7 @@ export default function HeroView({ lang }: { lang: any }) {
         className="absolute top-0 w-full h-svh md:h-screen overflow-hidden flex flex-col z-0"
       >
         <NavigationBar lang={lang.lang} />
-        <div
-          className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] bg-cover bg-position-[50%_20%] md:bg-center opacity-45 md:opacity-30 pointer-events-none"
-          style={{ backgroundImage: "url('/assets/images/background.webp')" }}
-        />
+        <HeroBackground className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] opacity-45 md:opacity-30 pointer-events-none" />
 
         {/* Mobile: name block is vertically centered in the visible background (88svh) */}
         <div className="flex-1 flex flex-col justify-center md:justify-start w-screen px-4 md:px-8 pb-[12svh] md:pb-0 md:pt-[12vh] z-10">
@@ -262,7 +266,16 @@ export default function HeroView({ lang }: { lang: any }) {
             <span ref={creativeRef} className={displayText}>
               <span className="flex flex-row items-center space-x-2 justify-end">
                 <DockText text="CREATIVE" />
-                <span className="text-lime-400">✦</span>
+                {/* The site sparkle, as tall as the line (0.8em on desktop):
+                    any taller and the merged title would shift */}
+                <svg
+                  ref={starRef}
+                  viewBox="0 0 100 100"
+                  aria-hidden="true"
+                  className="size-[0.8em] shrink-0 text-lime-400"
+                >
+                  <path d={sparklePath} fill="currentColor" />
+                </svg>
               </span>
             </span>
             <span ref={developerRef} className={displayText}>
@@ -281,11 +294,11 @@ export default function HeroView({ lang }: { lang: any }) {
           {/* Subpixel gap fix: overhang to cover GSAP pin-spacer rounding errors */}
           <div className="absolute -bottom-0.5 left-0 w-full h-1 bg-[#0a0a0a]" />
 
-          <div className="flex flex-col -space-y-1 uppercase">
-            <p className="text-neutral-400 text-lg md:text-[clamp(1rem,1.3vw,1.8rem)] font-semibold">
+          <div className="flex flex-col -space-y-1">
+            <p className="text-neutral-300 text-2xl md:text-4xl md:tracking-tight">
               {lang.home_section.location}, Indonesia
             </p>
-            <p className="text-neutral-600 text-base md:text-[clamp(1rem,1vw,1.8rem)] font-medium">
+            <p className="text-neutral-600 text-2xl md:text-4xl md:tracking-tight">
               {lang.contact_section.title}
             </p>
           </div>

@@ -1,11 +1,6 @@
 {
   "lang": "en",
-  "page": {
-    "title": "Achmad Daniel | Software Engineer",
-    "desc": "Achmad Daniel's Portfolio"
-  },
   "home_section": {
-    "desc": "i am always excited to create innovative solutions and engaging user experiences",
     "button_text": "Resume",
     "role": "Creative Developer and Software Engineer",
     "location": "Based in Bekasi"
@@ -18,25 +13,14 @@
     "title": "Expertise"
   },
   "works_section": {
-    "title": "Selected works",
-    "desc": "I build beautiful projects with the latest technologies and frameworks. I am a passionate developer and designer that loves to build amazing projects.",
-    "project_1": "Nielcode is a platform for hiring website and application development services.",
-    "project_2": "Kunime is a free anime streaming app tailored for Indonesian viewers, featuring Indonesian subtitles and a smooth UI.",
-    "project_3": "Kupass is an open-source password manager for Android, designed with security and convenience in mind.",
-    "project_4": "Favget is a high-performance backend for fetching and delivering favicons across domains with global caching/CDN."
-  },
-  "service_section": {
-    "title": "— Solutions I build for your business",
-    "mobile": "Production-ready Android/iOS apps that feel fast and polished. I handle flows, development, testing, and store release—plus analytics & crash reporting—so you can focus on growth.",
-    "web": "High-converting, high-performance websites & web apps: clean architecture, responsive UI, SEO, API/CMS integrations, and security best practices. From landing pages to dashboards, built to scale.",
-    "iot": "End-to-end IoT solutions: sensors to cloud, real-time data, automation, and monitoring dashboards. Outcome: leaner operations and data-driven decisions."
+    "title": "Selected works"
   },
   "quote_section": {
     "quote": "the possibilities are endless, the only limit is my imagination"
   },
   "cta_section": {
-    "first": ["Your design", "won't end up", "as AI slop"],
-    "second": ["Easy on", "the eyes,", "easy to use"]
+    "first": ["No AI slop.", "Every pixel", "is on purpose"],
+    "second": ["Looks good,", "feels even", "better"]
   },
   "contact_section": {
     "eyebrow": "Got a project in mind?",

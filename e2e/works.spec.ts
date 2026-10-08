@@ -72,3 +72,23 @@ test("works stack vertically and reveal lime first (mobile)", async ({
     )
     .toBe(true);
 });
+
+test("a work's hover image loads on the first hover only (desktop)", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "hover only");
+  await openHome(page);
+
+  await title(page).evaluate((el) => {
+    window.scrollTo(0, el.closest("section")!.getBoundingClientRect().top + scrollY);
+  });
+  const figure = page.locator("article figure").first();
+  const canvas = figure.locator("canvas");
+  // Nothing set up (no WebGL, no hover image download) before a hover
+  await expect(canvas).toHaveCSS("opacity", "0");
+
+  const box = (await figure.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, { steps: 4 });
+  await expect(canvas).toHaveCSS("opacity", "1");
+});

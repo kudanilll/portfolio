@@ -105,8 +105,16 @@ export default function QuoteView({ lang }: QuoteViewProps) {
         // text; a row's old and new line move up together, like one strip.
         const [first, second] = [...root.querySelectorAll("[data-cta-text]")];
         const lines = first.querySelectorAll("[data-cta-line]");
+        // Each line rises with a slight tilt that settles, so the big type
+        // does not move like stiff blocks. 120%, not 100%: a tilted line's
+        // high corner would otherwise peek over the bottom of its mask.
+        const hidden = {
+          yPercent: 120,
+          rotation: 3,
+          transformOrigin: "50% 100%",
+        };
         const reveal = gsap.from(lines, {
-          yPercent: 100,
+          ...hidden,
           duration: 1,
           ease: "power4.out",
           stagger: 0.1,
@@ -129,7 +137,7 @@ export default function QuoteView({ lang }: QuoteViewProps) {
           onLeaveBack: () => {
             reveal.pause();
             hide = gsap.to(lines, {
-              yPercent: 100,
+              ...hidden,
               duration: 0.25,
               ease: "power2.in",
             });
@@ -146,8 +154,16 @@ export default function QuoteView({ lang }: QuoteViewProps) {
               scrub: true,
             },
           })
-          .to(first.querySelectorAll("[data-cta-roll]"), { yPercent: -100, ...roll }, 0.3)
-          .from(second.querySelectorAll("[data-cta-roll]"), { yPercent: 100, ...roll }, 0.3)
+          .to(
+            first.querySelectorAll("[data-cta-roll]"),
+            { yPercent: -100, ...roll },
+            0.3,
+          )
+          .from(
+            second.querySelectorAll("[data-cta-roll]"),
+            { yPercent: 100, ...roll },
+            0.3,
+          )
           // Hold the second text for a moment before the pin lets go
           .to({}, { duration: 0.3 });
 
@@ -175,7 +191,9 @@ export default function QuoteView({ lang }: QuoteViewProps) {
 
   return (
     // With motion the text is one long line that starts just off screen
-    // (pl-[100vw]); with reduced motion it simply wraps and stays put.
+    // (pl, 0.5em past 100vw: a scattered, tilted first letter would otherwise
+    // poke in while the section above is still on screen); with reduced
+    // motion it simply wraps and stays put.
     // min-h-lvh, not svh: the pinned box must fill the screen even when a
     // phone hides its address bar (the screen grows ~56px), or the grown star
     // would leave a dark strip at the bottom.
@@ -188,7 +206,7 @@ export default function QuoteView({ lang }: QuoteViewProps) {
         data-quote
         // Padding is split by motion-reduce/motion-safe so a breakpoint
         // padding (md:px-8) can't override the off-screen start
-        className="text-[26vw] leading-[1.1] tracking-tight md:text-[clamp(3rem,13vw,15rem)] motion-reduce:px-4 md:motion-reduce:px-8 motion-safe:flex motion-safe:w-max motion-safe:gap-[0.4em] motion-safe:whitespace-nowrap motion-safe:pl-[100vw]"
+        className="text-[26vw] leading-[1.1] tracking-tight md:text-[clamp(3rem,13vw,15rem)] motion-reduce:px-4 md:motion-reduce:px-8 motion-safe:flex motion-safe:w-max motion-safe:gap-[0.4em] motion-safe:whitespace-nowrap motion-safe:pl-[calc(100vw+0.5em)]"
       >
         {lang.quote_section.quote}{" "}
         {/* An SVG rather than the "✦" character: the font has no ✦ glyph,

@@ -1,11 +1,6 @@
 import localFont from "next/font/local";
 import { Bebas_Neue } from "next/font/google";
 
-const satoshi = localFont({
-  src: "./fonts/Satoshi.ttf",
-  display: "swap",
-});
-
 const layGrotesk = localFont({
   src: "./fonts/laygrotesk-regular.otf",
   display: "swap",
@@ -17,4 +12,4 @@ const bebasNeue = Bebas_Neue({
   weight: "400",
 });
 
-export { satoshi, layGrotesk, bebasNeue };
+export { layGrotesk, bebasNeue };

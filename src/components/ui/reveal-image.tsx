@@ -4,22 +4,12 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from "gsap";
-import { Mesh, Program, Renderer, Texture, Triangle, Vec2 } from "ogl";
+import { Texture, Vec2 } from "ogl";
 import Image, { type ImageProps } from "next/image";
+import { createQuad } from "@/lib/gl";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-const vertex = /* glsl */ `
-  attribute vec2 uv;
-  attribute vec2 position;
-  varying vec2 vUv;
-
-  void main() {
-    vUv = uv;
-    gl_Position = vec4(position, 0.0, 1.0);
-  }
-`;
 
 // Pixel-grid reveal from the Codrops "gsap-threejs" demo
 // (E:\Animmaster\Scroll Animation\11), shader copied with smaller squares: the
@@ -109,10 +99,11 @@ const fragment = /* glsl */ `
 
 // next/image whose picture appears with the pixel-grid reveal each time it
 // scrolls into view (same toggleActions as the demo: it replays on re-entry).
-// A WebGL canvas covers the <img> box with the same classes (grayscale,
-// scale-…), so framing is unchanged; the <img> is hidden only once the canvas
-// has drawn. The parent must be positioned. Reduced motion, a hidden
-// breakpoint copy, or a WebGL failure simply keep the plain image.
+// A WebGL canvas with the same classes (scale-…) covers the <img> box while
+// the reveal plays, then hands back to the <img>: CSS scales the canvas
+// bitmap, which blurs it, while the browser draws the <img> sharp. The parent
+// must be positioned. Reduced motion, a hidden breakpoint copy, or a WebGL
+// failure simply keep the plain image.
 export default function RevealImage({ className, alt, ...props }: ImageProps) {
   const imageRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -123,36 +114,37 @@ export default function RevealImage({ className, alt, ...props }: ImageProps) {
       const canvas = canvasRef.current;
       if (!image || !canvas || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      let renderer: Renderer | undefined;
-      let program: Program | undefined;
-      let geometry: Triangle | undefined;
+      let quad: ReturnType<typeof createQuad> | undefined;
       let tween: gsap.core.Tween | undefined;
-      let render = () => {};
       const progress = { value: 0 };
+      const render = () => quad?.render();
+      const showCanvas = (revealing: boolean) => {
+        gsap.set(canvas, { opacity: revealing ? 1 : 0 });
+        gsap.set(image, { opacity: revealing ? 0 : 1 });
+      };
 
       const setup = () => {
         try {
-          // premultipliedAlpha matches three.js, which the demo renders with.
-          renderer = new Renderer({ canvas, alpha: true, premultipliedAlpha: true, dpr: Math.min(window.devicePixelRatio, 2) });
-          const gl = renderer.gl;
           const uniforms = {
-            uTexture: { value: new Texture(gl, { image, generateMipmaps: false, minFilter: gl.LINEAR }) },
+            uTexture: { value: undefined as Texture | undefined },
             uResolution: { value: new Vec2(image.naturalWidth, image.naturalHeight) },
             uContainerRes: { value: new Vec2(1, 1) },
             uProgress: progress,
             uColor: { value: [0x24 / 255, 0x24 / 255, 0x24 / 255] },
           };
-          geometry = new Triangle(gl);
-          program = new Program(gl, { vertex, fragment, uniforms, depthTest: false, depthWrite: false });
-          const mesh = new Mesh(gl, { geometry, program });
-          render = () => renderer?.render({ scene: mesh });
+          // premultipliedAlpha matches three.js, which the demo renders with.
+          quad = createQuad(canvas, fragment, uniforms, { premultipliedAlpha: true });
+          const { gl } = quad;
+          uniforms.uTexture.value = new Texture(gl, { image, generateMipmaps: false, minFilter: gl.LINEAR });
 
           // Drawn only while the tween runs: nothing loops at rest.
           tween = gsap.to(progress, {
             value: 1,
             duration: 1.6,
             ease: "linear",
-            onUpdate: () => render(),
+            onStart: () => showCanvas(true),
+            onUpdate: render,
+            onComplete: () => showCanvas(false),
             scrollTrigger: {
               trigger: image,
               start: "top bottom",
@@ -170,16 +162,15 @@ export default function RevealImage({ className, alt, ...props }: ImageProps) {
       const fit = () => {
         const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = image;
         if (!offsetWidth || !image.complete || !image.naturalWidth) return;
-        if (!renderer) {
+        if (!quad) {
           uniforms = setup();
           if (!uniforms) return;
         }
         gsap.set(canvas, { left: offsetLeft, top: offsetTop, width: offsetWidth, height: offsetHeight });
-        renderer?.setSize(offsetWidth, offsetHeight);
+        quad?.setSize(offsetWidth, offsetHeight);
         uniforms?.uContainerRes.value.set(offsetWidth, offsetHeight);
         render();
-        gsap.set(canvas, { opacity: 1 });
-        gsap.set(image, { opacity: 0 });
+        showCanvas(tween?.progress() !== 1);
       };
 
       const observer = new ResizeObserver(fit);
@@ -195,10 +186,9 @@ export default function RevealImage({ className, alt, ...props }: ImageProps) {
         // Free the GL objects but keep the context: React reuses this canvas
         // when it remounts (StrictMode does so in dev), and a lost context
         // cannot be revived. The context goes with the canvas element.
-        const texture = uniforms?.uTexture.value.texture;
-        if (texture) renderer?.gl.deleteTexture(texture);
-        geometry?.remove();
-        program?.remove();
+        const texture = uniforms?.uTexture.value?.texture;
+        if (texture) quad?.gl.deleteTexture(texture);
+        quad?.dispose();
       };
     },
     { dependencies: [props.src], revertOnUpdate: true },

@@ -112,10 +112,7 @@ export function buildSeoMetadata({ lang }: { lang: AppLocale }): Metadata {
       address: false,
       telephone: false,
     },
-    icons: {
-      icon: "/favicon.ico",
-      apple: "/assets/images/icon-512.png",
-    },
+    icons: { icon: "/favicon.ico" },
     // One URL for every language, so no hreflang alternates: the canonical
     // is the root, and search engines index the default language there.
     alternates: { canonical: "/" },

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { isMobileViewport } from "@/hooks/use-is-mobile";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { localeCookie, localeCookieMaxAge, type AppLocale } from "@/common/i18n";
 import { useLenis } from "lenis/react";
 import gsap from "gsap";
@@ -14,18 +13,16 @@ function switchLocale(locale: AppLocale) {
   window.location.reload();
 }
 
+const halves = { top: "top-0", bottom: "bottom-0" } as const;
+const columns = ["left-0", "left-1/4", "left-2/4", "left-3/4"];
+
 /**
- * Intro curtain animation:
- * - Desktop: Split horizontal di tengah, terbagi 4 kolom vertikal (total 4 blok atas & 4 blok bawah).
- *   Membuka dari tengah (center) ke arah luar, atas meluncur ke atas dan bawah meluncur ke bawah.
- * - Mobile: Split curtain tengah (1 blok atas meluncur ke atas, 1 blok bawah meluncur ke bawah).
+ * Intro curtain, split at the middle: the top half slides up, the bottom
+ * half down. Desktop has four columns that go right to left; mobile has one
+ * full-width pair. Before a language switch it closes the same way.
  */
 export default function IntroAnimation() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mobileTopRef = useRef<HTMLDivElement>(null);
-  const mobileBottomRef = useRef<HTMLDivElement>(null);
-  const topBlocksRef = useRef<(HTMLDivElement | null)[]>([]);
-  const bottomBlocksRef = useRef<(HTMLDivElement | null)[]>([]);
   const [isActive, setIsActive] = useState(true);
   const lenis = useLenis();
 
@@ -55,71 +52,33 @@ export default function IntroAnimation() {
 
     const skipDelay = sessionStorage.getItem("skipIntroDelay") === "true";
     sessionStorage.removeItem("skipIntroDelay");
-    const delay = skipDelay ? 0 : 0.5;
+
+    // CSS shows either the mobile or the desktop blocks; move the shown ones
+    const blocks = (half: keyof typeof halves) =>
+      gsap.utils
+        .toArray<HTMLElement>(`[data-half=${half}]`, containerRef.current)
+        .filter((block) => block.offsetParent);
+
+    const move = (open: boolean, vars: gsap.TimelineVars) => {
+      const tween = {
+        duration: 0.8,
+        ease: "power4.inOut",
+        stagger: { from: open ? "end" : "start", each: 0.1 },
+      } as const;
+      return gsap
+        .timeline(vars)
+        .to(blocks("top"), { ...tween, yPercent: open ? -100 : 0 }, 0)
+        .to(blocks("bottom"), { ...tween, yPercent: open ? 100 : 0 }, 0);
+    };
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
+      move(true, {
+        delay: skipDelay ? 0 : 0.5,
         onComplete: () => {
           document.body.style.overflow = "";
           setIsActive(false);
         },
       });
-
-      // Hold sebentar sebelum mulai buka
-      tl.to({}, { duration: delay });
-
-      const isMobile = isMobileViewport();
-
-      if (isMobile) {
-        // Mobile: Split atas & bawah dari tengah
-        tl.to(
-          mobileTopRef.current,
-          {
-            yPercent: -100,
-            duration: 0.8,
-            ease: "power4.inOut",
-          },
-          delay,
-        ).to(
-          mobileBottomRef.current,
-          {
-            yPercent: 100,
-            duration: 0.8,
-            ease: "power4.inOut",
-          },
-          delay,
-        );
-      } else {
-        // Desktop: 4 blok ke atas & 4 blok ke bawah, animasi berurutan dari kanan ke kiri
-        const topBlocks = topBlocksRef.current.filter(Boolean);
-        const bottomBlocks = bottomBlocksRef.current.filter(Boolean);
-
-        tl.to(
-          topBlocks,
-          {
-            yPercent: -100,
-            duration: 0.8,
-            ease: "power4.inOut",
-            stagger: {
-              from: "end",
-              each: 0.1,
-            },
-          },
-          delay,
-        ).to(
-          bottomBlocks,
-          {
-            yPercent: 100,
-            duration: 0.8,
-            ease: "power4.inOut",
-            stagger: {
-              from: "end",
-              each: 0.1,
-            },
-          },
-          delay,
-        );
-      }
     }, containerRef);
 
     // Close the curtain, then switch the language behind it
@@ -130,54 +89,10 @@ export default function IntroAnimation() {
       setIsActive(true);
       document.body.style.overflow = "hidden";
 
+      // Wait for React to remove the 'hidden' class
       setTimeout(() => {
-        gsap.context(() => {
-          const outTl = gsap.timeline({
-            onComplete: () => switchLocale(locale),
-          });
-
-          const isMobile = isMobileViewport();
-
-          if (isMobile) {
-            outTl
-              .to(
-                mobileTopRef.current,
-                { yPercent: 0, duration: 0.8, ease: "power4.inOut" },
-                0,
-              )
-              .to(
-                mobileBottomRef.current,
-                { yPercent: 0, duration: 0.8, ease: "power4.inOut" },
-                0,
-              );
-          } else {
-            const topBlocks = topBlocksRef.current.filter(Boolean);
-            const bottomBlocks = bottomBlocksRef.current.filter(Boolean);
-
-            outTl
-              .to(
-                topBlocks,
-                {
-                  yPercent: 0,
-                  duration: 0.8,
-                  ease: "power4.inOut",
-                  stagger: { from: "start", each: 0.1 },
-                },
-                0,
-              )
-              .to(
-                bottomBlocks,
-                {
-                  yPercent: 0,
-                  duration: 0.8,
-                  ease: "power4.inOut",
-                  stagger: { from: "start", each: 0.1 },
-                },
-                0,
-              );
-          }
-        }, containerRef);
-      }, 10); // Wait for React to remove 'hidden' class
+        ctx.add(() => move(false, { onComplete: () => switchLocale(locale) }));
+      }, 10);
     };
 
     window.addEventListener("page-transition", handlePageTransition);
@@ -196,67 +111,21 @@ export default function IntroAnimation() {
       className={`fixed inset-0 z-9999 ${isActive ? "" : "hidden"}`}
       aria-hidden="true"
     >
-      {/* Mobile: Split 2 blok (atas & bawah) */}
-      <div
-        ref={mobileTopRef}
-        className="absolute top-0 left-0 w-full h-[50.5%] bg-primary md:hidden"
-      />
-      <div
-        ref={mobileBottomRef}
-        className="absolute bottom-0 left-0 w-full h-[50.5%] bg-primary md:hidden"
-      />
-
-      {/* Desktop: 4 blok ATAS (slide ke atas) */}
-      <div
-        ref={(el) => {
-          topBlocksRef.current[0] = el;
-        }}
-        className="absolute top-0 left-0 w-1/4 h-[50.5%] bg-primary hidden md:block"
-      />
-      <div
-        ref={(el) => {
-          topBlocksRef.current[1] = el;
-        }}
-        className="absolute top-0 left-1/4 w-1/4 h-[50.5%] bg-primary hidden md:block"
-      />
-      <div
-        ref={(el) => {
-          topBlocksRef.current[2] = el;
-        }}
-        className="absolute top-0 left-2/4 w-1/4 h-[50.5%] bg-primary hidden md:block"
-      />
-      <div
-        ref={(el) => {
-          topBlocksRef.current[3] = el;
-        }}
-        className="absolute top-0 left-3/4 w-1/4 h-[50.5%] bg-primary hidden md:block"
-      />
-
-      {/* Desktop: 4 blok BAWAH (slide ke bawah) */}
-      <div
-        ref={(el) => {
-          bottomBlocksRef.current[0] = el;
-        }}
-        className="absolute bottom-0 left-0 w-1/4 h-[50.5%] bg-primary hidden md:block"
-      />
-      <div
-        ref={(el) => {
-          bottomBlocksRef.current[1] = el;
-        }}
-        className="absolute bottom-0 left-1/4 w-1/4 h-[50.5%] bg-primary hidden md:block"
-      />
-      <div
-        ref={(el) => {
-          bottomBlocksRef.current[2] = el;
-        }}
-        className="absolute bottom-0 left-2/4 w-1/4 h-[50.5%] bg-primary hidden md:block"
-      />
-      <div
-        ref={(el) => {
-          bottomBlocksRef.current[3] = el;
-        }}
-        className="absolute bottom-0 left-3/4 w-1/4 h-[50.5%] bg-primary hidden md:block"
-      />
+      {(Object.keys(halves) as (keyof typeof halves)[]).map((half) => (
+        <Fragment key={half}>
+          <div
+            data-half={half}
+            className={`absolute ${halves[half]} left-0 h-[50.5%] w-full bg-primary md:hidden`}
+          />
+          {columns.map((left) => (
+            <div
+              key={left}
+              data-half={half}
+              className={`absolute ${halves[half]} ${left} hidden h-[50.5%] w-1/4 bg-primary md:block`}
+            />
+          ))}
+        </Fragment>
+      ))}
     </div>
   );
 }

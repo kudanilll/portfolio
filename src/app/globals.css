@@ -14,12 +14,3 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
-
-.slide:nth-of-type(even) {
-  background-color: #c4cdc4; /* slide-alt-bg */
-}
-
-/* Debug */
-.debug-mode * {
-  border: 1px solid red !important;
-}

@@ -84,9 +84,11 @@ export default function WorksView({ lang }: WorksViewProps) {
                 defaults: { ease: "none" },
                 scrollTrigger: {
                   trigger: article,
-                  start: "top 90%",
-                  end: "top 30%",
-                  scrub: true,
+                  // Spread over most of the screen, eased a little, so the
+                  // reveal does not rush by
+                  start: "top bottom",
+                  end: "top 15%",
+                  scrub: 0.5,
                 },
               })
               .fromTo(panel, hidden, shown)

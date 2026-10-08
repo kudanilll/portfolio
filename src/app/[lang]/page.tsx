@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { AppLocale } from "@/common/i18n";
 import { buildSeoMetadata, getHomeStructuredData } from "@/common/seo-metadata";
-// import Marquee from "react-fast-marquee";
 import Footer from "@/components/partials/footer";
 import PageClientLayout from "@/components/partials/page-client-layout";
 import Section from "@/components/partials/section";
@@ -49,37 +48,9 @@ export default async function Page(props: {
         <Section id="expertise" lang={t}></Section>
         <Section id="quote" lang={t}></Section>
         <Footer lang={t} />
-
-        {/* <div className="md:translate-y-0 translate-y-[5svh] transform-gpu will-change-transform z-10">
-          <Marquee>
-            <h1 className="font-bold text-6xl md:text-8xl overflow-hidden">
-              Web Developer <span className="text-lime-400">✦</span> Mobile
-              Developer <span className="text-lime-400">✦</span> Creative
-              Developer <span className="text-lime-400">✦</span>
-            </h1>
-          </Marquee>
-          <div className="md:hidden mt-2">
-            <Marquee direction="right">
-              <h1 className="font-bold text-6xl md:text-8xl overflow-hidden">
-                Web Developer <span className="text-lime-400">✦</span> Mobile
-                Developer <span className="text-lime-400">✦</span> Creative
-                Developer <span className="text-lime-400">✦</span>
-              </h1>
-            </Marquee>
-          </div>
-        </div>
-
-        <div className="relative">
-          <div
-            className="absolute bottom-0 left-0 w-screen h-[96svh] md:h-screen bg-cover bg-center z-0 opacity-45 md:opacity-30"
-            style={{
-              backgroundImage: "url('/assets/images/background.webp')",
-            }}
-          ></div>
-        </div> */}
       </PageClientLayout>
 
-      <CursorPointer color="#ffffffaa" style="stroke" dotSize={48} />
+      <CursorPointer />
     </div>
   );
 }

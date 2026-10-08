@@ -22,8 +22,11 @@ export default function AboutView({ lang }: { lang: any }) {
         <RevealImage
           src="/assets/images/achmad-daniel.webp"
           alt="Achmad Daniel Syahputra"
-          width={500}
-          height={500}
+          width={1043}
+          height={1508}
+          // Already squoosh-compressed (29KB): the optimizer would only
+          // compress it a second time
+          unoptimized
           style={{ height: "auto" }}
           className="scale-125"
         />
@@ -33,7 +36,9 @@ export default function AboutView({ lang }: { lang: any }) {
         <Dot />
       </div>
 
-      <div className="w-full flex justify-between relative z-10">
+      {/* pointer-events-none: this text layer spans the section and would
+          otherwise sit over the dots and swallow their hover */}
+      <div className="pointer-events-none w-full flex justify-between relative z-10">
         <div className="w-[85%] md:w-2/5 h-full"></div>
         <div className="flex flex-col">
           {/* Desktop Text */}
@@ -57,8 +62,9 @@ export default function AboutView({ lang }: { lang: any }) {
           <RevealImage
             src="/assets/images/achmad-daniel.webp"
             alt="Achmad Daniel Syahputra"
-            width={220}
-            height={330}
+            width={1043}
+            height={1508}
+            unoptimized
             className="size-full object-cover scale-125"
           />
         </div>

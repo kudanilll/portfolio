@@ -1,11 +1,6 @@
 {
   "lang": "id",
-  "page": {
-    "title": "Achmad Daniel | Software Engineer",
-    "desc": "Portofolio Achmad Daniel"
-  },
   "home_section": {
-    "desc": "selalu bersemangat untuk menciptakan solusi inovatif dan pengalaman pengguna yang menarik",
     "button_text": "Resume",
     "role": "Creative Developer dan Software Engineer",
     "location": "Berlokasi di Bekasi"
@@ -18,25 +13,14 @@
     "title": "Keahlian"
   },
   "works_section": {
-    "title": "Pekerjaan pilihan",
-    "desc": "Saya membuat projek menarik dengan teknologi terbaru. Saya adalah developer yang senang untuk membuat projek-projek menarik.",
-    "project_1": "Nielcode adalah platform untuk menyewa jasa pembuatan website dan aplikasi.",
-    "project_2": "Kunime adalah aplikasi streaming anime gratis untuk penonton Indonesia, lengkap dengan subtitle Bahasa Indonesia dan antarmuka yang ringan.",
-    "project_3": "Kupass adalah aplikasi manajer kata sandi open-source untuk Android, dirancang dengan fokus pada keamanan dan kemudahan pakai.",
-    "project_4": "Favget adalah layanan backend berperforma tinggi untuk mengambil dan menyajikan favicon dari berbagai domain dengan caching global/CDN."
-  },
-  "service_section": {
-    "title": "— Solusi yang saya bangun untuk bisnis Anda",
-    "mobile": "Aplikasi Android/iOS yang cepat, halus, dan siap produksi. Saya tangani alur, pengembangan, testing hingga rilis—plus analitik & crash reporting—agar Anda fokus ke pertumbuhan.",
-    "web": "Website & web app yang konversi dan kencang: arsitektur rapi, UI responsif, SEO, integrasi API/CMS, dan best practice keamanan. Dari landing page hingga dashboard, siap scale.",
-    "iot": "Solusi IoT end-to-end: dari sensor ke cloud, data real-time, automasi, hingga dashboard pemantauan. Hasilnya: operasi lebih efisien dan keputusan berbasis data."
+    "title": "Pekerjaan pilihan"
   },
   "quote_section": {
     "quote": "the possibilities are endless, the only limit is my imagination"
   },
   "cta_section": {
-    "first": ["Desain Anda", "tidak akan jadi", "AI slop"],
-    "second": ["Tetap enak", "dilihat, tetap", "nyaman dipakai"]
+    "first": ["Bukan AI slop.", "Tiap piksel", "ada alasannya"],
+    "second": ["Enak dilihat,", "nyaman", "dijelajahi"]
   },
   "contact_section": {
     "eyebrow": "Punya ide proyek?",
