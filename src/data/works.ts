@@ -57,8 +57,8 @@ export const works: Work[] = [
     title: "Favget",
     category: "Backend service",
     href: "https://github.com/kudanilll/favget",
-    image: "/assets/images/favget.webp",
-    hoverImage: "/assets/images/background.webp",
+    image: "/assets/images/favget-1.webp",
+    hoverImage: "/assets/images/favget-2.webp",
     hoverBackground: "#17293b",
     description: {
       en: "A fast favicon delivery service with global caching.",
