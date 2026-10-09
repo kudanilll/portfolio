@@ -34,8 +34,8 @@ const heroSocials = socials
     Icon: socialIcons[name],
   }));
 
-// Mobile size makes the wider line, "CREATIVE ✦" (~3.53em), fill the padded width
-const displayText = `${bebasNeue.className} block text-end text-[calc((100vw-2rem)/3.55)] md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.025em] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase will-change-transform`;
+// Mobile size makes the wider line, "CREATIVE ✦" (~3.44em), fill the padded width
+const displayText = `${bebasNeue.className} block text-end text-[calc((100vw-2rem)/3.45)] md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.025em] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase will-change-transform`;
 
 function ResumeButton({ lang }: { lang: any }) {
   const label = lang.home_section.button_text;
@@ -154,7 +154,8 @@ export default function HeroView({ lang }: { lang: any }) {
       // scroll, so a refresh mid-animation still measures the start layout.
       media.add("(min-width: 768px)", () => {
         const layout = () => {
-          const gap = parseFloat(getComputedStyle(creative).fontSize) * 0.1;
+          // Same 0.05em as between "CREATIVE" and the star
+          const gap = parseFloat(getComputedStyle(creative).fontSize) * 0.05;
           const mergedW = creative.offsetWidth + gap + developer.offsetWidth;
           const wrapperW = wrapper.offsetWidth;
 
@@ -264,15 +265,16 @@ export default function HeroView({ lang }: { lang: any }) {
             className="absolute max-md:left-1/2 max-md:top-1/2 max-md:w-max max-md:invisible md:bottom-[16vh] md:right-8 flex flex-col items-end will-change-transform"
           >
             <span ref={creativeRef} className={displayText}>
-              <span className="flex flex-row items-center space-x-2 justify-end">
+              <span className="flex flex-row items-center gap-[0.05em] justify-end">
                 <DockText text="CREATIVE" />
-                {/* The site sparkle, as tall as the line (0.8em on desktop):
-                    any taller and the merged title would shift */}
+                {/* The site sparkle, its points level with the capitals:
+                    Bebas caps are 0.71em tall (the star's ink is 96% of
+                    its box) and sit 0.055em above the line box's center */}
                 <svg
                   ref={starRef}
                   viewBox="0 0 100 100"
                   aria-hidden="true"
-                  className="size-[0.8em] shrink-0 text-lime-400"
+                  className="size-[0.74em] shrink-0 -translate-y-[0.055em] text-lime-400"
                 >
                   <path d={sparklePath} fill="currentColor" />
                 </svg>
