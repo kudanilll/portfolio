@@ -191,6 +191,11 @@ export default function WorkImage({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 size-full opacity-0"
       />
+      {/* A light shade at the bottom, where the title overlaps the image */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-[#0a0a0a]/60 to-transparent"
+      />
     </div>
   );
 }
