@@ -18,8 +18,8 @@ export const works: Work[] = [
     title: "Nielcode",
     category: "Web platform",
     href: "https://nielcode.com",
-    image: "/assets/images/nielcode.webp",
-    hoverImage: "/assets/images/background.webp",
+    image: "/assets/images/nielcode-1.webp",
+    hoverImage: "/assets/images/nielcode-2.webp",
     hoverBackground: "#183d2c",
     description: {
       en: "A platform for hiring website and application development services.",
