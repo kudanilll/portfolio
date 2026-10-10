@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from "gsap";
-import { cn } from "@/lib/utils";
+import { cn, inOwnTask } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -20,24 +20,29 @@ export function TextReveal({
   const textRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
-    () => {
-      gsap.fromTo(
-        "[data-word]",
-        { opacity: 0.2 },
-        {
-          opacity: 1,
-          stagger: 0.1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            pin: textRef.current,
-            start: "top top",
-            end: "bottom 80%",
-            scrub: 1,
-          },
-        },
-      );
-    },
+    // Below the fold: set up after hydration, in a task of its own
+    (_, contextSafe) =>
+      inOwnTask(
+        contextSafe!(() => {
+          // Unlit words at 40%: dimmer fails the contrast check (3:1)
+          gsap.fromTo(
+            "[data-word]",
+            { opacity: 0.4 },
+            {
+              opacity: 1,
+              stagger: 0.1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: containerRef.current,
+                pin: textRef.current,
+                start: "top top",
+                end: "bottom 80%",
+                scrub: 1,
+              },
+            },
+          );
+        }),
+      ),
     { scope: containerRef, dependencies: [children] },
   );
 
@@ -52,7 +57,7 @@ export function TextReveal({
             <span
               key={i}
               data-word
-              className="mx-1 inline-block text-white opacity-20 lg:mx-1.5"
+              className="mx-1 inline-block text-white opacity-40 lg:mx-1.5"
             >
               {word}
             </span>

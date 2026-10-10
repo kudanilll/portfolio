@@ -1,5 +1,8 @@
 import { Mesh, Program, Renderer, Triangle } from "ogl";
 
+// Callers import this module dynamically, so ogl stays out of the first load
+export { Texture } from "ogl";
+
 const vertex = /* glsl */ `
   attribute vec2 uv;
   attribute vec2 position;
@@ -13,8 +16,9 @@ const vertex = /* glsl */ `
 
 /**
  * One triangle covering `canvas`, drawn by `fragment` (which gets `vUv`):
- * the base of every WebGL effect on the page. Throws when WebGL is not
- * available, so callers can keep their plain fallback.
+ * the base of every WebGL effect on the page. Throws when there is no
+ * hardware WebGL, so callers keep their plain fallback: software rendering
+ * (no GPU, or a blocklisted one) would draw every frame on the CPU.
  */
 export function createQuad(
   canvas: HTMLCanvasElement,
@@ -25,6 +29,24 @@ export function createQuad(
     premultipliedAlpha = false,
   } = {},
 ) {
+  // Created here with the caveat flag; ogl then reuses this context
+  const attributes = {
+    alpha: true,
+    antialias: false,
+    depth: false,
+    premultipliedAlpha,
+    failIfMajorPerformanceCaveat: true,
+  };
+  const context = (canvas.getContext("webgl2", attributes) ??
+    canvas.getContext("webgl", attributes)) as WebGLRenderingContext | null;
+  // The flag alone lets Chrome's software renderer through (SwiftShader,
+  // e.g. headless Chrome and PageSpeed), so check the renderer by name too
+  const info = context?.getExtension("WEBGL_debug_renderer_info");
+  const name = context && String(context.getParameter(info?.UNMASKED_RENDERER_WEBGL ?? context.RENDERER));
+  if (!context || /swiftshader|llvmpipe|software|basic render/i.test(name ?? "")) {
+    throw new Error("No hardware-accelerated WebGL");
+  }
+
   const renderer = new Renderer({ canvas, alpha: true, premultipliedAlpha, dpr });
   const { gl } = renderer;
   const geometry = new Triangle(gl);

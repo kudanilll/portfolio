@@ -2,12 +2,12 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { Texture, Vec2 } from "ogl";
 import Image from "next/image";
 import gsap from "gsap";
-import { createQuad } from "@/lib/gl";
 
 gsap.registerPlugin(useGSAP);
+
+type Quad = ReturnType<typeof import("@/lib/gl").createQuad>;
 
 // The hover image spreads from the pointer inside a noisy circle. Both
 // images stay still: only the edge of the circle is uneven.
@@ -52,7 +52,7 @@ const fragment = /* glsl */ `
 const coverRatio = (width: number, height: number, image: HTMLImageElement) => {
   const box = width / height;
   const picture = image.naturalWidth / image.naturalHeight;
-  return box > picture ? new Vec2(1, picture / box) : new Vec2(box / picture, 1);
+  return box > picture ? [1, picture / box] : [box / picture, 1];
 };
 
 const loadImage = (src: string) =>
@@ -97,15 +97,16 @@ export default function WorkImage({
       }
 
       const progress = { value: 0 };
-      const mouse = new Vec2(0.5, 0.5);
-      let quad: ReturnType<typeof createQuad> | undefined;
+      const mouse = { value: [0.5, 0.5] };
+      let quad: Quad | undefined;
       let ready: Promise<void> | undefined;
       let disposed = false;
 
       // First hover: the base texture is the file the <img> already shows;
       // the hover image goes through the image optimizer like the <img>.
       const setup = async () => {
-        const [base, hover] = await Promise.all([
+        const [{ createQuad, Texture }, base, hover] = await Promise.all([
+          import("@/lib/gl"),
           loadImage(image.currentSrc || image.src),
           loadImage(`/_next/image?url=${encodeURIComponent(hoverSrc)}&w=1080&q=75`),
         ]);
@@ -114,7 +115,7 @@ export default function WorkImage({
         const { width, height } = root.getBoundingClientRect();
         const uniforms: Record<string, { value: unknown }> = {
           uProgress: progress,
-          uMouse: { value: mouse },
+          uMouse: mouse,
           uMapRatio: { value: coverRatio(width, height, base) },
           uHoverRatio: { value: coverRatio(width, height, hover) },
         };
@@ -152,10 +153,10 @@ export default function WorkImage({
       const leave = () => void ready?.then(() => to(0));
       const move = (event: PointerEvent) => {
         const bounds = root.getBoundingClientRect();
-        mouse.set(
+        mouse.value = [
           (event.clientX - bounds.left) / bounds.width,
           1 - (event.clientY - bounds.top) / bounds.height,
-        );
+        ];
         if (progress.value > 0 && progress.value < 1) draw();
       };
 

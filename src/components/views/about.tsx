@@ -24,9 +24,10 @@ export default function AboutView({ lang }: { lang: any }) {
           alt="Achmad Daniel Syahputra"
           width={1043}
           height={1508}
-          // Already squoosh-compressed (29KB): the optimizer would only
-          // compress it a second time
-          unoptimized
+          // Quality 90: the source is already compressed by hand. Shown at
+          // 28vw, scaled 125%
+          quality={90}
+          sizes="35vw"
           style={{ height: "auto" }}
           className="scale-125"
         />
@@ -64,7 +65,8 @@ export default function AboutView({ lang }: { lang: any }) {
             alt="Achmad Daniel Syahputra"
             width={1043}
             height={1508}
-            unoptimized
+            quality={90}
+            sizes="275px"
             className="size-full object-cover scale-125"
           />
         </div>

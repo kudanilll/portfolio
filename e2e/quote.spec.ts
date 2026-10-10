@@ -32,8 +32,11 @@ test("the text pins, drops into line and finishes with the ✦ centered", async 
   await page.goto("/");
   await expect(page.getByTestId("intro-curtain")).toBeHidden();
 
-  // Screen readers get the whole sentence, not single letters
-  await expect(text(page)).toHaveAttribute("aria-label", new RegExp(`^${quote}`));
+  // Screen readers get the whole sentence from a hidden copy; the split
+  // letters are aria-hidden (an aria-label is not allowed on a <p>)
+  await expect(text(page)).toHaveAttribute("aria-hidden", "true");
+  await expect(text(page)).not.toHaveAttribute("aria-label", /./);
+  await expect(page.locator("p.sr-only", { hasText: quote })).toHaveCount(1);
 
   const total = await text(page).locator("span:not(:has(span))").count();
   await scrollIntoQuote(page, 0);

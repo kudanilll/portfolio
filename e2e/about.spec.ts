@@ -14,9 +14,10 @@ test("about photo reveals through WebGL, then shows the sharp original", async (
   await photo.scrollIntoViewIfNeeded();
   await expect(photo.locator("xpath=following-sibling::canvas[1]")).toHaveCSS("opacity", "0");
   await expect(photo).toHaveCSS("opacity", "1");
-  // Served as is, not compressed a second time by the image optimizer
+  // Sized for the screen by the image optimizer, at quality 90 (the source
+  // is already compressed by hand)
   expect(await photo.evaluate((img: HTMLImageElement) => img.currentSrc)).toMatch(
-    /\/assets\/images\/achmad-daniel\.webp$/,
+    /achmad-daniel\.webp.*q=90/,
   );
   expect(errors).toEqual([]);
 });

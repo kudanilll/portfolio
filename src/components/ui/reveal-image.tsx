@@ -4,12 +4,12 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from "gsap";
-import { Texture, Vec2 } from "ogl";
 import Image, { type ImageProps } from "next/image";
-import { createQuad } from "@/lib/gl";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+type Gl = typeof import("@/lib/gl");
 
 // Pixel-grid reveal from the Codrops "gsap-threejs" demo
 // (E:\Animmaster\Scroll Animation\11), shader copied with smaller squares: the
@@ -114,28 +114,34 @@ export default function RevealImage({ className, alt, ...props }: ImageProps) {
       const canvas = canvasRef.current;
       if (!image || !canvas || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      let quad: ReturnType<typeof createQuad> | undefined;
+      let quad: ReturnType<Gl["createQuad"]> | undefined;
+      let texture: WebGLTexture | undefined;
       let tween: gsap.core.Tween | undefined;
+      let loading = false;
+      let disposed = false;
       const progress = { value: 0 };
+      const containerRes = { value: [1, 1] };
       const render = () => quad?.render();
       const showCanvas = (revealing: boolean) => {
         gsap.set(canvas, { opacity: revealing ? 1 : 0 });
         gsap.set(image, { opacity: revealing ? 0 : 1 });
       };
 
-      const setup = () => {
+      const setup = ({ createQuad, Texture }: Gl) => {
         try {
           const uniforms = {
-            uTexture: { value: undefined as Texture | undefined },
-            uResolution: { value: new Vec2(image.naturalWidth, image.naturalHeight) },
-            uContainerRes: { value: new Vec2(1, 1) },
+            uTexture: { value: undefined as unknown },
+            uResolution: { value: [image.naturalWidth, image.naturalHeight] },
+            uContainerRes: containerRes,
             uProgress: progress,
             uColor: { value: [0x24 / 255, 0x24 / 255, 0x24 / 255] },
           };
           // premultipliedAlpha matches three.js, which the demo renders with.
           quad = createQuad(canvas, fragment, uniforms, { premultipliedAlpha: true });
           const { gl } = quad;
-          uniforms.uTexture.value = new Texture(gl, { image, generateMipmaps: false, minFilter: gl.LINEAR });
+          const map = new Texture(gl, { image, generateMipmaps: false, minFilter: gl.LINEAR });
+          texture = map.texture;
+          uniforms.uTexture.value = map;
 
           // Drawn only while the tween runs: nothing loops at rest.
           tween = gsap.to(progress, {
@@ -152,23 +158,29 @@ export default function RevealImage({ className, alt, ...props }: ImageProps) {
               toggleActions: "play reset restart reset",
             },
           });
-          return uniforms;
         } catch {
-          return undefined; // WebGL unavailable: the plain image stays.
+          quad = undefined; // No hardware WebGL: the plain image stays.
         }
       };
 
-      let uniforms: ReturnType<typeof setup>;
       const fit = () => {
         const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = image;
         if (!offsetWidth || !image.complete || !image.naturalWidth) return;
         if (!quad) {
-          uniforms = setup();
-          if (!uniforms) return;
+          // ogl loads only once a photo is ready to reveal
+          if (!loading) {
+            loading = true;
+            void import("@/lib/gl").then((gl) => {
+              if (disposed) return;
+              setup(gl);
+              if (quad) fit();
+            });
+          }
+          return;
         }
         gsap.set(canvas, { left: offsetLeft, top: offsetTop, width: offsetWidth, height: offsetHeight });
-        quad?.setSize(offsetWidth, offsetHeight);
-        uniforms?.uContainerRes.value.set(offsetWidth, offsetHeight);
+        quad.setSize(offsetWidth, offsetHeight);
+        containerRes.value = [offsetWidth, offsetHeight];
         render();
         showCanvas(tween?.progress() !== 1);
       };
@@ -178,6 +190,7 @@ export default function RevealImage({ className, alt, ...props }: ImageProps) {
       image.addEventListener("load", fit);
 
       return () => {
+        disposed = true;
         observer.disconnect();
         image.removeEventListener("load", fit);
         tween?.scrollTrigger?.kill();
@@ -186,7 +199,6 @@ export default function RevealImage({ className, alt, ...props }: ImageProps) {
         // Free the GL objects but keep the context: React reuses this canvas
         // when it remounts (StrictMode does so in dev), and a lost context
         // cannot be revived. The context goes with the canvas element.
-        const texture = uniforms?.uTexture.value?.texture;
         if (texture) quad?.gl.deleteTexture(texture);
         quad?.dispose();
       };

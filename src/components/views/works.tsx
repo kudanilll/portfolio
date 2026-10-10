@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react";
 import { LinkButton } from "@/components/ui/link-button";
 import WorkImage from "@/components/ui/work-image";
 import gsap from "gsap";
+import { inOwnTask } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -24,88 +25,90 @@ export default function WorksView({ lang }: WorksViewProps) {
   const locale = lang.lang === "id" ? "id" : "en";
 
   useGSAP(
-    () => {
-      const root = rootRef.current;
-      const title = titleRef.current;
-      const track = trackRef.current;
-      if (!root || !title || !track) return;
+    // Below the fold: set up after hydration, in a task of its own
+    (_, contextSafe) =>
+      inOwnTask(
+        contextSafe!(() => {
+          const root = rootRef.current;
+          const title = titleRef.current;
+          const track = trackRef.current;
+          if (!root || !title || !track) return;
 
-      // Desktop: the title fills white from left to right (--fill) with the
-      // pinned horizontal scroll. Mobile keeps it plain white (--fill: 100%).
-      const media = gsap.matchMedia();
-      media.add("(min-width: 768px)", () => {
-        const distance = () =>
-          Math.max(0, track.scrollWidth - window.innerWidth);
+          // Desktop: the title fills white from left to right (--fill) with the
+          // pinned horizontal scroll. Mobile keeps it plain white (--fill: 100%).
+          const media = gsap.matchMedia();
+          media.add("(min-width: 768px)", () => {
+            const distance = () =>
+              Math.max(0, track.scrollWidth - window.innerWidth);
 
-        // The pin outlasts the horizontal scroll by one screen, so the last
-        // card holds in place for a beat before the next section comes up.
-        ScrollTrigger.create({
-          trigger: root,
-          start: "top top",
-          end: () => `+=${distance() + window.innerHeight}`,
-          pin: true,
-          invalidateOnRefresh: true,
-        });
+            // The pin outlasts the horizontal scroll by one screen, so the last
+            // card holds in place for a beat before the next section comes up.
+            ScrollTrigger.create({
+              trigger: root,
+              start: "top top",
+              end: () => `+=${distance() + window.innerHeight}`,
+              pin: true,
+              invalidateOnRefresh: true,
+            });
 
-        const timeline = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: () => `+=${distance()}`,
-            scrub: 1,
-            invalidateOnRefresh: true,
-          },
-        });
+            const timeline = gsap.timeline({
+              defaults: { ease: "none" },
+              scrollTrigger: {
+                trigger: root,
+                start: "top top",
+                end: () => `+=${distance()}`,
+                scrub: 1,
+                invalidateOnRefresh: true,
+              },
+            });
 
-        timeline
-          .to(track, { x: () => -distance() })
-          .to(title, { "--fill": "100%" }, 0);
-      });
-
-      // Mobile cards reveal as they scroll in: a lime panel wipes up from the
-      // bottom (clip-path), the image follows over it while zooming out, then
-      // the caption rises in.
-      media.add(
-        "(max-width: 767.98px) and (prefers-reduced-motion: no-preference)",
-        () => {
-          const hidden = { clipPath: "inset(100% 0% 0% 0%)" };
-          const shown = { clipPath: "inset(0% 0% 0% 0%)" };
-
-          gsap.utils.toArray<HTMLElement>("article", track).forEach((article) => {
-            const panel = article.querySelector("[data-reveal-panel]");
-            const image = article.querySelector("[data-reveal-panel] + *");
-            const img = image?.querySelector("img");
-            const caption = article.querySelector("figure + div");
-            if (!panel || !image || !img || !caption) return;
-
-            gsap
-              .timeline({
-                defaults: { ease: "none" },
-                scrollTrigger: {
-                  trigger: article,
-                  // Spread over most of the screen, eased a little, so the
-                  // reveal does not rush by
-                  start: "top bottom",
-                  end: "top 15%",
-                  scrub: 0.5,
-                },
-              })
-              .fromTo(panel, hidden, shown)
-              .fromTo(image, hidden, shown, 0.25)
-              .fromTo(img, { scale: 1.25 }, { scale: 1 }, 0.25)
-              .fromTo(
-                caption,
-                { yPercent: 40, opacity: 0 },
-                { yPercent: 0, opacity: 1, ease: "power2.out" },
-                0.55,
-              );
+            timeline
+              .to(track, { x: () => -distance() })
+              .to(title, { "--fill": "100%" }, 0);
           });
-        },
-      );
 
-      return () => media.revert();
-    },
+          // Mobile cards reveal as they scroll in: a lime panel wipes up from the
+          // bottom (clip-path), the image follows over it while zooming out, then
+          // the caption rises in.
+          media.add(
+            "(max-width: 767.98px) and (prefers-reduced-motion: no-preference)",
+            () => {
+              const hidden = { clipPath: "inset(100% 0% 0% 0%)" };
+              const shown = { clipPath: "inset(0% 0% 0% 0%)" };
+
+              gsap.utils.toArray<HTMLElement>("article", track).forEach((article) => {
+                const panel = article.querySelector("[data-reveal-panel]");
+                const image = article.querySelector("[data-reveal-panel] + *");
+                const img = image?.querySelector("img");
+                const caption = article.querySelector("figure + div");
+                if (!panel || !image || !img || !caption) return;
+
+                gsap
+                  .timeline({
+                    defaults: { ease: "none" },
+                    scrollTrigger: {
+                      trigger: article,
+                      // Spread over most of the screen, eased a little, so the
+                      // reveal does not rush by
+                      start: "top bottom",
+                      end: "top 15%",
+                      scrub: 0.5,
+                    },
+                  })
+                  .fromTo(panel, hidden, shown)
+                  .fromTo(image, hidden, shown, 0.25)
+                  .fromTo(img, { scale: 1.25 }, { scale: 1 }, 0.25)
+                  .fromTo(
+                    caption,
+                    { yPercent: 40, opacity: 0 },
+                    { yPercent: 0, opacity: 1, ease: "power2.out" },
+                    0.55,
+                  );
+              });
+            },
+          );
+        }),
+      ),
     { scope: rootRef },
   );
 
@@ -140,7 +143,6 @@ export default function WorksView({ lang }: WorksViewProps) {
                 href={work.href}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={`${work.title}: ${work.description[locale]}`}
                 className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#0a0a0a]"
               >
                 <figure className="relative aspect-11/15 overflow-hidden">

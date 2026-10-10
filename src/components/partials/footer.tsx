@@ -115,7 +115,7 @@ export default function Footer({ lang }: FooterProps) {
                 socials come first and the copyright closes the page */}
             <div className="flex flex-col-reverse gap-4 border-t border-neutral-800 pt-4 md:flex-row md:items-center md:justify-between">
               {/* Same size and case as the socials, regular weight */}
-              <p className="text-lg text-neutral-500 uppercase md:text-[clamp(1rem,1.3vw,1.8rem)]">
+              <p className="text-lg text-neutral-400 uppercase md:text-[clamp(1rem,1.3vw,1.8rem)]">
                 {/* The year is set at build time; a visit in a later year
                     renders a newer one, which is expected */}
                 &copy;{" "}

@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = "http://localhost:3000";
+// E2E_PORT: run on another port when 3000 is taken by a different app
+const port = process.env.E2E_PORT ?? "3000";
+const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -10,7 +12,7 @@ export default defineConfig({
     { name: "mobile", use: devices["Pixel 7"] },
   ],
   webServer: {
-    command: "bun dev",
+    command: `bun dev --port ${port}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
   },

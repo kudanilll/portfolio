@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { createQuad } from "@/lib/gl";
+
+type Quad = ReturnType<typeof import("@/lib/gl").createQuad>;
 
 // Dark liquid marble that slowly drifts: domain-warped noise
 // (iquilezles.org/articles/warp), with glossy highlights along the bands of
@@ -69,24 +70,17 @@ export default function HeroBackground({ className }: { className?: string }) {
     if (!box || !canvas) return;
 
     const uniforms = { uTime: { value: 0 }, uAspect: { value: 1 } };
-    let quad: ReturnType<typeof createQuad>;
-    try {
-      // Half resolution: the swirls are soft, and the GPU does a quarter
-      // of the work
-      quad = createQuad(canvas, fragment, uniforms, { dpr: 0.5 });
-    } catch {
-      return; // No WebGL: the hero keeps its plain dark background
-    }
-
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let quad: Quad | undefined;
     let frame = 0;
     let last = 0;
     let visible = false;
+    let disposed = false;
 
     // ~30fps is plenty for a slow drift, and it only runs while on screen
     const loop = (time: number) => {
       frame = 0;
-      if (!visible) return;
+      if (!visible || !quad) return;
       if (time - last > 30) {
         last = time;
         uniforms.uTime.value = time / 1000;
@@ -96,28 +90,54 @@ export default function HeroBackground({ className }: { className?: string }) {
     };
 
     const resize = new ResizeObserver(() => {
-      quad.setSize(box.clientWidth, box.clientHeight);
+      quad?.setSize(box.clientWidth, box.clientHeight);
       uniforms.uAspect.value = box.clientWidth / box.clientHeight;
-      quad.render();
+      quad?.render();
     });
     const onScreen = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting && !still;
       if (visible && !frame) frame = requestAnimationFrame(loop);
     });
-    resize.observe(box);
-    onScreen.observe(box);
+
+    // Loaded and compiled once the page is idle, so the shader never
+    // competes with the first load; it fades in over the dark hero
+    const start = async () => {
+      const { createQuad } = await import("@/lib/gl");
+      if (disposed) return;
+      try {
+        // Half resolution: the swirls are soft, and the GPU does a quarter
+        // of the work
+        quad = createQuad(canvas, fragment, uniforms, { dpr: 0.5 });
+      } catch {
+        return; // No hardware WebGL: the hero keeps its plain dark background
+      }
+      resize.observe(box); // reports the size at once: first frame drawn
+      onScreen.observe(box);
+      canvas.style.opacity = "1";
+    };
+    // Safari has no requestIdleCallback
+    const hasIdle = typeof requestIdleCallback === "function";
+    const idle = hasIdle
+      ? requestIdleCallback(() => void start(), { timeout: 3000 })
+      : window.setTimeout(() => void start(), 1000);
 
     return () => {
+      disposed = true;
+      if (hasIdle) cancelIdleCallback(idle);
+      else window.clearTimeout(idle);
       cancelAnimationFrame(frame);
       resize.disconnect();
       onScreen.disconnect();
-      quad.dispose();
+      quad?.dispose();
     };
   }, []);
 
   return (
     <div ref={boxRef} aria-hidden="true" className={className}>
-      <canvas ref={canvasRef} className="block" />
+      <canvas
+        ref={canvasRef}
+        className="block opacity-0 transition-opacity duration-1000"
+      />
     </div>
   );
 }

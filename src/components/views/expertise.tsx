@@ -7,6 +7,7 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { expertise } from "@/data/expertise";
 import { sparklePath } from "@/components/svg/sparkle";
 import gsap from "gsap";
+import { inOwnTask } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
@@ -21,108 +22,110 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
   const listRef = useRef<HTMLUListElement>(null);
 
   useGSAP(
-    () => {
-      const star = starRef.current;
-      const starPath = starPathRef.current;
-      const media = gsap.matchMedia();
+    // Below the fold: set up after hydration, in a task of its own
+    (_, contextSafe) =>
+      inOwnTask(
+        contextSafe!(() => {
+          const star = starRef.current;
+          const starPath = starPathRef.current;
+          const media = gsap.matchMedia();
 
-      // The lime star next to the title draws its outline, fills in, then
-      // keeps spinning slowly (paused while off screen to save frames).
-      media.add("(prefers-reduced-motion: no-preference)", () => {
-        if (!star || !starPath) return;
+          // The lime star next to the title draws its outline, fills in, then
+          // keeps spinning slowly (paused while off screen to save frames).
+          media.add("(prefers-reduced-motion: no-preference)", () => {
+            if (!star || !starPath) return;
 
-        gsap
-          .timeline({
-            scrollTrigger: {
+            gsap
+              .timeline({
+                scrollTrigger: {
+                  trigger: star,
+                  start: "top 85%",
+                  toggleActions: "play none none reverse",
+                },
+              })
+              .fromTo(
+                starPath,
+                { drawSVG: "0%", fillOpacity: 0 },
+                { drawSVG: "100%", duration: 1.2, ease: "power2.inOut" },
+              )
+              .to(
+                starPath,
+                { fillOpacity: 1, duration: 0.4, ease: "power1.out" },
+                "-=0.3",
+              );
+
+            const spin = gsap.to(star, {
+              rotation: 360,
+              duration: 10,
+              ease: "none",
+              repeat: -1,
+              paused: true,
+            });
+            ScrollTrigger.create({
               trigger: star,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          })
-          .fromTo(
-            starPath,
-            { drawSVG: "0%", fillOpacity: 0 },
-            { drawSVG: "100%", duration: 1.2, ease: "power2.inOut" },
-          )
-          .to(
-            starPath,
-            { fillOpacity: 1, duration: 0.4, ease: "power1.out" },
-            "-=0.3",
-          );
-
-        const spin = gsap.to(star, {
-          rotation: 360,
-          duration: 10,
-          ease: "none",
-          repeat: -1,
-          paused: true,
-        });
-        ScrollTrigger.create({
-          trigger: star,
-          start: "top bottom",
-          end: "bottom top",
-          onToggle: (self) => (self.isActive ? spin.play() : spin.pause()),
-        });
-      });
-
-      // Line reveal (masked lines rising in, one after another, once): every
-      // <li> is a mask and its content slides up from below. Entries on the
-      // same visual line rise together, lines are staggered top to bottom.
-      media.add("(prefers-reduced-motion: no-preference)", () => {
-        const rows = new Map<number, HTMLElement[]>();
-        gsap.utils.toArray<HTMLElement>("li", listRef.current).forEach((li) => {
-          const row = rows.get(li.offsetTop) ?? [];
-          rows.set(li.offsetTop, [...row, li.firstElementChild as HTMLElement]);
-        });
-        const lines = [...rows.values()];
-
-        gsap.set(lines.flat(), { yPercent: 100 });
-        const reveal = gsap.timeline({
-          scrollTrigger: {
-            trigger: listRef.current,
-            start: "top 75%",
-            once: true,
-          },
-        });
-        lines.forEach((line, index) =>
-          reveal.to(
-            line,
-            { yPercent: 0, duration: 1, ease: "power4.out" },
-            index * 0.1,
-          ),
-        );
-      });
-
-      // Touch screens have no hover, so the item crossing the middle of the
-      // screen lights up lime instead (data-active), following the scroll.
-      media.add("(hover: none)", () => {
-        const items = gsap.utils.toArray<HTMLElement>(
-          "[data-tech]",
-          listRef.current,
-        );
-
-        items.forEach((item) => {
-          const li = item.closest("li")!;
-          // The <li> line box never moves during the line reveal (its content
-          // does). Its 0.1em mask padding overlaps the neighbouring lines, so
-          // trim it off, or two lines would light up at once.
-          const pad = () => parseFloat(getComputedStyle(li).paddingTop);
-
-          ScrollTrigger.create({
-            trigger: li,
-            start: () => `top+=${pad()} center`,
-            end: () => `bottom-=${pad()} center`,
-            onToggle: (self) =>
-              item.toggleAttribute("data-active", self.isActive),
+              start: "top bottom",
+              end: "bottom top",
+              onToggle: (self) => (self.isActive ? spin.play() : spin.pause()),
+            });
           });
-        });
 
-        return () =>
-          items.forEach((item) => item.removeAttribute("data-active"));
-      });
+          // Line reveal (masked lines rising in, one after another, once): every
+          // <li> is a mask and its content slides up from below. Entries on the
+          // same visual line rise together, lines are staggered top to bottom.
+          media.add("(prefers-reduced-motion: no-preference)", () => {
+            const rows = new Map<number, HTMLElement[]>();
+            gsap.utils.toArray<HTMLElement>("li", listRef.current).forEach((li) => {
+              const row = rows.get(li.offsetTop) ?? [];
+              rows.set(li.offsetTop, [...row, li.firstElementChild as HTMLElement]);
+            });
+            const lines = [...rows.values()];
 
-      return () => media.revert();
-    },
+            gsap.set(lines.flat(), { yPercent: 100 });
+            const reveal = gsap.timeline({
+              scrollTrigger: {
+                trigger: listRef.current,
+                start: "top 75%",
+                once: true,
+              },
+            });
+            lines.forEach((line, index) =>
+              reveal.to(
+                line,
+                { yPercent: 0, duration: 1, ease: "power4.out" },
+                index * 0.1,
+              ),
+            );
+          });
+
+          // Touch screens have no hover, so the item crossing the middle of the
+          // screen lights up lime instead (data-active), following the scroll.
+          media.add("(hover: none)", () => {
+            const items = gsap.utils.toArray<HTMLElement>(
+              "[data-tech]",
+              listRef.current,
+            );
+
+            items.forEach((item) => {
+              const li = item.closest("li")!;
+              // The <li> line box never moves during the line reveal (its content
+              // does). Its 0.1em mask padding overlaps the neighbouring lines, so
+              // trim it off, or two lines would light up at once.
+              const pad = () => parseFloat(getComputedStyle(li).paddingTop);
+
+              ScrollTrigger.create({
+                trigger: li,
+                start: () => `top+=${pad()} center`,
+                end: () => `bottom-=${pad()} center`,
+                onToggle: (self) =>
+                  item.toggleAttribute("data-active", self.isActive),
+              });
+            });
+
+            return () =>
+              items.forEach((item) => item.removeAttribute("data-active"));
+          });
+        }),
+      ),
     { scope: rootRef },
   );
 
@@ -159,7 +162,7 @@ export default function ExpertiseView({ lang }: ExpertiseViewProps) {
           only ever shows between two items on the same line. */}
       <ul
         ref={listRef}
-        className="my-auto ml-auto flex flex-wrap justify-end gap-x-[0.8em] overflow-x-clip pt-12 text-right text-[11vw] leading-[1.01] tracking-tight text-white/20 md:max-w-[80vw] md:pt-16 md:text-[6vw]"
+        className="my-auto ml-auto flex flex-wrap justify-end gap-x-[0.8em] overflow-x-clip pt-12 text-right text-[11vw] leading-[1.01] tracking-tight text-white/40 md:max-w-[80vw] md:pt-16 md:text-[6vw]"
       >
         {expertise.map((name) => (
           // overflow-y-clip makes the <li> the mask for the line reveal (only

@@ -90,5 +90,19 @@ test("a work's hover image loads on the first hover only (desktop)", async ({
 
   const box = (await figure.boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, { steps: 4 });
-  await expect(canvas).toHaveCSS("opacity", "1");
+
+  // With a GPU the WebGL reveal takes over; on a software renderer (headless
+  // Chrome without a GPU) the effect is skipped and the plain image stays
+  const hardware = await page.evaluate(() => {
+    const gl = document.createElement("canvas").getContext("webgl");
+    const info = gl?.getExtension("WEBGL_debug_renderer_info");
+    const name = gl ? String(gl.getParameter(info?.UNMASKED_RENDERER_WEBGL ?? gl.RENDERER)) : "";
+    return !!gl && !/swiftshader|llvmpipe|software|basic render/i.test(name);
+  });
+  if (hardware) await expect(canvas).toHaveCSS("opacity", "1");
+  else {
+    await page.waitForTimeout(1000);
+    await expect(canvas).toHaveCSS("opacity", "0");
+    await expect(figure.locator("img")).toBeVisible();
+  }
 });
