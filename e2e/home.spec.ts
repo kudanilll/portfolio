@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const siteUrl = "https://achmaddaniel.nielcode.com";
+const escapedSiteUrl = siteUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 test.describe("one URL for every language", () => {
   test("an English browser gets English at /", async ({ page }) => {
@@ -55,7 +56,7 @@ test("home page exposes core SEO tags", async ({ page }) => {
   await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     "href",
-    new RegExp(`^${siteUrl}/?$`),
+    new RegExp(`^${escapedSiteUrl}/?$`),
   );
   // One URL serves every language, so there are no hreflang alternates
   await expect(page.locator("link[hreflang]")).toHaveCount(0);
