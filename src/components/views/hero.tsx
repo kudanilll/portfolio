@@ -99,6 +99,8 @@ export default function HeroView({ lang }: { lang: any }) {
   // paint, pushing the Largest Contentful Paint back to after the JS
   const bgSpacerRef = useRef<HTMLDivElement>(null);
   const footerSpacerRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const shaderRef = useRef<HTMLDivElement>(null);
   const leftAreaRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const creativeRef = useRef<HTMLSpanElement>(null);
@@ -158,8 +160,10 @@ export default function HeroView({ lang }: { lang: any }) {
           media.add("(min-width: 768px)", () => {
             const layout = () => {
               // Same 0.05em as between "CREATIVE" and the star
-              const gap = parseFloat(getComputedStyle(creative).fontSize) * 0.05;
-              const mergedW = creative.offsetWidth + gap + developer.offsetWidth;
+              const gap =
+                parseFloat(getComputedStyle(creative).fontSize) * 0.05;
+              const mergedW =
+                creative.offsetWidth + gap + developer.offsetWidth;
               const wrapperW = wrapper.offsetWidth;
 
               return {
@@ -210,6 +214,26 @@ export default function HeroView({ lang }: { lang: any }) {
               )
               .to(star, { rotation: 180, transformOrigin: "50% 50%" }, 0);
           });
+
+          // 3. While the next section slides over, the hero backs away and
+          // dims. This moves a child, as a pinned layer must not be animated,
+          // and runs after the footer pin has set the hero's full height. It
+          // ends halfway up: the centered title is covered by then.
+          media.add("(prefers-reduced-motion: no-preference)", () => {
+            gsap
+              .timeline({
+                defaults: { ease: "none" },
+                scrollTrigger: {
+                  trigger: heroRef.current,
+                  start: "bottom bottom",
+                  end: "bottom center",
+                  scrub: true,
+                },
+              })
+              // autoAlpha: once faded out, its buttons must not take clicks
+              .to(sceneRef.current, { scale: 0.8, autoAlpha: 0 }, 0)
+              .to(shaderRef.current, { opacity: 0.7 }, 0);
+          });
         }),
       ),
     { scope: heroRef },
@@ -234,58 +258,73 @@ export default function HeroView({ lang }: { lang: any }) {
       <div ref={bgSpacerRef}>
         <div
           ref={bgRef}
-          className="absolute top-0 w-full h-svh md:h-screen overflow-hidden flex flex-col z-0"
+          className="absolute top-0 w-full h-svh md:h-screen overflow-hidden z-0"
         >
-          <NavigationBar lang={lang.lang} />
-          <HeroBackground className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] opacity-45 md:opacity-30 pointer-events-none" />
+          {/* Outside the scene: it only dims, while the content backs away.
+              The wrapper keeps that tween off the opacity set on the shader */}
+          <div
+            ref={shaderRef}
+            data-testid="hero-shader"
+            className="absolute inset-0"
+          >
+            <HeroBackground className="absolute top-0 left-0 w-screen h-[88svh] md:h-[85vh] opacity-45 md:opacity-30 pointer-events-none" />
+          </div>
 
-          {/* Mobile: name block is vertically centered in the visible background (88svh) */}
-          <div className="flex-1 flex flex-col justify-center md:justify-start w-screen px-4 md:px-8 pb-[12svh] md:pb-0 md:pt-[12vh] z-10">
-            {/* Name + CTA. Mobile size makes "SYAHPUTRA" (~5.25em) fill the padded width */}
-            <div
-              ref={leftAreaRef}
-              className="w-full text-[calc((100vw-2rem)/5.3)] md:text-[clamp(4rem,5.5vw,14rem)] tracking-[-0.06em] font-medium leading-[0.85] uppercase text-neutral-300"
-            >
-              <div className="flex flex-col md:flex-row md:items-center md:gap-6">
-                <DockText text="Achmad" />
-                <DockText text="Daniel" />
-              </div>
-              <div className="md:flex md:items-end md:gap-2 md:mt-2">
-                <DockText text="Syahputra" down />
-                <div
-                  className={`${layGrotesk.className} mt-6 md:mt-0 md:ml-4 md:translate-y-[-0.6vw] flex flex-wrap items-center gap-3 text-base leading-normal tracking-normal`}
-                >
-                  <ResumeButton lang={lang} />
-                  <SocialLinks className="md:hidden" />
+          <div
+            ref={sceneRef}
+            data-testid="hero-scene"
+            className="relative size-full flex flex-col"
+          >
+            <NavigationBar lang={lang.lang} />
+
+            {/* Mobile: name block is vertically centered in the visible background (88svh) */}
+            <div className="flex-1 flex flex-col justify-center md:justify-start w-screen px-4 md:px-8 pb-[12svh] md:pb-0 md:pt-[12vh] z-10">
+              {/* Name + CTA. Mobile size makes "SYAHPUTRA" (~5.25em) fill the padded width */}
+              <div
+                ref={leftAreaRef}
+                className="w-full text-[calc((100vw-2rem)/5.3)] md:text-[clamp(4rem,5.5vw,14rem)] tracking-[-0.06em] font-medium leading-[0.85] uppercase text-neutral-300"
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:gap-6">
+                  <DockText text="Achmad" />
+                  <DockText text="Daniel" />
+                </div>
+                <div className="md:flex md:items-end md:gap-2 md:mt-2">
+                  <DockText text="Syahputra" down />
+                  <div
+                    className={`${layGrotesk.className} mt-6 md:mt-0 md:ml-4 md:translate-y-[-0.6vw] flex flex-wrap items-center gap-3 text-base leading-normal tracking-normal`}
+                  >
+                    <ResumeButton lang={lang} />
+                    <SocialLinks className="md:hidden" />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* CREATIVE ✦ DEVELOPER */}
-            <div
-              ref={wrapperRef}
-              data-testid="hero-title"
-              className="absolute max-md:left-1/2 max-md:top-1/2 max-md:w-max max-md:invisible md:bottom-[16vh] md:right-8 flex flex-col items-end will-change-transform"
-            >
-              <span ref={creativeRef} className={displayText}>
-                <span className="flex flex-row items-center gap-[0.05em] justify-end">
-                  <DockText text="CREATIVE" />
-                  {/* The site sparkle, its points level with the capitals:
-                      Bebas caps are 0.71em tall (the star's ink is 96% of
-                      its box) and sit 0.055em above the line box's center */}
-                  <svg
-                    ref={starRef}
-                    viewBox="0 0 100 100"
-                    aria-hidden="true"
-                    className="size-[0.74em] shrink-0 -translate-y-[0.055em] text-lime-400"
-                  >
-                    <path d={sparklePath} fill="currentColor" />
-                  </svg>
+              {/* CREATIVE ✦ DEVELOPER */}
+              <div
+                ref={wrapperRef}
+                data-testid="hero-title"
+                className="absolute max-md:left-1/2 max-md:top-1/2 max-md:w-max max-md:invisible md:bottom-[16vh] md:right-8 flex flex-col items-end will-change-transform"
+              >
+                <span ref={creativeRef} className={displayText}>
+                  <span className="flex flex-row items-center gap-[0.05em] justify-end">
+                    <DockText text="CREATIVE" />
+                    {/* The site sparkle, its points level with the capitals:
+                        Bebas caps are 0.71em tall (the star's ink is 96% of
+                        its box) and sit 0.055em above the line box's center */}
+                    <svg
+                      ref={starRef}
+                      viewBox="0 0 100 100"
+                      aria-hidden="true"
+                      className="size-[0.74em] shrink-0 translate-y-[-0.055em] text-lime-400"
+                    >
+                      <path d={sparklePath} fill="currentColor" />
+                    </svg>
+                  </span>
                 </span>
-              </span>
-              <span ref={developerRef} className={displayText}>
-                <DockText text="DEVELOPER" down />
-              </span>
+                <span ref={developerRef} className={displayText}>
+                  <DockText text="DEVELOPER" down />
+                </span>
+              </div>
             </div>
           </div>
         </div>

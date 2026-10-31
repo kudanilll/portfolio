@@ -11,9 +11,16 @@ import gsap from "gsap";
 
 type LocaleSwitchEvent = CustomEvent<{ locale: AppLocale }>;
 
+// Marks the reload after a language switch, which skips the greetings
+const quickCookie = "curtain-quick";
+// Reads it once, inline: the JS bundle comes after the first paint, too late
+// to stop the first greeting from flashing
+const quickOpen = `if(document.cookie.includes("${quickCookie}=")){document.cookie="${quickCookie}=;path=/;max-age=0";document.currentScript.parentElement.dataset.quick=""}`;
+
 /** Every language shares one URL: remember the choice, then reload. */
 function switchLocale(locale: AppLocale) {
   document.cookie = `${localeCookie}=${locale}; path=/; max-age=${localeCookieMaxAge}; samesite=lax`;
+  document.cookie = `${quickCookie}=1; path=/; max-age=60; samesite=lax`;
   window.location.reload();
 }
 
@@ -55,7 +62,8 @@ const columns = ["left-0", "left-1/4", "left-2/4", "left-3/4"];
  * middle, the top half sliding up and the bottom half down. Desktop has four
  * columns that go right to left; mobile has one full-width pair. CSS runs it
  * from the first paint, so a slow phone never waits on the JS behind a white
- * screen. Before a language switch, GSAP closes it again.
+ * screen. Before a language switch, GSAP closes it again, and the reload opens
+ * it after a short hold, without the greetings.
  */
 export default function IntroAnimation() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -152,16 +160,19 @@ export default function IntroAnimation() {
     <div
       ref={containerRef}
       data-testid="intro-curtain"
-      className={`fixed inset-0 z-9999 motion-reduce:hidden ${isActive ? "" : "hidden"}`}
+      className={`fixed inset-0 z-9999 data-quick:[--open-delay:500ms] motion-reduce:hidden ${isActive ? "" : "hidden"}`}
       aria-hidden="true"
+      suppressHydrationWarning // quickOpen may add data-quick before hydration
     >
+      <script dangerouslySetInnerHTML={{ __html: quickOpen }} />
+
       {(Object.keys(halves) as (keyof typeof halves)[]).map((half) => {
         const { position, open } = halves[half];
         return (
           <Fragment key={half}>
             <div
               data-half={half}
-              style={{ animationDelay: `${openDelay}ms` }}
+              style={{ animationDelay: `var(--open-delay, ${openDelay}ms)` }}
               className={`absolute ${position} ${open} left-0 h-[50.5%] w-full bg-primary md:hidden`}
             />
             {columns.map((left, i) => (
@@ -170,7 +181,7 @@ export default function IntroAnimation() {
                 data-half={half}
                 // Right to left: the last column opens first
                 style={{
-                  animationDelay: `${openDelay + (columns.length - 1 - i) * 100}ms`,
+                  animationDelay: `calc(var(--open-delay, ${openDelay}ms) + ${(columns.length - 1 - i) * 100}ms)`,
                 }}
                 className={`absolute ${position} ${open} ${left} hidden h-[50.5%] w-1/4 bg-primary md:block`}
               />
@@ -182,7 +193,7 @@ export default function IntroAnimation() {
       <div
         ref={greetingsRef}
         style={{ animationDuration: `${openDelay}ms` }}
-        className="absolute inset-0 grid animate-curtain-words place-items-center text-[40px] leading-none text-[#0a0a0a] md:text-[56px]"
+        className="absolute inset-0 grid animate-curtain-words place-items-center text-[40px] leading-none text-[#0a0a0a] in-data-quick:hidden md:text-[56px]"
       >
         {/* CSS draws each word from data-greeting, so none of them end up in
             the page text that search engines read */}

@@ -56,11 +56,16 @@ test.describe("desktop", () => {
       .toEqual({ visible: true, lines: 1, centered: true, fits: true });
   });
 
-  test("title stays centered after a resize mid-animation", async ({ page }) => {
+  test("title stays centered after a resize mid-animation", async ({
+    page,
+  }) => {
     await openHome(page);
     // Resizing triggers a ScrollTrigger refresh while the merge is half done
     await scrollToScreens(page, 0.75);
-    await page.setViewportSize({ width: 1024, height: page.viewportSize()!.height });
+    await page.setViewportSize({
+      width: 1024,
+      height: page.viewportSize()!.height,
+    });
     await page.waitForTimeout(500);
     await scrollToScreens(page, 1.5);
     await expect
@@ -75,7 +80,10 @@ test.describe("desktop", () => {
     // stands in for a phone rotating across the md breakpoint
     await openHome(page);
     await scrollToScreens(page, 0.75);
-    await page.setViewportSize({ width: 390, height: page.viewportSize()!.height });
+    await page.setViewportSize({
+      width: 390,
+      height: page.viewportSize()!.height,
+    });
     await page.waitForTimeout(500);
     await scrollToScreens(page, 1.5);
     await expect
@@ -98,6 +106,58 @@ test.describe("mobile", () => {
       .poll(() => heroTitle(page))
       .toEqual({ visible: true, lines: 2, centered: true, fits: true });
   });
+});
+
+/** In percent: the content's scale and opacity, then the shader's opacity. */
+function heroDepth(page: Page) {
+  return Promise.all([
+    page
+      .getByTestId("hero-scene")
+      .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a),
+    page
+      .getByTestId("hero-scene")
+      .evaluate((el) => Number(getComputedStyle(el).opacity)),
+    page
+      .getByTestId("hero-shader")
+      .evaluate((el) => Number(getComputedStyle(el).opacity)),
+  ]).then((values) => values.map((n) => Math.round(n * 100)));
+}
+
+test("the hero content backs away and fades while the shader only dims", async ({
+  page,
+}) => {
+  await openHome(page);
+  await scrollToScreens(page, 1.4);
+  expect(await heroDepth(page)).toEqual([100, 100, 100]);
+
+  await scrollToScreens(page, 1.75);
+  await expect.poll(() => heroDepth(page)).toEqual([90, 50, 85]);
+
+  await scrollToScreens(page, 2);
+  await expect.poll(() => heroDepth(page)).toEqual([80, 0, 70]);
+
+  // Faded out, so the language buttons stop taking clicks
+  await scrollToScreens(page, 2.1);
+  await expect(page.getByTestId("hero-scene")).toBeHidden();
+
+  // The shader behind it stays full size
+  const shaderBox = page.locator("#home canvas").locator("..");
+  expect(
+    await shaderBox.evaluate((el) => el.getBoundingClientRect().width),
+  ).toBe(page.viewportSize()!.width);
+
+  // Scrolling back undoes it
+  await scrollToScreens(page, 1.4);
+  await expect.poll(() => heroDepth(page)).toEqual([100, 100, 100]);
+  await expect(page.getByTestId("hero-scene")).toBeVisible();
+});
+
+test("reduced motion keeps the hero still", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await openHome(page);
+  await scrollToScreens(page, 2);
+  await page.waitForTimeout(300);
+  expect(await heroDepth(page)).toEqual([100, 100, 100]);
 });
 
 test("hero has no nested scroll containers (no stray scroll indicator)", async ({

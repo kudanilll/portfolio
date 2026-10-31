@@ -10,7 +10,9 @@ test.describe("one URL for every language", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
   });
 
-  test("an Indonesian browser gets Indonesian at the same URL", async ({ browser }) => {
+  test("an Indonesian browser gets Indonesian at the same URL", async ({
+    browser,
+  }) => {
     const context = await browser.newContext({ locale: "id-ID" });
     const page = await context.newPage();
     await page.goto("/");
@@ -19,15 +21,21 @@ test.describe("one URL for every language", () => {
     await context.close();
   });
 
-  test("bots that send no usable language get the default (English)", async ({ request }) => {
+  test("bots that send no usable language get the default (English)", async ({
+    request,
+  }) => {
     for (const acceptLanguage of ["", "*"]) {
-      const res = await request.get("/", { headers: { "accept-language": acceptLanguage } });
+      const res = await request.get("/", {
+        headers: { "accept-language": acceptLanguage },
+      });
       expect(res.status()).toBe(200);
       expect(await res.text()).toContain('<html lang="en"');
     }
   });
 
-  test("old /id and /en links move to / and keep their language", async ({ page }) => {
+  test("old /id and /en links move to / and keep their language", async ({
+    page,
+  }) => {
     await page.goto("/id");
     await expect(page).toHaveURL(/\/$/);
     await expect(page.locator("html")).toHaveAttribute("lang", "id");
@@ -44,10 +52,9 @@ test.describe("one URL for every language", () => {
     await page.getByRole("button", { name: "ID", exact: true }).click();
     await expect(page.locator("html")).toHaveAttribute("lang", "id");
     await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByRole("button", { name: "ID", exact: true })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    await expect(
+      page.getByRole("button", { name: "ID", exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
   });
 });
 
@@ -60,10 +67,9 @@ test("home page exposes core SEO tags", async ({ page }) => {
   );
   // One URL serves every language, so there are no hreflang alternates
   await expect(page.locator("link[hreflang]")).toHaveCount(0);
-  await expect(page.locator('meta[property="og:image"]').first()).toHaveAttribute(
-    "content",
-    `${siteUrl}/assets/images/og-image.png`,
-  );
+  await expect(
+    page.locator('meta[property="og:image"]').first(),
+  ).toHaveAttribute("content", `${siteUrl}/assets/images/og-image.png`);
 
   const graph = JSON.parse(
     (await page.locator('script[type="application/ld+json"]').textContent())!,
@@ -89,7 +95,9 @@ test("search and AI crawler files are served", async ({ request }) => {
   expect(await llms.text()).toContain("# Achmad Daniel Syahputra");
 });
 
-test("the intro ends on its last greeting, kept out of the page text", async ({ page }) => {
+test("the intro ends on its last greeting, kept out of the page text", async ({
+  page,
+}) => {
   await page.goto("/");
   const curtain = page.getByTestId("intro-curtain");
   await expect(curtain).toHaveText("");
@@ -110,6 +118,25 @@ test("the intro ends on its last greeting, kept out of the page text", async ({ 
   await expect(curtain).toBeHidden();
 });
 
+test("a language switch opens the curtain without the greetings, once", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const curtain = page.getByTestId("intro-curtain");
+  const greetings = curtain.locator("[data-greeting]").first().locator("..");
+  await expect(greetings).toHaveCSS("display", "grid");
+  await expect(curtain).toBeHidden();
+
+  await page.getByRole("button", { name: "ID", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "id");
+  await expect(greetings).toHaveCSS("display", "none");
+  await expect(curtain).toBeHidden();
+
+  // A plain reload after that is a full intro again
+  await page.reload();
+  await expect(greetings).toHaveCSS("display", "grid");
+});
+
 test("Lenis scrolls the page once the intro finishes", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("html.lenis")).toBeAttached();
@@ -118,5 +145,7 @@ test("Lenis scrolls the page once the intro finishes", async ({ page }) => {
 
   await page.mouse.move(200, 400);
   await page.mouse.wheel(0, 400);
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBeGreaterThan(0);
 });
