@@ -6,6 +6,8 @@ const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
   testDir: "./e2e",
+  // The intro alone runs for nearly the default 5s wait
+  expect: { timeout: 10_000 },
   use: { baseURL, locale: "en-US" },
   projects: [
     { name: "desktop", use: devices["Desktop Chrome"] },

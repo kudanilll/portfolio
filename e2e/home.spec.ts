@@ -89,6 +89,27 @@ test("search and AI crawler files are served", async ({ request }) => {
   expect(await llms.text()).toContain("# Achmad Daniel Syahputra");
 });
 
+test("the intro ends on its last greeting, kept out of the page text", async ({ page }) => {
+  await page.goto("/");
+  const curtain = page.getByTestId("intro-curtain");
+  await expect(curtain).toHaveText("");
+
+  await expect
+    .poll(
+      () =>
+        curtain
+          .locator("[data-greeting]")
+          .evaluateAll((words) =>
+            words
+              .filter((word) => getComputedStyle(word).visibility === "visible")
+              .map((word) => word.getAttribute("data-greeting")),
+          ),
+      { intervals: [100] },
+    )
+    .toEqual(["Hallo"]);
+  await expect(curtain).toBeHidden();
+});
+
 test("Lenis scrolls the page once the intro finishes", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("html.lenis")).toBeAttached();

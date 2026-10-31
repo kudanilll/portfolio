@@ -1,7 +1,11 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import { localeCookie, localeCookieMaxAge, type AppLocale } from "@/common/i18n";
+import {
+  localeCookie,
+  localeCookieMaxAge,
+  type AppLocale,
+} from "@/common/i18n";
 import { useLenis } from "lenis/react";
 import gsap from "gsap";
 
@@ -13,6 +17,33 @@ function switchLocale(locale: AppLocale) {
   window.location.reload();
 }
 
+const words = [
+  "Hello",
+  "Bonjour",
+  "Ciao",
+  "Olá",
+  "Hola",
+  "Guten tag",
+  "Hej",
+  "नमस्ते",
+  "やあ",
+  "Здравствуйте",
+  "안녕하세요",
+  "Hallå",
+  "Hallo",
+];
+// Word i shows from wordTimes[i] to wordTimes[i + 1], in ms: Hello holds, the
+// others flick by, and the last stays until the words have faded out. Every
+// time follows from words, so each one added lengthens the intro by a flick
+const flick = 150;
+const wordTimes = [
+  0,
+  ...words.slice(1).map((_, i) => 1000 + i * flick),
+  1000 + (words.length - 2) * flick + 1100,
+];
+// The curtain opens only once the words are gone
+const openDelay = wordTimes[words.length];
+
 const halves = {
   top: { position: "top-0", open: "animate-curtain-up", yPercent: -100 },
   bottom: { position: "bottom-0", open: "animate-curtain-down", yPercent: 100 },
@@ -20,14 +51,15 @@ const halves = {
 const columns = ["left-0", "left-1/4", "left-2/4", "left-3/4"];
 
 /**
- * Intro curtain, split at the middle: the top half slides up, the bottom
- * half down, after a short hold. Desktop has four columns that go right to
- * left; mobile has one full-width pair. CSS opens it from the first paint,
- * so a slow phone never waits on the JS behind a white screen. Before a
- * language switch, GSAP closes it again.
+ * Intro curtain: greetings flick by and fade out, then it splits at the
+ * middle, the top half sliding up and the bottom half down. Desktop has four
+ * columns that go right to left; mobile has one full-width pair. CSS runs it
+ * from the first paint, so a slow phone never waits on the JS behind a white
+ * screen. Before a language switch, GSAP closes it again.
  */
 export default function IntroAnimation() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const greetingsRef = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useState(true);
   const lenis = useLenis();
 
@@ -54,10 +86,12 @@ export default function IntroAnimation() {
       };
     }
 
-    // Done once the CSS has opened every block (maybe before this ran)
+    // Done once the CSS has opened the curtain (maybe before this ran)
     document.body.style.overflow = "hidden";
     let disposed = false;
-    Promise.all(container.getAnimations({ subtree: true }).map((a) => a.finished))
+    Promise.all(
+      container.getAnimations({ subtree: true }).map((a) => a.finished),
+    )
       .then(() => {
         if (disposed) return;
         document.body.style.overflow = "";
@@ -73,10 +107,14 @@ export default function IntroAnimation() {
     const handlePageTransition = (e: Event) => {
       const { locale } = (e as LocaleSwitchEvent).detail;
 
-      // Hand the blocks from CSS to GSAP while they are still open: showing
-      // the curtain again would otherwise restart the CSS animation
+      // Hand the curtain from CSS to GSAP while it is still open: showing it
+      // again would otherwise restart the CSS animations
+      gsap.set(greetingsRef.current, { opacity: 0, animation: "none" });
       for (const half of ["top", "bottom"] as const) {
-        gsap.set(blocks(half), { yPercent: halves[half].yPercent, animation: "none" });
+        gsap.set(blocks(half), {
+          yPercent: halves[half].yPercent,
+          animation: "none",
+        });
       }
       setIsActive(true);
       document.body.style.overflow = "hidden";
@@ -123,7 +161,7 @@ export default function IntroAnimation() {
           <Fragment key={half}>
             <div
               data-half={half}
-              style={{ animationDelay: "0.5s" }}
+              style={{ animationDelay: `${openDelay}ms` }}
               className={`absolute ${position} ${open} left-0 h-[50.5%] w-full bg-primary md:hidden`}
             />
             {columns.map((left, i) => (
@@ -131,13 +169,35 @@ export default function IntroAnimation() {
                 key={left}
                 data-half={half}
                 // Right to left: the last column opens first
-                style={{ animationDelay: `${0.5 + (columns.length - 1 - i) * 0.1}s` }}
+                style={{
+                  animationDelay: `${openDelay + (columns.length - 1 - i) * 100}ms`,
+                }}
                 className={`absolute ${position} ${open} ${left} hidden h-[50.5%] w-1/4 bg-primary md:block`}
               />
             ))}
           </Fragment>
         );
       })}
+
+      <div
+        ref={greetingsRef}
+        style={{ animationDuration: `${openDelay}ms` }}
+        className="absolute inset-0 grid animate-curtain-words place-items-center text-[40px] leading-none text-[#0a0a0a] md:text-[56px]"
+      >
+        {/* CSS draws each word from data-greeting, so none of them end up in
+            the page text that search engines read */}
+        {words.map((word, i) => (
+          <span
+            key={word}
+            data-greeting={word}
+            style={{
+              animationDelay: `${wordTimes[i]}ms`,
+              animationDuration: `${wordTimes[i + 1] - wordTimes[i]}ms`,
+            }}
+            className="invisible col-start-1 row-start-1 animate-curtain-word after:content-[attr(data-greeting)]"
+          />
+        ))}
+      </div>
     </div>
   );
 }

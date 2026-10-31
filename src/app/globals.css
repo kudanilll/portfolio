@@ -3,11 +3,32 @@
 @theme {
   --color-primary: #ffffff;
 
-  /* Intro curtain, opened by CSS so it never waits for the JS; the curve is
+  /* Intro curtain, run by CSS so it never waits for the JS; the curve is
      GSAP's power4.inOut */
+  --animate-curtain-words: curtain-words both;
+  --animate-curtain-word: curtain-word linear;
   --animate-curtain-up: curtain-up 0.8s cubic-bezier(0.86, 0, 0.07, 1) both;
   --animate-curtain-down: curtain-down 0.8s cubic-bezier(0.86, 0, 0.07, 1) both;
 
+  @keyframes curtain-words {
+    0%,
+    7% {
+      opacity: 0;
+    }
+    40%,
+    90% {
+      opacity: 0.75;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes curtain-word {
+    from,
+    to {
+      visibility: visible;
+    }
+  }
   @keyframes curtain-up {
     to {
       transform: translateY(-100%);
