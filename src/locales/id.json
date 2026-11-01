@@ -13,7 +13,10 @@
     "title": "Keahlian"
   },
   "works_section": {
-    "title": "Pekerjaan pilihan"
+    "title": "Pekerjaan pilihan",
+    "next": "Next",
+    "up_next": "Selanjutnya",
+    "teaser": ["Masih banyak.", "Mungkin nanti", "bersamamu?"]
   },
   "quote_section": {
     "quote": "the possibilities are endless, the only limit is my imagination"

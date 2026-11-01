@@ -13,7 +13,10 @@
     "title": "Expertise"
   },
   "works_section": {
-    "title": "Selected works"
+    "title": "Selected works",
+    "next": "Next",
+    "up_next": "Up next",
+    "teaser": ["And many more.", "Could the next", "one be yours?"]
   },
   "quote_section": {
     "quote": "the possibilities are endless, the only limit is my imagination"

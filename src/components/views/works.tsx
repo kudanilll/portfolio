@@ -5,16 +5,26 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { works } from "@/data/works";
 import { useGSAP } from "@gsap/react";
 import { LinkButton } from "@/components/ui/link-button";
-import WorkImage from "@/components/ui/work-image";
-import gsap from "gsap";
+import { WorksNext } from "@/components/views/works-next";
 import { inOwnTask } from "@/lib/utils";
+import gsap from "gsap";
+import WorkImage from "@/components/ui/work-image";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+/** Screens of scroll the last card takes, from card to the next section. */
+const STAGE_SCREENS = 5;
 
 type WorksViewProps = {
   lang: {
     lang: string;
-    works_section: { title: string };
+    expertise_section: { title: string };
+    works_section: {
+      title: string;
+      next: string;
+      up_next: string;
+      teaser: string[];
+    };
   };
 };
 
@@ -34,38 +44,145 @@ export default function WorksView({ lang }: WorksViewProps) {
           const track = trackRef.current;
           if (!root || !title || !track) return;
 
-          // Desktop: the title fills white from left to right (--fill) with the
-          // pinned horizontal scroll. Mobile keeps it plain white (--fill: 100%).
           const media = gsap.matchMedia();
-          media.add("(min-width: 768px)", () => {
-            const distance = () =>
-              Math.max(0, track.scrollWidth - window.innerWidth);
+          media.add(
+            {
+              wide: "(min-width: 768px)",
+              motion: "(prefers-reduced-motion: no-preference)",
+            },
+            ({ conditions }) => {
+              const { wide, motion } = conditions!;
+              if (!wide && !motion) return;
 
-            // The pin outlasts the horizontal scroll by one screen, so the last
-            // card holds in place for a beat before the next section comes up.
-            ScrollTrigger.create({
-              trigger: root,
-              start: "top top",
-              end: () => `+=${distance() + window.innerHeight}`,
-              pin: true,
-              invalidateOnRefresh: true,
-            });
+              const stage = track.querySelector<HTMLElement>("[data-stage]")!;
+              const panel = stage.querySelector<HTMLElement>("[data-panel]")!;
+              const wall = stage.querySelector<HTMLElement>("[data-wall]")!;
+              const big = stage.querySelector("[data-big]");
+              const lines = (scope: string) =>
+                gsap.utils.toArray(`${scope} [data-line]`, stage);
 
-            const timeline = gsap.timeline({
-              defaults: { ease: "none" },
-              scrollTrigger: {
-                trigger: root,
+              const distance = () =>
+                wide ? Math.max(0, track.scrollWidth - window.innerWidth) : 0;
+              const stageScroll = () =>
+                motion ? window.innerHeight * STAGE_SCREENS : 0;
+              // From below the screen to above it, or back
+              const crossing = () => panel.offsetHeight + wall.offsetHeight;
+
+              // Desktop pins the whole section, mobile only the last screen
+              const pin = ScrollTrigger.create({
+                trigger: wide ? root : stage,
                 start: "top top",
-                end: () => `+=${distance()}`,
-                scrub: 1,
+                end: () => `+=${distance() + stageScroll()}`,
+                pin: true,
+                // GSAP turns it off by default in a flex parent (the mobile track)
+                pinSpacing: true,
                 invalidateOnRefresh: true,
-              },
-            });
+                // Rebuilt after later sections when the breakpoint changes
+                refreshPriority: 1,
+              });
 
-            timeline
-              .to(track, { x: () => -distance() })
-              .to(title, { "--fill": "100%" }, 0);
-          });
+              // Desktop: the title fills white from left to right (--fill) with
+              // the pinned horizontal scroll. Mobile keeps it plain white
+              // (--fill: 100%).
+              if (wide) {
+                gsap
+                  .timeline({
+                    defaults: { ease: "none" },
+                    scrollTrigger: {
+                      trigger: root,
+                      start: "top top",
+                      end: () => `+=${distance()}`,
+                      scrub: 1,
+                      invalidateOnRefresh: true,
+                    },
+                  })
+                  .to(track, { x: () => -distance() })
+                  .to(title, { "--fill": "100%" }, 0);
+              }
+
+              if (!motion) return;
+
+              // The last half screen of the pin goes to the shrink
+              const played = () => pin.end - window.innerHeight * 0.5;
+
+              // The big text waits under its masks. Set here and not with a
+              // from() in the timeline: a refresh undoes a from() until its
+              // tween starts, so the staggered lines would show before their turn.
+              gsap.set(big, { autoAlpha: 1 });
+              gsap.set(lines("[data-big]"), { yPercent: 100 });
+
+              // From the moment the card sits centered: it opens to the whole
+              // screen, its text rolling out once it has grown a little and the
+              // big text rolling in at the end, then the columns cross over the
+              // shrinking text, odd ones down, even ones up. Same scrub as the
+              // track, so the two stay in step.
+              gsap
+                .timeline({
+                  defaults: { ease: "none" },
+                  scrollTrigger: {
+                    trigger: stage,
+                    start: () => pin.start + distance(),
+                    end: played,
+                    scrub: 1,
+                    invalidateOnRefresh: true,
+                  },
+                })
+                .to(
+                  panel,
+                  { "--grow": 1, duration: 0.2, ease: "power2.inOut" },
+                  0,
+                )
+                // Once covered: the last work, the title and the caption must
+                // not show around the panel when it shrinks
+                .set(stage, { backgroundColor: "#0a0a0a" }, 0.2)
+                .set("[data-caption]", { autoAlpha: 0 }, 0.2)
+                .to(
+                  lines("[data-card]"),
+                  { yPercent: -100, duration: 0.06, stagger: 0.015 },
+                  0.06,
+                )
+                .to(
+                  lines("[data-foot]"),
+                  { yPercent: 100, duration: 0.06 },
+                  0.06,
+                )
+                .to(
+                  lines("[data-big]"),
+                  {
+                    yPercent: 0,
+                    duration: 0.07,
+                    stagger: 0.01,
+                    ease: "power2.out",
+                  },
+                  0.19,
+                )
+                .fromTo(
+                  "[data-column]",
+                  { y: (i: number) => (i % 2 ? 0 : -crossing()) },
+                  {
+                    y: (i: number) => (i % 2 ? -crossing() : 0),
+                    duration: 0.7,
+                  },
+                  0.3,
+                )
+                .to("[data-big-text]", { scale: 0.7, duration: 0.7 }, 0.3);
+
+              // Leaving for the next section, the lime closes in from every side:
+              // in place at first, or its top edge would never be seen, then on
+              // up with the page. By the clip, not by scaling, so the text keeps
+              // its size.
+              gsap.to(panel, {
+                "--shrink": 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: stage,
+                  start: played,
+                  end: () => pin.end + window.innerHeight * 0.5,
+                  scrub: true,
+                },
+              });
+            },
+          );
 
           // Mobile cards reveal as they scroll in: a lime panel wipes up from the
           // bottom (clip-path), the image follows over it while zooming out, then
@@ -76,35 +193,39 @@ export default function WorksView({ lang }: WorksViewProps) {
               const hidden = { clipPath: "inset(100% 0% 0% 0%)" };
               const shown = { clipPath: "inset(0% 0% 0% 0%)" };
 
-              gsap.utils.toArray<HTMLElement>("article", track).forEach((article) => {
-                const panel = article.querySelector("[data-reveal-panel]");
-                const image = article.querySelector("[data-reveal-panel] + *");
-                const img = image?.querySelector("img");
-                const caption = article.querySelector("figure + div");
-                if (!panel || !image || !img || !caption) return;
-
-                gsap
-                  .timeline({
-                    defaults: { ease: "none" },
-                    scrollTrigger: {
-                      trigger: article,
-                      // Spread over most of the screen, eased a little, so the
-                      // reveal does not rush by
-                      start: "top bottom",
-                      end: "top 15%",
-                      scrub: 0.5,
-                    },
-                  })
-                  .fromTo(panel, hidden, shown)
-                  .fromTo(image, hidden, shown, 0.25)
-                  .fromTo(img, { scale: 1.25 }, { scale: 1 }, 0.25)
-                  .fromTo(
-                    caption,
-                    { yPercent: 40, opacity: 0 },
-                    { yPercent: 0, opacity: 1, ease: "power2.out" },
-                    0.55,
+              gsap.utils
+                .toArray<HTMLElement>("article", track)
+                .forEach((article) => {
+                  const panel = article.querySelector("[data-reveal-panel]");
+                  const image = article.querySelector(
+                    "[data-reveal-panel] + *",
                   );
-              });
+                  const img = image?.querySelector("img");
+                  const caption = article.querySelector("figure + div");
+                  if (!panel || !image || !img || !caption) return;
+
+                  gsap
+                    .timeline({
+                      defaults: { ease: "none" },
+                      scrollTrigger: {
+                        trigger: article,
+                        // Spread over most of the screen, eased a little, so the
+                        // reveal does not rush by
+                        start: "top bottom",
+                        end: "top 15%",
+                        scrub: 0.5,
+                      },
+                    })
+                    .fromTo(panel, hidden, shown)
+                    .fromTo(image, hidden, shown, 0.25)
+                    .fromTo(img, { scale: 1.25 }, { scale: 1 }, 0.25)
+                    .fromTo(
+                      caption,
+                      { yPercent: 40, opacity: 0 },
+                      { yPercent: 0, opacity: 1, ease: "power2.out" },
+                      0.55,
+                    );
+                });
             },
           );
         }),
@@ -132,7 +253,7 @@ export default function WorksView({ lang }: WorksViewProps) {
       <div className="md:h-full md:overflow-hidden">
         <div
           ref={trackRef}
-          className="flex flex-col gap-20 px-4 pt-6 pb-24 md:h-full md:w-max md:flex-row md:items-center md:gap-[20vw] md:px-[20vw] md:py-0"
+          className="flex flex-col gap-20 px-4 pt-6 md:h-full md:w-max md:flex-row md:items-center md:gap-[20vw] md:pt-0 md:pr-0 md:pl-[20vw]"
         >
           {works.map((work, index) => (
             <article
@@ -176,6 +297,7 @@ export default function WorksView({ lang }: WorksViewProps) {
               </a>
             </article>
           ))}
+          <WorksNext lang={lang} />
         </div>
       </div>
     </div>
