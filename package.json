@@ -10,7 +10,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@formatjs/intl-localematcher": "^0.10.0",
+    "@formatjs/intl-localematcher": "^0.10.1",
     "@gsap/react": "^2.1.2",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
