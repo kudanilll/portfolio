@@ -1,7 +1,7 @@
 {
   "lang": "en",
   "home_section": {
-    "button_text": "Resume",
+    "button_text": "See Resume",
     "role": "Creative Developer and Software Engineer",
     "location": "Based in Bekasi"
   },
@@ -14,6 +14,7 @@
   },
   "works_section": {
     "title": "Selected works",
+    "see_work": "See Work",
     "next": "Next",
     "up_next": "Up next",
     "teaser": ["And many more.", "Could the next", "one be yours?"]

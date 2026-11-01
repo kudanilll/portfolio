@@ -1,4 +1,5 @@
 import { bebasNeue } from "@/common/font";
+import { arrowPath } from "@/components/svg/arrow";
 import { works } from "@/data/works";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -61,7 +62,7 @@ export function WorksNext({ lang }: WorksNextProps) {
             strokeWidth="2"
             className="size-[0.8em]"
           >
-            <path d="M2 12h20M13 2.2Q13.6 10.6 22 12Q13.6 13.4 13 21.8" />
+            <path d={arrowPath} />
           </svg>
         </p>
       </div>

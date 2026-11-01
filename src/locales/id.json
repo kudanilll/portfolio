@@ -1,7 +1,7 @@
 {
   "lang": "id",
   "home_section": {
-    "button_text": "Resume",
+    "button_text": "Lihat Resume",
     "role": "Creative Developer dan Software Engineer",
     "location": "Berlokasi di Bekasi"
   },
@@ -14,6 +14,7 @@
   },
   "works_section": {
     "title": "Pekerjaan pilihan",
+    "see_work": "Lihat Proyek",
     "next": "Next",
     "up_next": "Selanjutnya",
     "teaser": ["Masih banyak.", "Mungkin nanti", "bersamamu?"]

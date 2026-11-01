@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { works } from "@/data/works";
 import { useGSAP } from "@gsap/react";
-import { LinkButton } from "@/components/ui/link-button";
+import { ArrowButton } from "@/components/ui/arrow-button";
 import { WorksNext } from "@/components/views/works-next";
 import { inOwnTask } from "@/lib/utils";
 import gsap from "gsap";
@@ -21,6 +21,7 @@ type WorksViewProps = {
     expertise_section: { title: string };
     works_section: {
       title: string;
+      see_work: string;
       next: string;
       up_next: string;
       teaser: string[];
@@ -287,12 +288,10 @@ export default function WorksView({ lang }: WorksViewProps) {
                   >
                     {work.title}
                   </h3>
-                  {/* No onClick: renders a label driven by the card link's hover */}
-                  <LinkButton
-                    className={`mt-2 text-xl md:ml-[-10%] md:mr-0 opacity-75 group-hover:opacity-100 ${index % 2 === 0 ? "ml-[8%]" : "ml-auto mr-[8%]"}`}
-                  >
-                    {work.category}
-                  </LinkButton>
+                  <ArrowButton
+                    label={lang.works_section.see_work}
+                    className={`mt-3 w-fit md:ml-[-10%] md:mr-0 ${index % 2 === 0 ? "ml-[8%]" : "ml-auto mr-[8%]"}`}
+                  />
                 </div>
               </a>
             </article>

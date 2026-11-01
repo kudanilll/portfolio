@@ -4,7 +4,7 @@
 
 import { DockText } from "@/components/typography/dock-text";
 import { bebasNeue, layGrotesk } from "@/common/font";
-import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
+import { ArrowButton } from "@/components/ui/arrow-button";
 import { InstagramLogoIcon } from "@phosphor-icons/react/dist/csr/InstagramLogo";
 import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
 import { LinkedinLogoIcon } from "@phosphor-icons/react/dist/csr/LinkedinLogo";
@@ -50,18 +50,9 @@ function ResumeButton({ lang }: { lang: any }) {
       target="_blank"
       rel="noopener"
       aria-label={`${label} - Achmad Daniel Syahputra (PDF)`}
-      className="text-base md:text-xl flex-1 md:flex-none md:w-56 h-12 md:h-14 border border-neutral-200 md:border-neutral-400 group flex items-center justify-center relative overflow-hidden uppercase active:scale-90 transition-all duration-300 ease-in-out"
+      className="group active:scale-90 transition-transform duration-300 ease-in-out"
     >
-      <span className="relative h-6 md:h-7 overflow-hidden">
-        <span className="flex flex-col text-neutral-300 hover:text-white transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-7">
-          {[0, 1].map((copy) => (
-            <span key={copy} className="flex items-center">
-              {label}
-              <ArrowUpRightIcon className="ml-3 size-5 md:size-6" />
-            </span>
-          ))}
-        </span>
-      </span>
+      <ArrowButton label={label} upRight />
     </a>
   );
 }
