@@ -12,7 +12,6 @@
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.10.0",
     "@gsap/react": "^2.1.2",
-    "@phosphor-icons/react": "^2.1.10",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "gsap": "^3.15.0",

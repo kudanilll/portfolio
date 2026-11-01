@@ -5,9 +5,7 @@
 import { DockText } from "@/components/typography/dock-text";
 import { bebasNeue, layGrotesk } from "@/common/font";
 import { ArrowButton } from "@/components/ui/arrow-button";
-import { InstagramLogoIcon } from "@phosphor-icons/react/dist/csr/InstagramLogo";
-import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
-import { LinkedinLogoIcon } from "@phosphor-icons/react/dist/csr/LinkedinLogo";
+import { socialPaths } from "@/components/svg/social-icons";
 import { useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -20,19 +18,8 @@ import gsap from "gsap";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-// The hero shows the profiles that have an icon here
-const socialIcons: Record<string, typeof InstagramLogoIcon> = {
-  Instagram: InstagramLogoIcon,
-  GitHub: GithubLogoIcon,
-  LinkedIn: LinkedinLogoIcon,
-};
-const heroSocials = socials
-  .filter(({ name }) => name in socialIcons)
-  .map(({ name, handle, href }) => ({
-    href,
-    label: `${name}: ${handle}`,
-    Icon: socialIcons[name],
-  }));
+const buttonLink =
+  "group active:scale-90 transition-transform duration-300 ease-in-out";
 
 // Mobile size makes the wider line, "CREATIVE ✦" (~3.44em), fill the padded width
 const displayText = `${bebasNeue.className} block text-end text-[calc((100vw-2rem)/3.45)] md:text-[clamp(4rem,18vw,16rem)] tracking-[-0.025em] font-medium text-white leading-[0.85] md:leading-[0.8] uppercase will-change-transform`;
@@ -50,9 +37,9 @@ function ResumeButton({ lang }: { lang: any }) {
       target="_blank"
       rel="noopener"
       aria-label={`${label} - Achmad Daniel Syahputra (PDF)`}
-      className="group active:scale-90 transition-transform duration-300 ease-in-out"
+      className={buttonLink}
     >
-      <ArrowButton label={label} upRight />
+      <ArrowButton label={label} upRight reversed />
     </a>
   );
 }
@@ -60,21 +47,16 @@ function ResumeButton({ lang }: { lang: any }) {
 function SocialLinks({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      {heroSocials.map(({ href, label, Icon }) => (
+      {socials.map(({ name, handle, href }) => (
         <a
           key={href}
           href={href}
           target="_blank"
           rel="noopener noreferrer me"
-          aria-label={`${label} (opens in a new tab)`}
-          className="size-12 md:size-16 shrink-0 border border-neutral-200 text-neutral-200 opacity-100 md:opacity-50 hover:opacity-100 duration-500 ease-out group flex items-center justify-center relative overflow-hidden"
+          aria-label={`${name}: ${handle} (opens in a new tab)`}
+          className={buttonLink}
         >
-          <span className="relative h-6 md:h-8 overflow-hidden">
-            <span className="flex flex-col transition-transform duration-500 ease-out group-hover:-translate-y-6 md:group-hover:-translate-y-8">
-              <Icon className="size-6 md:size-8" />
-              <Icon className="size-6 md:size-8" />
-            </span>
-          </span>
+          <ArrowButton label={name} icon={socialPaths[name]} upRight />
         </a>
       ))}
     </div>
@@ -285,7 +267,8 @@ export default function HeroView({ lang }: { lang: any }) {
                     className={`${layGrotesk.className} mt-6 md:mt-0 md:ml-4 md:translate-y-[-0.6vw] flex flex-wrap items-center gap-3 text-base leading-normal tracking-normal`}
                   >
                     <ResumeButton lang={lang} />
-                    <SocialLinks className="md:hidden" />
+                    {/* contents: they wrap with the button above, not as a block */}
+                    <SocialLinks className="contents md:hidden" />
                   </div>
                 </div>
               </div>
@@ -331,15 +314,9 @@ export default function HeroView({ lang }: { lang: any }) {
           <div className="bg-[#0a0a0a] w-full px-4 md:px-8 pt-8 pb-6 md:pb-[4vh] flex justify-between items-end gap-4 pointer-events-auto relative">
             {/* Subpixel gap fix: overhang to cover GSAP pin-spacer rounding errors */}
             <div className="absolute -bottom-0.5 left-0 w-full h-1 bg-[#0a0a0a]" />
-
-            <div className="flex flex-col -space-y-1">
-              <p className="text-neutral-300 text-2xl md:text-4xl md:tracking-tight">
-                {lang.home_section.location}, Indonesia
-              </p>
-              <p className="text-neutral-500 text-2xl md:text-4xl md:tracking-tight">
-                {lang.contact_section.title}
-              </p>
-            </div>
+            <p className="text-neutral-500 text-2xl md:text-4xl md:tracking-tight">
+              {lang.home_section.location}, Indonesia
+            </p>
             <SocialLinks className="hidden md:flex" />
           </div>
         </div>

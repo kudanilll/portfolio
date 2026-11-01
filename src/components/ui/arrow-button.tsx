@@ -14,39 +14,55 @@ const Icon = ({ path, className }: { path: string; className: string }) => (
 );
 
 /**
- * A label and an arrow in a lime square. On the hover/focus of the link around
- * it (`group`), the lime spreads from the square over the whole button, the
- * label rolls up to its dark copy and a new arrow slides in. A <span>, since it
- * always sits inside a link. The copy is a ::after, so it stays out of the page
- * text, and `/ ''` keeps it out of the link's accessible name too.
+ * A label and an icon (an arrow by default) in a lime square. On the hover/focus
+ * of the link around it (`group`), the lime spreads from the square over the
+ * whole button, the label rolls up to its copy and a new icon slides in, up and
+ * to the right with `upRight`. `reversed` starts from the lime and goes the other
+ * way. A <span>, since it always sits inside a link. The copy is a ::after, so it
+ * stays out of the page text, and `/ ''` keeps it out of the link's accessible
+ * name too.
  */
 export function ArrowButton({
   label,
+  icon,
   upRight,
+  reversed,
   className,
 }: {
   label: string;
+  icon?: string;
   upRight?: boolean;
+  reversed?: boolean;
   className?: string;
 }) {
-  const path = upRight ? arrowUpRightPath : arrowPath;
+  const path = icon ?? (upRight ? arrowUpRightPath : arrowPath);
 
   return (
     <span
       className={cn(
-        "relative flex h-[calc(var(--square)+2*var(--gap))] items-center justify-between gap-6 overflow-hidden bg-neutral-900 pr-(--gap) pl-4 text-base leading-normal font-medium tracking-tight text-white normal-case [--gap:0.375rem] [--square:2.25rem] motion-reduce:**:transition-none md:pl-5 md:text-lg md:[--square:2.75rem]",
+        "relative flex h-[calc(var(--square)+2*var(--gap))] items-center justify-between gap-6 overflow-hidden bg-neutral-900 pr-(--gap) pl-4 text-base leading-normal font-medium tracking-tight text-(--ink) normal-case [--gap:0.375rem] [--square:2.25rem] motion-reduce:**:transition-none md:pl-5 md:text-lg md:[--square:2.75rem]",
+        // --ink is the label at rest and the icon that slides in, --paper the
+        // other two
+        reversed
+          ? "[--ink:#0a0a0a] [--paper:#fff]"
+          : "[--ink:#fff] [--paper:#0a0a0a]",
         className,
       )}
     >
       <span
         aria-hidden="true"
-        className="absolute inset-0 bg-lime-400 transition-[clip-path] duration-300 ease-in-out [clip-path:inset(var(--gap)_var(--gap)_var(--gap)_calc(100%-var(--gap)-var(--square)))] group-hover:[clip-path:inset(0)] group-focus-visible:[clip-path:inset(0)]"
+        className={cn(
+          "absolute inset-0 bg-lime-400 transition-[clip-path] duration-300 ease-in-out",
+          reversed
+            ? "[clip-path:inset(0)] group-hover:[clip-path:inset(var(--gap)_var(--gap)_var(--gap)_calc(100%-var(--gap)-var(--square)))] group-focus-visible:[clip-path:inset(var(--gap)_var(--gap)_var(--gap)_calc(100%-var(--gap)-var(--square)))]"
+            : "[clip-path:inset(var(--gap)_var(--gap)_var(--gap)_calc(100%-var(--gap)-var(--square)))] group-hover:[clip-path:inset(0)] group-focus-visible:[clip-path:inset(0)]",
+        )}
       />
 
       <span className="relative overflow-hidden">
         <span
           data-text={label}
-          className="relative block transition-transform duration-300 ease-in-out group-hover:-translate-y-full group-focus-visible:-translate-y-full after:absolute after:top-full after:left-0 after:text-[#0a0a0a] after:content-[attr(data-text)/'']"
+          className="relative block transition-transform duration-300 ease-in-out group-hover:-translate-y-full group-focus-visible:-translate-y-full after:absolute after:top-full after:left-0 after:text-(--paper) after:content-[attr(data-text)/'']"
         >
           {label}
         </span>
@@ -54,12 +70,17 @@ export function ArrowButton({
 
       <span
         aria-hidden="true"
-        className="relative size-(--square) shrink-0 overflow-hidden transition-colors duration-300 ease-in-out group-hover:bg-[#0a0a0a] group-focus-visible:bg-[#0a0a0a]"
+        className={cn(
+          "relative size-(--square) shrink-0 overflow-hidden transition-colors duration-300 ease-in-out",
+          reversed
+            ? "bg-[#0a0a0a] group-hover:bg-transparent group-focus-visible:bg-transparent"
+            : "group-hover:bg-[#0a0a0a] group-focus-visible:bg-[#0a0a0a]",
+        )}
       >
         <Icon
           path={path}
           className={cn(
-            "text-[#0a0a0a] transition-transform duration-300 ease-in-out group-hover:translate-x-[180%] group-focus-visible:translate-x-[180%]",
+            "text-(--paper) transition-transform duration-300 ease-in-out group-hover:translate-x-[180%] group-focus-visible:translate-x-[180%]",
             upRight &&
               "group-hover:translate-y-[-180%] group-focus-visible:translate-y-[-180%]",
           )}
@@ -67,7 +88,7 @@ export function ArrowButton({
         <Icon
           path={path}
           className={cn(
-            "translate-x-[-180%] text-white transition-transform duration-300 ease-in-out group-hover:translate-x-0 group-focus-visible:translate-x-0",
+            "translate-x-[-180%] text-(--ink) transition-transform duration-300 ease-in-out group-hover:translate-x-0 group-focus-visible:translate-x-0",
             upRight &&
               "translate-y-[180%] group-hover:translate-y-0 group-focus-visible:translate-y-0",
           )}

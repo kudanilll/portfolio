@@ -1,4 +1,4 @@
-// Social profiles: the hero icons, the footer links, and the JSON-LD sameAs
+// Social profiles: the hero buttons, the footer links, and the JSON-LD sameAs
 // list all read from here.
 export const socials = [
   {
