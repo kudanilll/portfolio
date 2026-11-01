@@ -66,3 +66,8 @@ export const works: Work[] = [
     },
   },
 ];
+
+/** Every work picture, once. */
+export const workPictures = [
+  ...new Set(works.flatMap(({ image, hoverImage }) => [image, hoverImage])),
+];

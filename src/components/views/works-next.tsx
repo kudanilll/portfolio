@@ -1,6 +1,6 @@
 import { bebasNeue } from "@/common/font";
 import { arrowPath } from "@/components/svg/arrow";
-import { works } from "@/data/works";
+import { workPictures } from "@/data/works";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -13,9 +13,7 @@ type WorksNextProps = {
 
 // shortcut: the wall reuses the work images, swap in its own pictures once they
 // exist
-const pictures = [
-  ...new Set(works.flatMap(({ image, hoverImage }) => [image, hoverImage])),
-];
+const pictures = workPictures;
 
 /** A masked line for works.tsx to roll, CSS-generated to stay out of the page text. */
 const Line = ({ text }: { text: string }) => (
