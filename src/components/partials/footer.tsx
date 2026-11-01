@@ -3,12 +3,12 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import gsap from "gsap";
 import { bebasNeue } from "@/common/font";
 import { sparklePath } from "@/components/svg/sparkle";
 import { LinkButton } from "@/components/ui/link-button";
 import { email, socials, whatsapp } from "@/data/socials";
 import { cn } from "@/lib/utils";
+import gsap from "gsap";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -65,7 +65,7 @@ export default function Footer({ lang }: FooterProps) {
       id="contact"
       className="relative h-lvh [clip-path:polygon(0_0,100%_0,100%_100%,0_100%)]"
     >
-      <div className="relative -top-[100lvh] h-[200lvh]">
+      <div className="relative top-[-100lvh] h-[200lvh]">
         <div
           data-footer-panel
           className="sticky top-0 flex h-lvh flex-col justify-between gap-8 bg-[#0a0a0a] px-4 pt-[calc(100lvh-100svh+2rem)] pb-6 text-neutral-200 md:px-8 md:pb-[4vh]"
