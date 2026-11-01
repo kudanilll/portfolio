@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  allowedDevOrigins: ["192.168.1.16"],
   images: {
     // AVIF first: smaller than WebP for the work photos, WebP as the fallback
     formats: ["image/avif", "image/webp"],
